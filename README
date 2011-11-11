@@ -1,0 +1,73 @@
+README
+
+0x01		manage.php
+In this document resides the main driveforece of TheCMS. The database class, module class, templates class and the various class's that handles the login system.
+
+0x02		settings.php
+Here is all the constants that needs defining throughout TheCMS. From database connection to URLs and default mailer behavior.
+
+0x03		urls.php
+Here is the default url handling (derived from .htaccess's urlrewrite, that puts everything behind a ?handle= query). The path to admin panel, and main application is defined here.
+
+
+
+
+0x10		Using the class's
+	The Database class:
+/*
+---- Instantiate class -----
+$Database = new Database;
+---- Get one entry -----
+$fetchone = $Database->fetchOne($table, array($needle_field->$value));
+$fetchone['field'];
+---- Get many entries -----
+$fetchAll = $Database->fetchAll($table, array($needle_field->$value));
+foreach($fetchAll as $data)
+{
+	$data['field'];
+}
+---- Insert an entry -----
+$Database->insert($table, array($field1->$value1, $field2=>$value2))
+---- Update an entry -----
+$Database->update($table, array($field1->$value1, $field2=>$value2), array($needle_field->$value))
+---- Delete an entry -----
+$Database->delete($table, array($needle_field->$value));
+---- Count ----
+$Database->count($table, array($needle_field->$value));
+*/
+
+	The Modules class:
+/*
+----- Instantiate class -----
+$modules = new Modules;
+----- Get all modules -----
+$modules = new Modules;
+$getModules = $modules->getModules();
+foreach($getModules as $module)
+{
+	include('modules/'.$module.'/'.$module.'.class.php');
+}
+---- Run install on modules ----
+$modules->installSQL();
+*/
+
+	The Templates class:
+
+/*
+---- Example 1 -----
+$template_dir = TEMPLATES_ROOT . end(explode(DS, dirname(__file__))) . DS;
+$content = new Template($template_dir . 'page.tpl');
+$content->set('id', $getpage['id']);
+$content->set('Title', $getpage['name']);
+$content->set('Content' , $getpage['content']);
+$content = $content->output();
+
+<h1>{:Title} {:id}</h1>
+<p>{:Content}</p>
+---- Example 2 ----
+# Using $content from above !
+$layout = new Template(TEMPLATES_ROOT . 'main.tpl');
+$layout->set('Title', 'T3$t1ng l13k t3h 60$$ ! !');
+$layout->set('Content', $content);
+print $layout->output();
+*/
