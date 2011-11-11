@@ -1,0 +1,2 @@
+resources/uploads/*
+!.gitignore
