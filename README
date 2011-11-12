@@ -1,4 +1,4 @@
-README
+0x00 		README
 
 0x01		manage.php
 In this document resides the main driveforece of TheCMS. The database class, module class, templates class and the various class's that handles the login system.
