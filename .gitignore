@@ -1,2 +1,2 @@
-resources/uploads/*
+.DS_Store resources/uploads/*
 !.gitignore
