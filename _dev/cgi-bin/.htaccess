@@ -1,0 +1,6 @@
+AddHandler cgi-script .py
+Options +ExecCGI
+
+<FilesMatch "\.(pl|php|cgi|spl|scgi|fcgi|py)$">
+    Header unset Cache-Control
+</FilesMatch>

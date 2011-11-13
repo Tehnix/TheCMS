@@ -1,2 +1,2 @@
-.DS_Store resources/uploads/*
+.DS_Store resources/uploads/* _backup/* 
 !.gitignore
