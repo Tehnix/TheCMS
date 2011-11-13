@@ -1,0 +1,65 @@
+# Don't show indexes
+IndexIgnore *
+
+Options +FollowSymLinks
+Options +Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php?handle=$1 [L,QSA]
+    # If no picture, display no_picture.png
+    # RewriteCond %{REQUEST_URI} \.(jpg|gif|png)$ [NC]
+    # RewriteCond %{REQUEST_FILENAME} !-d
+    # RewriteRule .*$ style/img/no_picture.png [L]
+</IfModule>
+
+# Error handling
+ErrorDocument 404 /resources/errors/404.html
+
+<IfModule mod_expires.c>
+    # Set expire Values
+    ExpiresActive On
+    ExpiresDefault A2592000
+    ExpiresByType image/x-icon A2592000
+    ExpiresByType application/x-javascript A2592000
+    ExpiresByType text/javascript A2592000
+    ExpiresByType text/css A2592000
+    ExpiresByType image/gif A604800
+    ExpiresByType image/png A604800
+    ExpiresByType image/jpeg A604800
+    ExpiresByType text/plain A604800
+    ExpiresByType application/x-shockwave-flash A604800
+    ExpiresByType video/x-flv A604800
+    ExpiresByType application/pdf A604800
+    ExpiresByType text/html A900
+</IfModule>
+
+# Set mime type for videos
+AddType video/ogg .ogv
+AddType video/mp4 .mp4
+AddType video/webm .webm
+
+# Optimization settings
+<IfModule mod_deflate.c>
+    # The following line is enough for .js and .css
+    AddOutputFilter DEFLATE js css
+    # The following line also enables compression by file content type, for the following list of Content-Type:s
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml application/xml
+    # The following lines are to avoid bugs with some browsers
+    BrowserMatch ^Mozilla/4 gzip-only-text/html
+    BrowserMatch ^Mozilla/4\.0[678] no-gzip
+    BrowserMatch \bMSIE !no-gzip !gzip-only-text/html 
+</IfModule>
+
+<IfModule mod_headers.c>
+    <FilesMatch "\.(js|css|xml|gz)$">
+        Header append Vary Accept-Encoding
+    </FilesMatch>
+</IfModule>
+
+#Run php in js files
+<FilesMatch "\.(js)$">
+    ForceType application/x-httpd-php
+</FilesMatch>
