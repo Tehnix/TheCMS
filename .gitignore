@@ -1,2 +1,11 @@
-.DS_Store resources/uploads/* _backup/.backup.zip* _dev/site/resources/uploads/* _dev/site/_backup/*.backup.zip
+# Files to ignore (we avoid Mac OS's .DS_Store's)
+.DS_Store 
+# We don't want uploads to get committed (both live and dev)
+resources/uploads/* 
+_dev/site/resources/uploads/* 
+# We don't want our backups to get committed (except for .sql backups)
+_backup/*.backup.zip 
+_dev/site/_backup/*.backup.zip 
+
+# We keep our .gitignore folders incase we ignore full content of a folder
 !.gitignore
