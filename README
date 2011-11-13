@@ -101,12 +101,13 @@ $content->set('Title', $getpage['name']);
 $content->set('Content' , $getpage['content']);
 $content = $content->output();
 
-<h1>{:Title} {:id}</h1>
-<p>{:Content}</p>
+<h1>{% TITLE %} {% ID %}</h1>
+<p>{% CONTENT %}</p>
 ---- Example 2 ----
 # Using $content from above !
 $layout = new Template(TEMPLATES_ROOT . 'main.tpl');
-$layout->set('Title', 'T3$t1ng l13k t3h 60$$ ! !');
-$layout->set('Content', $content);
+$layout->set('ID', '2');
+$layout->set('TITLE', 'T3$t1ng l13k t3h 60$$ ! !');
+$layout->set('CONTENT', $content);
 print $layout->output();
 */
