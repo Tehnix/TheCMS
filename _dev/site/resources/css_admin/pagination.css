@@ -1,0 +1,33 @@
+.paginate {
+	font: 12px 'Lucida Grande', Tahoma, Verdana, Sans-Serif;
+}
+
+a.paginate {
+	font: 12px 'Lucida Grande', Tahoma, Verdana, Sans-Serif;
+	border-left: 1px solid #DEDEDE;
+	padding: 1px 6px;
+	color: #005fad;
+}
+a.paginate:last-child{
+    border-right: 1px solid #DEDEDE;
+}
+
+a.current {
+    border-left: 1px solid #DEDEDE;
+	font: 12px 'Lucida Grande', Tahoma, Verdana, Sans-Serif;
+	padding: 2px 6px 2px 6px;
+	cursor: default;
+	color: #000;
+	font-weight:700;
+	text-decoration: none;
+}
+a.current:last-child{
+    border-right: 1px solid #DEDEDE;
+}
+
+span.inactive {
+	font: 12px 'Lucida Grande', Tahoma, Verdana, Sans-Serif;
+	padding: 1px 6px;
+	color: #005fad;
+	cursor: default;
+}

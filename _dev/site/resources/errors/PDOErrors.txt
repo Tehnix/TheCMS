@@ -1,0 +1,36 @@
+SQLSTATE[HY000] [2005] Unknown MySQL server host 'DB_SERER' (2)
+SQLSTATE[42S02]: Base table or view not found: 1146 Table 'labs.thesite.dk.blog_posts' doesn't exist
+SQLSTATE[42S02]: Base table or view not found: 1146 Table 'labs.thesite.dk.blog_posts' doesn't exist
+SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens
+SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens
+SQLSTATE[HY093]: Invalid parameter number: no parameters were bound
+SQLSTATE[HY093]: Invalid parameter number: no parameters were bound
+SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''_modules' (
+		  'id' tinyint(4) NOT NULL,
+		  'name' varchar(255) NOT NULL,
+		 ' at line 1
+SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'LIMIT' at line 1
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '8' for key 'PRIMARY'
+SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'display' cannot be null
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '8' for key 'PRIMARY'
+SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'display' cannot be null
+SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'display' cannot be null
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'filename' in 'group statement'
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '127' for key 'PRIMARY'
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '127' for key 'PRIMARY'
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '127' for key 'PRIMARY'
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '127' for key 'PRIMARY'
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '127' for key 'PRIMARY'
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '127' for key 'PRIMARY'
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '127' for key 'PRIMARY'
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '127' for key 'PRIMARY'
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '127' for key 'PRIMARY'
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '127' for key 'PRIMARY'
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '127' for key 'PRIMARY'
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '127' for key 'PRIMARY'
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '127' for key 'PRIMARY'
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '127' for key 'PRIMARY'
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '127' for key 'PRIMARY'
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '127' for key 'PRIMARY'
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '127' for key 'PRIMARY'
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '127' for key 'PRIMARY'

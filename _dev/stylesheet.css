@@ -1,0 +1,92 @@
+body {
+	background: #f9f9f9;
+	margin:0 0 30px 0;
+	padding:0;
+	color:#2f2f2f;
+	font: 12px/18px 'Lucida Grande', Tahoma, Verdana, Sans-Serif;
+}
+/* Appearance */
+#Menu {
+	background:#566058;
+	/* For WebKit (Safari, Google Chrome etc) */
+	background: -webkit-gradient(linear, left top, left bottom, from(#566058), to(#384048));
+	/* For Mozilla/Gecko (Firefox etc) */
+	background: -moz-linear-gradient(top, #566058, #384048);
+	/* For Internet Explorer 5.5 - 7 */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#566058, endColorstr=#384048);
+	/* For Internet Explorer 8 */
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#566058, endColorstr=#384048)";
+	height:40px;
+	line-height:34px;
+	width:100%;
+}
+#Menu a{
+    color:#fff;
+    margin:0 20px 0 0;
+}
+#Content{
+    margin:20px;
+}
+
+/* Tables */
+#settingsTable{
+    font: 12px 'Lucida Grande', Tahoma, Verdana, Sans-Serif;
+}
+#settingsTable td{
+    vertical-align:top;
+}
+
+#movedFiles{
+    font: 12px 'Lucida Grande', Tahoma, Verdana, Sans-Serif;
+    width:735px;
+    border-bottom:1px solid black;
+}
+#movedFiles td{
+    vertical-align:top;
+}
+#movedFiles input{
+    float:right;
+}
+
+#changedFiles{
+    border-spacing:0;
+}
+#changedFiles td{
+    vertical-align:top;
+}
+#changedFiles input{
+    float:right;
+}
+#changedFiles #filename{
+    font: 18px 'Lucida Grande', Tahoma, Verdana, Sans-Serif;
+}
+#changedFiles #state{
+    font: 12px 'Lucida Grande', Tahoma, Verdana, Sans-Serif;
+}
+#changedFiles #textAfter{
+    background:#ddd;
+    font: 12px 'Lucida Grande', Tahoma, Verdana, Sans-Serif;
+}
+#changedFiles #textAfter #text{
+    width:500px;
+}
+#changedFiles #textAfter #linenum{
+    background:"lightgrey";
+    text-align:right;
+    width:40px;
+    padding:2px 0 2px 0;
+}
+#changedFiles #textBefore{
+    color:#808080;
+    background:#ddd;
+    font: 12px 'Lucida Grande', Tahoma, Verdana, Sans-Serif;
+}
+#changedFiles #textBefore #text{
+    width:500px;
+}
+#changedFiles #textBefore #linenum{
+    background:"lightgrey";
+    text-align:right;
+    width:40px;
+    padding:2px 0 2px 0;
+}
