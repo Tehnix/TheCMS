@@ -13,12 +13,18 @@
  */
 
 /* Add your CSS files to this array */
+if(isset($_GET['type'])){
+	$type = $_GET['type'];
+}
+else{
+	$type = '';
+}
 $dir = '../css';
 $cssFolder = scandir($dir, 0);
 $exclude = array('.', '..', '.DS_Store', 'compressed.php');
 $cssFiles = array();
 foreach($cssFolder as $file) {
-	if(!in_array($file, $exclude)) {
+	if(!in_array($file, $exclude) and substr($file, 0, strlen($type)) == $type){
 		$cssFiles[] = $file;
 	}
 }

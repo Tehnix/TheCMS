@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>{% SITE_TITLE %}</title>
-	<link rel="stylesheet" type="text/css" media="screen, print, projection" href="{% STYLESHEET %}">
+	<link rel="stylesheet" type="text/css" media="screen, print, projection" href="{% STYLESHEET %}?type=main">
 	<link rel="shortcut icon" type="image/x-icon" href="{% FAVICON %}">
 	<!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>

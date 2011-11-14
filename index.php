@@ -198,7 +198,7 @@ if($Module_admin) {
     }
     # The admin page
     $tpl_layout = new Template(TEMPLATES_ROOT . 'admin' . DS . 'index.tpl');
-    $tpl_layout->set('STYLESHEET', ADMIN_MEDIA_ROOT . 'compressed.php');
+    $tpl_layout->set('STYLESHEET', MEDIA_ROOT . 'compressed.php');
     $tpl_layout->set('FAVICON', RESOURCES_ROOT . 'img' . DS . 'favicon.ico');
     $tpl_layout->set('IMG_ROOT', RESOURCES_ROOT . 'img' . DS);
     $tpl_layout->set('JS_ROOT', RESOURCES_ROOT . 'js' . DS);
@@ -217,9 +217,6 @@ else if($Module_login){
      * found, display the total number of errors.
      * If errors occurred, they will be displayed.
      */
-    if($Form->num_errors > 0){
-       echo "<font size=\"2\" color=\"#ff0000\">".$Form->num_errors." error(s) found</font>";
-    }
     $remember = '';
     if($Form->value('remember') != ''){
         $remember = 'checked';
@@ -229,6 +226,7 @@ else if($Module_login){
         $tpl_layout->set('URL_ROOT', URL_ROOT);
         $tpl_layout->set('STYLESHEET', MEDIA_ROOT . 'compressed.php');
         $tpl_layout->set('FAVICON', RESOURCES_ROOT . 'img' . DS . 'favicon.ico');
+        $tpl_layout->set('IMG_ROOT', RESOURCES_ROOT . 'img' . DS);
         $tpl_layout->set('SITE_TITLE', $settings['sitetitle']);
         $tpl_layout->set('FORM_USER', $Form->value("user"));
         $tpl_layout->set('FORM_PASS', $Form->value("pass"));
@@ -309,6 +307,7 @@ else if($Module_register){
                 }
                 $tpl_layout->set('URL_ROOT', URL_ROOT);
                 $tpl_layout->set('STYLESHEET', MEDIA_ROOT . 'compressed.php');
+                $tpl_layout->set('IMG_ROOT', RESOURCES_ROOT . 'img' . DS);
                 $tpl_layout->set('FAVICON', RESOURCES_ROOT . 'img' . DS . 'favicon.ico');
                 $tpl_layout->set('SITE_TITLE', $settings['sitetitle']);
                 print $tpl_layout->output();
@@ -335,7 +334,7 @@ else{
         }
     }
     $tpl_menu .= '</ul>';
-    print_r($menuPages);
+
     # The general page
     $tpl_layout = new Template(TEMPLATES_ROOT . 'index.tpl');
     $tpl_layout->set('URL_ROOT', URL_ROOT);

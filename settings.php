@@ -58,7 +58,6 @@ define("MODULE_ROOT", ROOT . 'modules' . DS);
 define("TEMPLATES_ROOT", ROOT . 'templates' . DS);
 define("RESOURCES_ROOT", URL_ROOT . 'resources' . DS);
 define("MEDIA_ROOT", URL_ROOT . 'resources' . DS . 'css' . DS);
-define("ADMIN_MEDIA_ROOT", URL_ROOT . "resources" . DS . 'css_admin' . DS);
 define("UPLOAD_ROOT", ROOT . 'resources' . DS . 'uploads' . DS);
 
 /**

@@ -1,0 +1,71 @@
+/* Page-level */
+body {
+	background: #2F2F36 url("../img/backgroundTile.png");
+	margin:0 auto; 
+	font: 13px/18px 'Lucida Grande', Tahoma, Verdana, Sans-Serif;
+}
+@font-face {
+	font-family: nevisBold;
+	src: url("../fonts/nevis.ttf");
+}
+h1, h2, h3 {
+	font-family:nevisBold;
+	font-weight:lighter;
+}
+p { font-size: 13px; font-weight:bold;}
+a:link {color:#000; text-decoration: none; font-weight:bold;} a:visited {color:#000;} a:hover{color:#ff6a57;text-decoration: underline;} a:active {color:#ff6a57;}
+div{background:none;}
+/* Note: Make HTML 5 elements block-level for consistent styling */
+header, nav, section, article, hgroup, footer, address { display:block; }
+
+/* content */
+#container{
+	width:600px;
+	min-height:200px;
+	margin:120px auto 150px auto;
+	padding:20px;
+	background: #f4f4f4;
+	-webkit-border-radius:10px;
+	-moz-border-radius:10px;
+	border-radius:10px;
+	-moz-box-shadow:0 0 10px 10px rgba(0,0,0,.2);
+    -webkit-box-shadow: 0 0 10px 5px rgba(0,0,0,.2);
+    box-shadow: 0 0 10px 10px rgba(0,0,0,.2);
+}
+#container table{
+	width:320px;
+	float:right;
+}
+#logo{
+	float:left;
+	width:280px;
+}
+#logo img{
+	width:240px;
+	border:none;
+	margin:50px 0 0 0;
+	padding:0;
+}
+
+/* footer */
+footer{
+    clear:both;
+    position:relative;
+    bottom:0;
+    left:50%;
+    width:600px;
+    margin-left:-300px;
+    text-align:center;
+    font: 10px "lucida grande";
+	color: #505050;
+	padding-top:30px;
+}
+footer a {
+    text-decoration:none;
+	font: 10px "lucida grande";
+	color: #505050;
+}
+footer a:link {color:#505050;}
+footer a:visited {color:#505050;}
+footer a:hover {color:#ff6a57;}
+footer a:active {color:#ff6a57;}
