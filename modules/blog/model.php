@@ -59,6 +59,10 @@ class Blog
             WHERE b.id = :id
             AND b.trash = :trash";
 			$posts = $this->database->execute('fetchone', $sql, array('id'=>$inId, 'trash'=>'0'));
+			if(get_magic_quotes_gpc()){
+				$posts['title'] = stripslashes($posts['title']);
+				$posts['post'] = stripslashes($posts['post']);
+			}
 			$posts['date_posted'] = $posts['date_posted'];
 			$posts['category'] = $this->getCategory($post['id']);
 			$posts['tags'] = $this->getTags($post['id']);
@@ -114,6 +118,10 @@ class Blog
 				$posts = $this->database->execute('fetchall', $sql, array('trash'=>'0'));
 			}
 			for($i=0; $i<sizeof($posts); $i++){
+				if(get_magic_quotes_gpc()){
+					$posts[$i]['title'] = stripslashes($posts[$i]['title']);
+					$posts[$i]['post'] = stripslashes($posts[$i]['post']);
+				}
 				$posts[$i]['date_posted'] = $posts[$i]['date_posted'];
 				$posts[$i]['category'] = $this->getCategory($posts[$i]['id']);
 				$posts[$i]['tags'] = $this->getTags($posts[$i]['id']);

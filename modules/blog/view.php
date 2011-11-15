@@ -29,7 +29,7 @@ if($Module_blog) {
 		            . '</time> by ' . $post['author_name'] . ' with ' 
 		            . $post['comments_count'] . ' comments</p>
 		        </header>
-		        <p class="blogPostContent">' . $post['post'] . '</p>
+		        <div class="blogPostContent">' . $post['post'] . '</div>
 		        <div class="blogPostFooter">
 		            ' . implode(' :: ', $footerInfo) . '
 		        </div>
@@ -62,7 +62,7 @@ if($Module_blog) {
     	            . '</time> by ' . $getPosts['author_name'] . ' with ' 
     	            . $getPosts['comments_count'] . ' comments</p>
     	        </header>
-    	        <p class="blogPostContent">' . $getPosts['post'] . '</p>
+    	        <div class="blogPostContent">' . $getPosts['post'] . '</div>
     	        <div class="blogPostFooter">
 		            ' . implode(' :: ', $footerInfo) . '
 		        </div>

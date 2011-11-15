@@ -43,7 +43,9 @@ class Pages
 	public function getPage( $id=null, $additional = null ){
 		if(!empty($id)) {
 			$pagesArray = $this->database->fetchOne('pages', array('id'=>$id));
-			$pagesArray['content'] = stripslashes($pagesArray['content']);
+			if(get_magic_quotes_gpc()){
+				$pagesArray['content'] = stripslashes($pagesArray['content']);
+			}
 			$pagesArray['comments_count'] = $this->database->count('pages_comments', array('pages_id'=>$id));
 		}
 		else {
@@ -51,6 +53,9 @@ class Pages
 			$pagesArray = $this->database->fetchAll('pages', array('trash'=>'0'), $additional);
 			for($i=0; $i<sizeof($pagesArray); $i++){
 			    $pagesArray[$i]['content'] = stripslashes($pagesArray[$i]['content']);
+			    if(get_magic_quotes_gpc()){
+					$pagesArray[$i]['content'] = stripslashes($pagesArray[$i]['content']);
+				}
 				$pagesArray[$i]['comments_count'] = $this->database->count('pages_comments', 
 				                                                           array('pages_id'=>$pagesArray[$i]['id']));
 			}
