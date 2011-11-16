@@ -63,8 +63,8 @@
         </div>
         <div style="clear:both;"></div>
         <footer>
-                Copyright &copy; 2009 - 2011 Christian Laustsen, 
-                <a href="{% URL_ROOT %}resources/BSDLicense.html">All rights reserved</a>
+            Copyright &copy; 2009 - 2011 Christian Laustsen, 
+            <a href="{% URL_ROOT %}resources/BSDLicense.html">All rights reserved</a>
         </footer>
     </div>
 

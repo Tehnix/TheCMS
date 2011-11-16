@@ -254,19 +254,28 @@ class Database
     }
 }
 
-# Initialize Database object
-$Database = new Database;
+/**                                                                          *
+ *                                                                           *
+ * The ModulesBase class holds all the functio                               *
+ * that all modules should inherit                                           *
+ */
+class ModulesBase
+{
+    protected $database;
 
+    public function __construct(){
+        global $Database;
+        $this->database = $Database;
+    }
+}
 /**                                                                          *
  *                                                                           *
  * The Modules class is meant to simplify handling of                        *
  * modules, be it importing, or running various operations.                  *
  */
-class Modules
+class Modules extends ModulesBase
 {
     public function getModules() {
-        global $Database;
-        
         $dir = 'modules';
         $modulesfolder = scandir($dir, 0);
         $exclude = array('.', '..', '.DS_Store');
@@ -280,20 +289,17 @@ class Modules
     }
     
     public function installSQL() {
-        global $Database;
+        # Install our main INSTALL.sql file
+        $this->database->runSQLDump('INSTALL.sql');
         
-        $Database->runSQLDump('INSTALL.sql');
-        
+        # Install INSTALL.sql files belonging to modules
         $modules = $this->getModules();
         foreach($modules as $module) {
             $filename = MODULE_ROOT . $module . DS . 'INSTALL.sql';
-            $Database->runSQLDump($filename);
+            $this->database->runSQLDump($filename);
         }
     }
 }
-
-# Initialize Modules object
-$Modules = new Modules;
 
 /**                                                                          *
  *                                                                           *
@@ -1203,9 +1209,6 @@ class UsersHandler
     }
 }
 
-# Create database connection
-$UsersHandler = new UsersHandler;
-
 /**                                                                          *
  *                                                                           *
  * The Mailer class is meant to simplify the task of sending                 *
@@ -1251,8 +1254,6 @@ class Mailer
     }
 }
 
-# Initialize mailer object
-$Mailer = new Mailer;
 
 class Form
 {
@@ -1965,15 +1966,6 @@ class Session
     }
 }
 
-/**                                                                          *
- * Initialize session object - This must be initialized before               *
- * the form object because the form uses session variables,                  *
- * which cannot be accessed unless the session has started.                  *
- */
-$Session = new Session;
-# Initialize form object
-$Form = new Form;
-
 class Process
 {
     /* Class constructor */
@@ -2356,6 +2348,26 @@ class Uploader
 
     }
 }
+
+/**                                                                          *
+ *                                                                           *
+ * This section is where class that needs                                    *
+ * it, are instantiated                                                      *
+ */
+
+# Initialize Database object
+$Database = new Database;
+# Initialize Modules object
+$Modules = new Modules;
+# Initialize userhandler object
+$UsersHandler = new UsersHandler;
+# Initialize mailer object
+$Mailer = new Mailer;
+# Initialize session object
+$Session = new Session;
+# Initialize form object
+$Form = new Form;
+
 
 /**                                                                          *
  *                                                                           *
