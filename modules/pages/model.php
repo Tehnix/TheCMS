@@ -138,7 +138,7 @@ if($FieldStorage['action'] == 'pages_newPage'){
                     $FieldStorage['pages_discussion'],
                     $FieldStorage['pages_type']
                    );
-    header("Location: " . $FieldStorage['referer'] . "");
+    header("Location: " . $FieldStorage['referer']);
 }
 else if($FieldStorage['action'] == 'pages_updatePage'){
     $Pages = new Pages;
@@ -149,5 +149,5 @@ else if($FieldStorage['action'] == 'pages_updatePage'){
                        $FieldStorage['pages_discussion'],
                        $FieldStorage['pages_type']
                       );
-    header("Location: " . $FieldStorage['referer'] . "");
+    header("Location: " . $FieldStorage['referer']);
 }

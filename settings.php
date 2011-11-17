@@ -114,9 +114,9 @@ define("COOKIE_PATH", "/");  //Avaible in whole domain
  * sends to users, and whether to send a
  * welcome email to newly registered users.
  */
-define("EMAIL_FROM_NAME", "TheSite - Christian Laustsen");
-define("EMAIL_FROM_ADDR", "Contact@TheSite.com");
-define("EMAIL_SIGNATURE", "- TheSite");
+define("EMAIL_FROM_NAME", "Zeal - Christian Laustsen");
+define("EMAIL_FROM_ADDR", "Contact@ZealDev.com");
+define("EMAIL_SIGNATURE", "- Zeal");
 define("EMAIL_WELCOME", false);
 
 /**

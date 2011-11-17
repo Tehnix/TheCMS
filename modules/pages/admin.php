@@ -15,7 +15,7 @@ if($$pages_admin_name){
         foreach($Pages->getPage('', 'ORDER BY id DESC '.$pagination->limit) as $item){
             $pages .=
             '<tr>' .
-            '<td><a href="' . URL_ROOT . 'admin/' . $module_pages_name . '/update/' 
+            '<td><a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_pages_name . '/update/' 
             . $item['id'] . '">' . $item['name'] . '</a></td>' .
             '<td>' . $item['comments_count'] . '</td>' .
             '<td>' . date('F d, Y', strtotime($item['modify'])) . '</td>';
@@ -24,7 +24,7 @@ if($$pages_admin_name){
         $style = '<style></style>';
         
         $top_right = $pagination->display_pages();
-        $top_left = '<a href="' . URL_ROOT . 'admin/' . $module_pages_name . '/new">Add New Page <b>+</b></a>';
+        $top_left = '<a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_pages_name . '/new">Add New Page <b>+</b></a>';
         
         $full = '
         <table id="zebraTable">
@@ -51,7 +51,7 @@ if($$pages_admin_name){
             </tbody>
         </table>';
         
-        $tpl_content = new Template(TEMPLATES_ROOT . 'admin/one_col.tpl');
+        $tpl_content = new Template(TEMPLATES_ROOT . ADMIN_PATH . '/one_col.tpl');
         $tpl_content->set('SCRIPT', $admin->script);
         $tpl_content->set('STYLE', $style);
         $tpl_content->set('TOP_RIGHT', $top_right);
@@ -97,13 +97,13 @@ if($$pages_admin_name){
                                       'value'=>'Submit'));
         
         $form = $admin->form(array('action'=>'pages_newPage',
-                                   'referer'=>'admin/' . $module_pages_name,
+                                   'referer'=>ADMIN_PATH . '/' . $module_pages_name,
                                    'validate'=>'#pages_title'));
                              
         $style = '<style></style>';
         
         $top_right = '';
-        $top_left = '<a href="' . URL_ROOT . 'admin/' . $module_pages_name . '">View All</a>';
+        $top_left = '<a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_pages_name . '">View All</a>';
         
         $left = $form . $textarea;
         
@@ -136,7 +136,7 @@ if($$pages_admin_name){
         </table>
         </form>';
         
-        $tpl_content = new Template(TEMPLATES_ROOT . 'admin/two_col.tpl');
+        $tpl_content = new Template(TEMPLATES_ROOT . ADMIN_PATH . '/two_col.tpl');
         $tpl_content->set('SCRIPT', $admin->script);
         $tpl_content->set('STYLE', $style);
         $tpl_content->set('TOP_RIGHT', $top_right);
@@ -196,13 +196,13 @@ if($$pages_admin_name){
                                           'value'=>'Submit'));
             
             $form = $admin->form(array('action'=>'pages_updatePage',
-                                       'referer'=>'admin/' . $module_pages_name,
+                                       'referer'=>ADMIN_PATH . '/' . $module_pages_name,
                                        'validate'=>'#pages_title'));
             
             $style = '<style></style>';
             
             $top_right = '';
-            $top_left = '<a href="' . URL_ROOT . 'admin/' . $module_pages_name . '">View All</a>';
+            $top_left = '<a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_pages_name . '">View All</a>';
 
             $left = $form . $id . $textarea;
 
@@ -239,12 +239,12 @@ if($$pages_admin_name){
             $script = '';
             $style = '';
             $top_right = '';
-            $top_left = '<a href="' . URL_ROOT . 'admin/' . $module_pages_name . '">View All</a>';
+            $top_left = '<a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_pages_name . '">View All</a>';
             $left = '<div class="errormsg">Sorry, there wasn\'t found any data !</div>';
             $right = '';
         }
         
-        $tpl_content = new Template(TEMPLATES_ROOT . 'admin/two_col.tpl');
+        $tpl_content = new Template(TEMPLATES_ROOT . ADMIN_PATH . '/two_col.tpl');
         $tpl_content->set('SCRIPT', $admin->script);
         $tpl_content->set('STYLE', $style);
         $tpl_content->set('TOP_RIGHT', $top_right);

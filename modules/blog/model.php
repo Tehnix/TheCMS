@@ -281,9 +281,8 @@ class Blog extends ModulesBase
         return $array;
     }
     
-    public function addTags( $tags, $insertid=null ){
+    public function addTags( $subTags, $insertid=null ){
         if(!empty($subTags)) {
-            $subTags = mysql_real_escape_string($subTags);
             $subTags = preg_split("/[\s]*[,][\s]*/", $subTags);
             foreach($subTags as $arrayTags) {
                 $tags = $this->database->fetchAll('tags', array('name'=>$arrayTags), 'ORDER BY id');
@@ -346,7 +345,7 @@ if($FieldStorage['action'] == 'blog_addBlogPost'){
                        $FieldStorage['blog_category'],
                        $FieldStorage['blog_tags'],
                        $FieldStorage['blog_discussion']);
-    header("Location: " . $FieldStorage['referer'] . "");
+    header("Location: " . $FieldStorage['referer']);
 }
 if($FieldStorage['action'] == 'blog_updateBlogPost'){
     $Blog = new Blog;
@@ -363,5 +362,5 @@ if($FieldStorage['action'] == 'blog_updateBlogPost'){
                           $FieldStorage['blog_category'],
                           $FieldStorage['blog_tags'],
                           $FieldStorage['blog_discussion']);
-    header("Location: " . $FieldStorage['referer'] . "");
+    header("Location: " . $FieldStorage['referer']);
 }

@@ -18,7 +18,7 @@ if($$blog_admin_name){
         foreach($Blog->getBlogPosts($pagination->limit) as $item){
             $blog .=
             '<tr>' .
-            '<td><a href="' . URL_ROOT . 'admin/' . $module_blog_name . '/update/' 
+            '<td><a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_blog_name . '/update/' 
             . $item['id'] . '">' . $item['title'] . '</a></td>' .
             '<td>' . $item['author_name'] . '</td>' .
             '<td>' . $item['comments_count'] . '</td>' .
@@ -28,7 +28,7 @@ if($$blog_admin_name){
         $style = '<style></style>';
         
         $top_right = $pagination->display_pages();
-        $top_left = '<a href="' . URL_ROOT . 'admin/' . $module_blog_name . '/new">Add New Post <b>+</b></a>';
+        $top_left = '<a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_blog_name . '/new">Add New Post <b>+</b></a>';
         
         $full = '
         <table id="zebraTable">
@@ -57,7 +57,7 @@ if($$blog_admin_name){
             </tbody>
         </table>';
         
-        $tpl_content = new Template(TEMPLATES_ROOT . 'admin/one_col.tpl');
+        $tpl_content = new Template(TEMPLATES_ROOT . ADMIN_PATH . '/one_col.tpl');
         $tpl_content->set('SCRIPT', $admin->script);
         $tpl_content->set('STYLE', $style);
         $tpl_content->set('TOP_RIGHT', $top_right);
@@ -109,13 +109,13 @@ if($$blog_admin_name){
                                       'value'=>'Submit'));
         
         $form = $admin->form(array('action'=>'blog_addBlogPost',
-                                   'referer'=>'admin/' . $module_blog_name,
+                                   'referer'=>ADMIN_PATH . '/' . $module_blog_name,
                                    'validate'=>'#blog_title'));
                              
         $style = '<style></style>';
         
         $top_right = '';
-        $top_left = '<a href="' . URL_ROOT . 'admin/' . $module_blog_name . '">View All</a>';
+        $top_left = '<a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_blog_name . '">View All</a>';
         
         $left = $form . $textarea;
         
@@ -152,7 +152,7 @@ if($$blog_admin_name){
         </table>
         </form>';
         
-        $tpl_content = new Template(TEMPLATES_ROOT . 'admin/two_col.tpl');
+        $tpl_content = new Template(TEMPLATES_ROOT . ADMIN_PATH . '/two_col.tpl');
         $tpl_content->set('SCRIPT', $admin->script);
         $tpl_content->set('STYLE', $style);
         $tpl_content->set('TOP_RIGHT', $top_right);
@@ -220,13 +220,13 @@ if($$blog_admin_name){
                                           'value'=>'Submit'));
 
             $form = $admin->form(array('action'=>'blog_updateBlogPost',
-                                       'referer'=>'admin/' . $module_blog_name,
+                                       'referer'=>ADMIN_PATH . '/' . $module_blog_name,
                                        'validate'=>'#blog_title'));
             
             $style = '<style></style>';
 
             $top_right = '';
-            $top_left = '<a href="' . URL_ROOT . 'admin/' . $module_blog_name . '">View All</a>';
+            $top_left = '<a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_blog_name . '">View All</a>';
 
             $left = $form . $id . $textarea;
 
@@ -267,12 +267,12 @@ if($$blog_admin_name){
             $script = '';
             $style = '';
             $top_right = '';
-            $top_left = '<a href="' . URL_ROOT . 'admin/' . $module_blog_name . '">View All</a>';
+            $top_left = '<a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_blog_name . '">View All</a>';
             $left = '<div class="errormsg">Sorry, there wasn\'t found any data !</div>';
             $right = '';
         }
         
-        $tpl_content = new Template(TEMPLATES_ROOT . 'admin/two_col.tpl');
+        $tpl_content = new Template(TEMPLATES_ROOT . ADMIN_PATH . '/two_col.tpl');
         $tpl_content->set('SCRIPT', $admin->script);
         $tpl_content->set('STYLE', $style);
         $tpl_content->set('TOP_RIGHT', $top_right);

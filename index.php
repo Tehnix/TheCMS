@@ -144,7 +144,7 @@ if($Module_admin) {
                                       'value'=>'Submit'));
         
         $form = $admin->form(array('action'=>'settings_settings',
-                                   'referer'=>'admin/settings'));
+                                   'referer'=>ADMIN_PATH . '/settings'));
                                    
         $first = $form . '
         <table id="settingsTable">
@@ -189,7 +189,7 @@ if($Module_admin) {
         
         $second = 'Sådan noget som google analytics!';
         
-        $tpl_content = new Template(TEMPLATES_ROOT . 'admin/settings.tpl');
+        $tpl_content = new Template(TEMPLATES_ROOT . ADMIN_PATH . '/settings.tpl');
         $tpl_content->set('SCRIPT', $admin->script);
         $tpl_content->set('FIRST' , $first);
         $tpl_content->set('SECOND' , $second);
@@ -197,7 +197,7 @@ if($Module_admin) {
         $tpl_content = $tpl_content->output();
     }
     # The admin page
-    $tpl_layout = new Template(TEMPLATES_ROOT . 'admin' . DS . 'index.tpl');
+    $tpl_layout = new Template(TEMPLATES_ROOT . ADMIN_PATH . DS . 'index.tpl');
     $tpl_layout->set('STYLESHEET', MEDIA_ROOT . 'compressed.php');
     $tpl_layout->set('FAVICON', RESOURCES_ROOT . 'img' . DS . 'favicon.ico');
     $tpl_layout->set('IMG_ROOT', RESOURCES_ROOT . 'img' . DS);

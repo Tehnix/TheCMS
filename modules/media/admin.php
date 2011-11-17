@@ -15,7 +15,7 @@ if($$media_admin_name){
         foreach($Media->getMedia('', $pagination->limit) as $item){
             $media .=
             '<tr>' .
-            '<td><a href="' . URL_ROOT . 'admin/' . $module_media_name . '/view/' 
+            '<td><a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_media_name . '/view/' 
             . $item['log_id'] . '">' . $item['log_originalname'] . '</a></td>' .
             '<td>' . number_format(($item['log_size']/100000), 2, '.', '') . ' MB</td>' .
             '<td>' . date('F d, Y', strtotime($item['log_date'])) . '</td>';
@@ -24,7 +24,7 @@ if($$media_admin_name){
         $style = '<style></style>';
         
         $top_right = $pagination->display_pages();
-        $top_left = '<a href="' . URL_ROOT . 'admin/' . $module_media_name . '/new">Add New Media <b>+</b></a> ';
+        $top_left = '<a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_media_name . '/new">Add New Media <b>+</b></a> ';
         
         $full = '
         <table id="zebraTable">
@@ -47,7 +47,7 @@ if($$media_admin_name){
             </tbody>
         </table>';
         
-        $tpl_content = new Template(TEMPLATES_ROOT . 'admin/one_col.tpl');
+        $tpl_content = new Template(TEMPLATES_ROOT . ADMIN_PATH . '/one_col.tpl');
         $tpl_content->set('SCRIPT', $admin->script);
         $tpl_content->set('STYLE', $style);
         $tpl_content->set('TOP_RIGHT', $top_right);
@@ -65,7 +65,7 @@ if($$media_admin_name){
             $style = '<style></style>';
             
             $top_right = '';
-            $top_left = '<a href="' . URL_ROOT . 'admin/' . $module_media_name . '">View All</a> ';
+            $top_left = '<a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_media_name . '">View All</a> ';
 
             $full = '
                 <form>
@@ -77,7 +77,7 @@ if($$media_admin_name){
         }
         else{
             $top_right = '';
-            $top_left = '<a href="' . URL_ROOT . 'admin/' . $module_media_name . '">View All</a> ';
+            $top_left = '<a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_media_name . '">View All</a> ';
 
             $full = '
             <span style="color:red;">
@@ -85,7 +85,7 @@ if($$media_admin_name){
             </span>';
         }
         
-        $tpl_content = new Template(TEMPLATES_ROOT . 'admin/one_col.tpl');
+        $tpl_content = new Template(TEMPLATES_ROOT . ADMIN_PATH . '/one_col.tpl');
         $tpl_content->set('SCRIPT', $script.$admin->script);
         $tpl_content->set('STYLE', $style);
         $tpl_content->set('TOP_RIGHT', $top_right);
@@ -109,18 +109,18 @@ if($$media_admin_name){
             $style = '<style></style>';
             
             $top_right = '';
-            $top_left = '<a href="' . URL_ROOT . 'admin/' . $module_media_name . '">View All</a>';
+            $top_left = '<a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_media_name . '">View All</a>';
             
             $full =  $displayMedia;
         }
         if($error){
             $script = '';
             $style = '';
-            $top = '<a href="' . URL_ROOT . 'admin/' . $module_media_name . '">View All</a>';
+            $top = '<a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_media_name . '">View All</a>';
             $full = '<div class="errormsg">Sorry, there wasn\'t found any data !</div>';
         }
         
-        $tpl_content = new Template(TEMPLATES_ROOT . 'admin/one_col.tpl');
+        $tpl_content = new Template(TEMPLATES_ROOT . ADMIN_PATH . '/one_col.tpl');
         $tpl_content->set('SCRIPT', $admin->script);
         $tpl_content->set('STYLE', $style);
         $tpl_content->set('TOP_RIGHT', $top_right);
