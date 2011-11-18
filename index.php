@@ -254,6 +254,8 @@ else if($Module_login){
         $tpl_layout->set('ERROR_USER', $Form->error("user"));
         $tpl_layout->set('ERROR_PASS', $Form->error("pass"));
         print $tpl_layout->output();
+        # So Form errors doens't block after input is corrected
+        unset($_SESSION['error_array']);
     }
     catch (Exception $e) {
         print 'Error loading template !...';
@@ -264,9 +266,14 @@ else if($Module_register){
      * The user is already logged in, not allowed to register.
      */
     if($Session->logged_in){
-       echo "<h1>Registered</h1>";
-       echo "<p>We're sorry <b>$Session->username</b>, but you've already registered. "
-           ."<a href=\"index.php\">Main</a>.</p>";
+        $tpl_layout = new Template(TEMPLATES_ROOT . 'error.tpl');
+        $tpl_layout->set(
+                         'ERROR_MSG',
+                         '<h1>Registered</h1>'
+                         . '<p>We\'re sorry <b>' . $Session->username 
+                         . '</b>, but you\'ve already registered. '
+                         . '<a href="index.php">Main</a>.</p>'
+                        );
     }
     /**
      * The user has submitted the registration form and the
@@ -275,15 +282,26 @@ else if($Module_register){
     else if(isset($_SESSION['regsuccess'])){
        /* Registration was successful */
        if($_SESSION['regsuccess']){
-          echo "<h1>Registered!</h1>";
-          echo "<p>Thank you <b>".$_SESSION['reguname']."</b>, your information has been added to the database, "
-              ."you may now <a href=\"index.php\">log in</a>.</p>";
+            $tpl_layout = new Template(TEMPLATES_ROOT . 'error.tpl');
+            $tpl_layout->set(
+                             'ERROR_MSG',
+                             '<h1>Registered!</h1>'
+                             . '<p>Thank you <b>' . $_SESSION['reguname'] 
+                             . '</b>, your information has been added to the database, '
+                             . 'you may now <a href="index.php">log in</a>.</p>'
+                             . 'Please try again at a later time.</p>'
+                            );
        }
        /* Registration failed */
        else{
-          echo "<h1>Registration Failed</h1>";
-          echo "<p>We're sorry, but an error has occurred and your registration for the username <b>".$_SESSION['reguname']."</b>, "
-              ."could not be completed.<br>Please try again at a later time.</p>";
+            $tpl_layout = new Template(TEMPLATES_ROOT . 'error.tpl');
+            $tpl_layout->set(
+                             'ERROR_MSG',
+                             '<h1>Registration Failed</h1>'
+                             . '<p>We\'re sorry, but an error has occurred and your registration for the username <b>'
+                             . $_SESSION['reguname'] . '</b>, could not be completed.<br>'
+                             . 'Please try again at a later time.</p>'
+                            );
        }
        unset($_SESSION['regsuccess']);
        unset($_SESSION['reguname']);
@@ -325,20 +343,24 @@ else if($Module_register){
                     $tpl_layout->set('ERROR_FIRSTNAME', $Form->error("cfirst_name"));
                     $tpl_layout->set('ERROR_LASTNAME', $Form->error("clast_name"));
                 }
-                $tpl_layout->set('URL_ROOT', URL_ROOT);
-                $tpl_layout->set('STYLESHEET', MEDIA_ROOT . 'compressed.php');
-                $tpl_layout->set('IMG_ROOT', RESOURCES_ROOT . 'img' . DS);
-                $tpl_layout->set('FAVICON', RESOURCES_ROOT . 'img' . DS . 'favicon.ico');
-                $tpl_layout->set('SITE_TITLE', $settings['sitetitle']);
-                print $tpl_layout->output();
             } 
             catch (Exception $e) {
-                print 'Error loading template !...';
+                $tpl_layout = new Template(TEMPLATES_ROOT . 'error.tpl');
+                $tpl_layout->set('ERROR_MSG', "Error loading template !...");
             }
         }
         else{
-            print 'Registration not allowed at the moment';
+            $tpl_layout = new Template(TEMPLATES_ROOT . 'error.tpl');
+            $tpl_layout->set('ERROR_MSG', "Registration not allowed at the moment");
         }
+        $tpl_layout->set('URL_ROOT', URL_ROOT);
+        $tpl_layout->set('STYLESHEET', MEDIA_ROOT . 'compressed.php');
+        $tpl_layout->set('IMG_ROOT', RESOURCES_ROOT . 'img' . DS);
+        $tpl_layout->set('FAVICON', RESOURCES_ROOT . 'img' . DS . 'favicon.ico');
+        $tpl_layout->set('SITE_TITLE', $settings['sitetitle']);
+        print $tpl_layout->output();
+        # So Form errors doens't block after input is corrected
+        unset($_SESSION['error_array']);
     }
 }
 else{
