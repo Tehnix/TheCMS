@@ -1,6 +1,10 @@
 # Don't show indexes
 IndexIgnore *
 
+# For them stupid magic quotes ;)
+php_flag magic_quotes_gpc Off
+php_value magic_quotes_gpc Off
+
 Options +FollowSymLinks
 Options +Indexes
 

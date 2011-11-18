@@ -10,6 +10,8 @@ CREATE TABLE `settings` (
   `startpage` varchar(50) NOT NULL DEFAULT '',
   `membership` tinyint(1) NOT NULL DEFAULT '0',
   `theme` int(11) NOT NULL DEFAULT '1',
+  `googleanalytics` tinyint(1) NOT NULL DEFAULT '0',
+  `analyticscode` text NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
@@ -17,7 +19,7 @@ CREATE TABLE `settings` (
 -- Dumping data for table `settings`
 --
 
-INSERT INTO `settings` VALUES(1, 'TheCMS', '', '', '1', 0, 1);
+INSERT INTO `settings` VALUES(1, 'TheCMS', '', '', '1', 0, 1, 0, '');
 --
 -- Table structure for table `_recent_activity`
 --
