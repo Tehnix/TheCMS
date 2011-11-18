@@ -44,7 +44,7 @@ $updateblogpost = $blog->updateBlogPost($updateId, $title, $post, $author_id, $c
 */
 class Blog extends ModulesBase
 {   
-    public function getBlogPosts($inLimit=null, $inId=null, $inCategoryId=null, $inTagId=null, $inArchiveId=null){
+    public function get($inLimit=null, $inId=null, $inCategoryId=null, $inTagId=null, $inArchiveId=null){
         if(!empty($inId)){
             $sql = "SELECT b.*, u.username, u.first_name, u.last_name, u.email, u.userlevel 
             FROM blog_posts AS b 
@@ -135,7 +135,7 @@ class Blog extends ModulesBase
         return $posts;
     }
     
-    public function addBlogPost( $title, $post, $author_id, $category=null, $tags=null, $discussion=null ){
+    public function insert( $title, $post, $author_id, $category=null, $tags=null, $discussion=null ){
         // Check if basic values are submitted, else print error
         if(empty($title) || empty($post)) {
             return false;
@@ -159,7 +159,7 @@ class Blog extends ModulesBase
         }
     }
     
-    public function updateBlogPost( $id=null, $title=null, $post=null, $author_id=null, $category=null, $tags=null, $discussion=null ){
+    public function update( $id=null, $title=null, $post=null, $author_id=null, $category=null, $tags=null, $discussion=null ){
         if(empty($id) || empty($title) || empty($post)) {
             return false;
         }
@@ -339,12 +339,14 @@ if($FieldStorage['action'] == 'blog_addBlogPost'){
     else{
         $author_id = 0;
     }
-    $Blog->addBlogPost($FieldStorage['blog_title'],
-                       $FieldStorage['blog_post'],
-                       $author_id,
-                       $FieldStorage['blog_category'],
-                       $FieldStorage['blog_tags'],
-                       $FieldStorage['blog_discussion']);
+    $Blog->insert(
+                  $FieldStorage['blog_title'],
+                  $FieldStorage['blog_post'],
+                  $author_id,
+                  $FieldStorage['blog_category'],
+                  $FieldStorage['blog_tags'],
+                  $FieldStorage['blog_discussion']
+                 );
     header("Location: " . $FieldStorage['referer']);
 }
 if($FieldStorage['action'] == 'blog_updateBlogPost'){
@@ -355,12 +357,14 @@ if($FieldStorage['action'] == 'blog_updateBlogPost'){
     else{
         $author_id = 0;
     }
-    $Blog->updateBlogPost($FieldStorage['blog_id'],
-                          $FieldStorage['blog_title'],
-                          $FieldStorage['blog_post'],
-                          $author_id,
-                          $FieldStorage['blog_category'],
-                          $FieldStorage['blog_tags'],
-                          $FieldStorage['blog_discussion']);
+    $Blog->update(
+                  $FieldStorage['blog_id'],
+                  $FieldStorage['blog_title'],
+                  $FieldStorage['blog_post'],
+                  $author_id,
+                  $FieldStorage['blog_category'],
+                  $FieldStorage['blog_tags'],
+                  $FieldStorage['blog_discussion']
+                 );
     header("Location: " . $FieldStorage['referer']);
 }

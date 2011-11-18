@@ -5,7 +5,7 @@
 
 class References extends ModulesBase
 {
-    public function getReferences($id){
+    public function get($id){
         if(!empty($id)){
             $refArray = $this->database->fetchOne(
                                                   'references',
@@ -39,7 +39,7 @@ class References extends ModulesBase
         return $refArray;
     }
        
-    public function newReference(){
+    public function insert(){
         
     }
 }

@@ -24,7 +24,7 @@ $displaymedia = $media->displayMedia($filename)
 */
 class Media extends ModulesBase
 {   
-    public function getMedia( $id=null, $limit=null ){
+    public function get( $id=null, $limit=null ){
         if(!empty($id)) {
             $mediaArray = $this->database->fetchOne('_uploads_log', array('log_id'=>$id));
         }
@@ -36,7 +36,7 @@ class Media extends ModulesBase
         return $mediaArray;
     }
     
-    public function displayMedia( $filename=null ){
+    public function display( $filename=null ){
         $extension = strtolower(end(preg_split('/\./', $filename, -1 , PREG_SPLIT_NO_EMPTY)));
         
         if($extension == "jpg" || $extension == "gif" || $extension == "png" || $extension == "jpeg" || $extension == "pdf") {

@@ -12,7 +12,7 @@ if($$media_admin_name){
         $pagination->paginate("_uploads_log", $pagination_page, $pagination_ipp);
         
         $media = '';
-        foreach($Media->getMedia('', $pagination->limit) as $item){
+        foreach($Media->get('', $pagination->limit) as $item){
             $media .=
             '<tr>' .
             '<td><a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_media_name . '/view/' 
@@ -98,13 +98,13 @@ if($$media_admin_name){
         $error = true;
         if(isset($url_query[3])){
             $error = false;
-            $media = $Media->getMedia($url_query[3]);
+            $media = $Media->get($url_query[3]);
             if(empty($media['log_id'])){
                 $error = true;
             }
             $admin_title .= ' -> View';
             
-            $displayMedia = $Media->displayMedia($media['log_filename']);
+            $displayMedia = $Media->display($media['log_filename']);
             
             $style = '<style></style>';
             

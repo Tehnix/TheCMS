@@ -6,7 +6,7 @@ if($Module_blog) {
     $pagination->paginate("blog_posts", $page_needle, $page_ipp);
     
     $blog = new Blog;
-    $getPosts = $blog->getBlogPosts($pagination->limit, $blog_needle, $category_needle, $tag_needle, $archive_needle);
+    $getPosts = $blog->get($pagination->limit, $blog_needle, $category_needle, $tag_needle, $archive_needle);
     
     $template_dir = TEMPLATES_ROOT . end(explode(DS, dirname(__file__))) . DS;
     
@@ -73,7 +73,7 @@ if($Module_blog) {
         }
         if($getPosts['discussion'] == 1) {
             $Comments = new Comments;
-            $getComments = $Comments->getComments('blog_post_comments', 'blog_post_id', $getPosts['id']);
+            $getComments = $Comments->get('blog_post_comments', 'blog_post_id', $getPosts['id']);
             $blogComments = '<section id="blogComments">';
             foreach($getComments as $comment){
                 $blogComments .= '

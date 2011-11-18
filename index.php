@@ -13,7 +13,7 @@ foreach($getmodules as $module) {
 }
 # Redirect to startpage if page is empty
 if(empty($url_query[0])){
-    $startpage = Pages::getPageMenu($settings['startpage']); # Make it take id for page, and return type plus id...
+    $startpage = Pages::getMenu($settings['startpage']); # Make it take id for page, and return type plus id...
     if($startpage['type'] != 'pages'){
         $url_query[0] = $startpage['type'];
         $url_query[1] = $startpage['id'];
@@ -343,7 +343,7 @@ else if($Module_register){
 }
 else{
     $tpl_menu = '<ul id="menu">';
-    foreach(Pages::getPageMenu() as $page){
+    foreach(Pages::getMenu() as $page){
         if($page['type'] == 'pages'){
             $tpl_menu .= '<li><a href="' . URL_ROOT . $page['type'] . '/' 
             . $page['id'] . '">' . $page['name'] . '</a></li>';

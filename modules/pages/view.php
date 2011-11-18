@@ -1,7 +1,7 @@
 <?php
 if($Module_pages) {
     $pages = new Pages;
-    $getPage = $pages->getPage($pages_number);
+    $getPage = $pages->get($pages_number);
     
     $template_dir = TEMPLATES_ROOT . end(explode(DS, dirname(__file__))) . DS;
     

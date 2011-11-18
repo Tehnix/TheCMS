@@ -5,7 +5,7 @@
 
 class Projects extends ModulesBase
 {
-    public function getProjects($id){
+    public function get($id){
         if(!empty($id)){
             $projectsArray = $this->database->fetchOne(
                                                        'projects',
@@ -39,7 +39,7 @@ class Projects extends ModulesBase
         return $projectsArray;
     }
        
-    public function newProject(){
+    public function insert(){
         
     }
 }

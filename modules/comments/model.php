@@ -2,7 +2,7 @@
 
 class Comments extends ModulesBase
 {
-    public function getComments( $table, $field, $id, $limit = null ){
+    public function get( $table, $field, $id, $limit = null ){
         $commentIds = $this->database->fetchAll($table, array($field=>$id));
         for($i=0; $i<sizeof($commentIds); $i++){
             $comment = $this->database->fetchOne(

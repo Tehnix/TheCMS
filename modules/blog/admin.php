@@ -15,7 +15,7 @@ if($$blog_admin_name){
         $pagination->paginate("blog_posts", $pagination_page, $pagination_ipp);
         
         $blog = '';
-        foreach($Blog->getBlogPosts($pagination->limit) as $item){
+        foreach($Blog->get($pagination->limit) as $item){
             $blog .=
             '<tr>' .
             '<td><a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_blog_name . '/update/' 
@@ -166,7 +166,7 @@ if($$blog_admin_name){
         $error = true;
         if(isset($url_query[3])){
             $error = false;
-            $blog = $Blog->getBlogPosts('', $url_query[3]);
+            $blog = $Blog->get('', $url_query[3]);
             if(empty($blog['id'])){
                 $error = true;
             }

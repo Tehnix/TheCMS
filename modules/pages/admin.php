@@ -12,7 +12,7 @@ if($$pages_admin_name){
         $pagination->paginate("pages", $pagination_page, $pagination_ipp);
         
         $pages = '';
-        foreach($Pages->getPage('', 'ORDER BY id DESC '.$pagination->limit) as $item){
+        foreach($Pages->get('', 'ORDER BY id DESC '.$pagination->limit) as $item){
             $pages .=
             '<tr>' .
             '<td><a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_pages_name . '/update/' 
@@ -74,7 +74,7 @@ if($$pages_admin_name){
                                      array('0'=>'No',
                                            '1'=>'Yes'));      
         $typesArray = array();
-        foreach(Pages::getPageTypes() as $types){
+        foreach(Pages::getTypes() as $types){
             $typesArray[$types['key']] = $types['name'];
         }
         $type = $admin->select(array('name'=>'pages_type',
@@ -150,7 +150,7 @@ if($$pages_admin_name){
         $error = true;
         if(isset($url_query[3])){
             $error = false;
-            $page = $Pages->getPage($url_query[3]);
+            $page = $Pages->get($url_query[3]);
             if(empty($page['id'])){
                 $error = true;
             }
@@ -172,7 +172,7 @@ if($$pages_admin_name){
                                          array('0'=>'No',
                                                '1'=>'Yes'));
             $typesArray = array();
-            foreach(Pages::getPageTypes() as $types){
+            foreach(Pages::getTypes() as $types){
                 $typesArray[$types['key']] = $types['name'];
             }
             $type = $admin->select(array('name'=>'pages_type',

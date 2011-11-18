@@ -34,7 +34,7 @@ class Pages extends ModulesBase
 {
     protected $maxPages = 100;
     
-    public function getPage( $id=null, $additional = null ){
+    public function get( $id=null, $additional = null ){
         if(!empty($id)) {
             $pagesArray = $this->database->fetchOne('pages', array('id'=>$id));
             if(get_magic_quotes_gpc()){
@@ -59,7 +59,7 @@ class Pages extends ModulesBase
         return $pagesArray;
     }
     
-    public function newPage( $name=null, $content=null, $discussion=null, $type=null ){
+    public function insert( $name=null, $content=null, $discussion=null, $type=null ){
         if(empty($name))
         {
             return false;
@@ -88,7 +88,7 @@ class Pages extends ModulesBase
         }
     }
     
-    public function updatePage( $id=null, $name=null, $content=null, $discussion=null, $type=null ){
+    public function update( $id=null, $name=null, $content=null, $discussion=null, $type=null ){
         if(empty($id) || empty($name)) {
             return false;
         }
@@ -104,7 +104,7 @@ class Pages extends ModulesBase
         
     }
     
-    public static function getPageTypes(){
+    public static function getTypes(){
         global $Database;
         $typeArray = array();
         $types = $Database->fetchAll('pages_type');
@@ -116,7 +116,7 @@ class Pages extends ModulesBase
         return $typeArray;
     }
     
-    public static function getPageMenu( $id=null ){
+    public static function getMenu( $id=null ){
         global $Database;
         if(!empty($id)){
             $types = $Database->fetchOne('pages', array('id'=>$id));
@@ -132,22 +132,22 @@ class Pages extends ModulesBase
 # Handle all interaction with this modules model class
 if($FieldStorage['action'] == 'pages_newPage'){
     $Pages = new Pages;
-    $Pages->newPage(
-                    $FieldStorage['pages_title'],
-                    $FieldStorage['pages_content'],
-                    $FieldStorage['pages_discussion'],
-                    $FieldStorage['pages_type']
-                   );
+    $Pages->insert(
+                   $FieldStorage['pages_title'],
+                   $FieldStorage['pages_content'],
+                   $FieldStorage['pages_discussion'],
+                   $FieldStorage['pages_type']
+                  );
     header("Location: " . $FieldStorage['referer']);
 }
 else if($FieldStorage['action'] == 'pages_updatePage'){
     $Pages = new Pages;
-    $Pages->updatePage(
-                       $FieldStorage['pages_id'],
-                       $FieldStorage['pages_title'],
-                       $FieldStorage['pages_content'],
-                       $FieldStorage['pages_discussion'],
-                       $FieldStorage['pages_type']
-                      );
+    $Pages->update(
+                   $FieldStorage['pages_id'],
+                   $FieldStorage['pages_title'],
+                   $FieldStorage['pages_content'],
+                   $FieldStorage['pages_discussion'],
+                   $FieldStorage['pages_type']
+                  );
     header("Location: " . $FieldStorage['referer']);
 }
