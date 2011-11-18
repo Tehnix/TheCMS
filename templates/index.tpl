@@ -8,6 +8,7 @@
     <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <script src="{% JS_ROOT %}head.load.min.js" type="text/javascript" charset="utf-8"></script>
 </head>
 
 <body>
@@ -30,5 +31,6 @@
         <a href="{% URL_ROOT %}resources/BSDLicense.html">All rights reserved</a> |
         <a href="{% URL_ROOT %}admin">Administration</a>
     </footer>
+    {% GOOGLE_ANALYTICS %}
 </body>
 </html>

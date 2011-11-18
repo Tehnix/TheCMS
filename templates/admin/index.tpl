@@ -5,8 +5,8 @@
 	<title>{% HEAD_TITLE %}</title>
 	<link rel="stylesheet" type="text/css" media="screen, print, projection" href="{% STYLESHEET %}?type=admin">
 	<link rel="shortcut icon" type="image/x-icon" href="{% FAVICON %}">
-	<script src="{% JS_ROOT %}jquery-1.6.4.min.js" type="text/javascript" charset="utf-8"></script>
-	<script src="{% JS_ROOT %}head.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="{% JS_ROOT %}head.load.min.js" type="text/javascript" charset="utf-8"></script>
 	<script> 
 	$(document).ready(function () {
 		var up = true;
@@ -84,26 +84,39 @@
 		
 	</div>
 	<script>
-	head.js("{% JS_ROOT %}jquery.plugins.js", function() {
-		head.js("{% JS_ROOT %}plupload.full.js", "{% JS_ROOT %}plupload.queue.js");
-		head.js("{% JS_ROOT %}jquery.cleditor.min.js", function() {
-			$(".advancedEditor").cleditor({width:"99.5%", height:400});
-			$(".simpleEditor").cleditor({
-				width:"98.5%", 
-				height:150,
-				controls: "bold italic underline strikethrough | image | subscript superscript | font size " +
-				"| alignleft center alignright justify | undo redo | source"
-			});
+	head.js(
+			"{% JS_ROOT %}jquery.plugins.js",
+			"{% JS_ROOT %}plupload.full.js",
+			"{% JS_ROOT %}plupload.queue.js",
+			{"CLEditor" : "{% JS_ROOT %}jquery.cleditor.min.js"},
+			{"Fancybox" : "{% JS_ROOT %}jquery.fancybox-1.3.4.pack.js"}
+	);
+	head.ready("CLEditor", function() {
+		$(".advancedEditor").cleditor({width:"99.5%", height:400});
+		$(".simpleEditor").cleditor({
+			width:"98.5%", 
+			height:150,
+			controls: "bold italic underline strikethrough | image | subscript superscript | font size " +
+			"| alignleft center alignright justify | undo redo | source"
 		});
-		head.js("{% JS_ROOT %}jquery.fancybox-1.3.4.pack.js", function() {
-			$(".iframe").fancybox({
-				'width'				: 550,
-				'height'			: 300,
-				'autoScale'			: false,
-				'transitionIn'		: 'none',
-				'transitionOut'		: 'none',
-				'type'				: 'iframe'
-			});
+	});
+	head.ready("Fancybox", function() {
+		/* For use with iFrames (remove comment marks to enable)
+		$(".iframe").fancybox({
+			'width'				: 550,
+			'height'			: 300,
+			'autoScale'			: false,
+			'transitionIn'		: 'none',
+			'transitionOut'		: 'none',
+			'type'				: 'iframe'
+		});
+		*/
+		$(".inline").fancybox({
+			'width'				: 550,
+			'height'			: 300,
+			'autoScale'			: false,
+			'transitionIn'		: 'none',
+			'transitionOut'		: 'none'
 		});
 	});
 	</script>

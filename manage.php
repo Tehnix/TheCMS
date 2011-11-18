@@ -2407,7 +2407,9 @@ if($FieldStorage['action'] == 'settings_settings'){
                       'email'=>$FieldStorage['settings_email'],
                       'startpage'=>$FieldStorage['settings_startpage'], 
                       'membership'=>$FieldStorage['settings_membership'],
-                      'theme'=>$FieldStorage['settings_theme']),
+                      'theme'=>$FieldStorage['settings_theme'],
+                      'googleanalytics'=>$FieldStorage['settings_googleanalytics'],
+                      'analyticscode'=>$FieldStorage['settings_analyticscode']),
                       array('id'=>'1'));
     header("Location: " . $FieldStorage['referer'] . "");
 }

@@ -109,6 +109,11 @@ if($Module_admin) {
                                      array('0'=>'None',
                                            '1'=>'Open',
                                            '2'=>'Closed'));
+        $googleanalytics = $admin->select(array('name'=>'settings_googleanalytics',
+                                                'style'=>'width:130px;',
+                                                'selected'=>$settings['googleanalytics']),
+                                          array('0'=>'Turned Off',
+                                                '1'=>'Turned On'));
         $theme = $admin->select(array('name'=>'settings_theme',
                                       'style'=>'width:130px;',
                                       'selected'=>$settings['theme']),
@@ -137,11 +142,16 @@ if($Module_admin) {
                                      'type'=>'text',
                                      'value'=>$settings['email'],
                                      'placeholder'=>'MyOwn@Email.com'));
+
+        $gacode = $admin->textarea(array('name'=>'settings_analyticscode',
+                                         'id'=>'analyticscode',
+                                         'style'=>'width:600px;height:350px;',
+                                         'value'=>$settings['analyticscode']));
         
         $submit = $admin->input(array('id'=>'settings_submit',
                                       'class'=>'button darkblue',
                                       'type'=>'submit',
-                                      'value'=>'Submit'));
+                                      'value'=>'Save Settings'));
         
         $form = $admin->form(array('action'=>'settings_settings',
                                    'referer'=>ADMIN_PATH . '/settings'));
@@ -173,11 +183,21 @@ if($Module_admin) {
                 </tr>
                 <tr>
                     <td>Registration :</td>
-                    <td>'. $membership .'</td>
+                    <td>' . $membership . '</td>
                 </tr>
                 <tr>
                     <td>Theme :</td>
-                    <td>'. $theme .'</td>
+                    <td>' . $theme . '</td>
+                </tr>
+                <tr>
+                    <td>Google Analytics :</td>
+                    <td>
+                        ' . $googleanalytics . '
+                        <a class="inline" href="#analyticscode">Click here to alter google analytics code</a>
+                        <div style="display:none;">
+                            ' . $gacode . '
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <td></td>
@@ -344,5 +364,15 @@ else{
     $tpl_layout->set('TITLE', $settings['sitetitle']);
     $tpl_layout->set('MENU', $tpl_menu);
     $tpl_layout->set('CONTENT', $tpl_content);
+    $tpl_layout->set('JS_ROOT', RESOURCES_ROOT . 'js' . DS);
+    if($settings['googleanalytics'] == 1){
+        $tpl_layout->set(
+                         'GOOGLE_ANALYTICS',
+                         "<script>head.ready(document, function(){" . $settings['analyticscode'] . "});</script>"
+                        );
+    }
+    else{
+        $tpl_layout->set('GOOGLE_ANALYTICS', '');
+    }
     print $tpl_layout->output();
 }
