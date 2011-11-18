@@ -92,7 +92,7 @@ if($Module_admin) {
         
         $tpl_content = $tpl_content->output();
     }
-    if($admin_title == 'Settings'){
+    else if($admin_title == 'Settings'){
         $admin = new AdminGenerator;
         $pages_array = array();
         $pages = $Database->fetchAll('pages');
@@ -213,6 +213,38 @@ if($Module_admin) {
         $tpl_content->set('SCRIPT', $admin->script);
         $tpl_content->set('FIRST' , $first);
         $tpl_content->set('SECOND' , $second);
+        
+        $tpl_content = $tpl_content->output();
+    }
+    else if($admin_title == 'Profile'){
+        $top_left = '<a href="' . URL_ROOT . ADMIN_PATH . '/profile/edit">Edit Profile</a>';
+
+        $full = '
+        <table id="profileTable">
+            <tr>
+                <td>Username</td>
+                <td>' . $Session->username . '</td>
+            </tr>
+            <tr>
+                <td>First name</td>
+                <td>' . $Session->first_name . '</td>
+            </tr>
+            <tr>
+                <td>Last name</td>
+                <td>' . $Session->last_name . '</td>
+            </tr>
+            <tr>
+                <td>Priviliges</td>
+                <td>' . $Session->userlevel . '</td>
+            </tr>
+        </table>';
+        
+        $tpl_content = new Template(TEMPLATES_ROOT . ADMIN_PATH . '/one_col.tpl');
+        $tpl_content->set('SCRIPT', '');
+        $tpl_content->set('STYLE', '');
+        $tpl_content->set('TOP_RIGHT', '');
+        $tpl_content->set('TOP_LEFT', $top_left);
+        $tpl_content->set('FULL' , $full);
         
         $tpl_content = $tpl_content->output();
     }
