@@ -8,7 +8,7 @@ _backup/*.backup.zip
 _dev/site/_backup/*.backup.zip 
 
 # The settings.php file is individual, we then avoid it in further merges
-# settings.php
+settings.php
 
 # We keep our .gitignore folders incase we ignore full content of a folder
 !.gitignore
