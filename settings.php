@@ -13,7 +13,7 @@ define("DB_TYPE", "MySQL");
 define("DB_SERVER", "servername");
 define("DB_USER", "username");
 define("DB_PASS", "password");
-define("DB_NAME", "databasename");
+define("DB_NAME", "database_name");
 
 /**
  * Database Table Constants - these constants
