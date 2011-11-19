@@ -1,5 +1,21 @@
-# Files to ignore (we avoid Mac OS's .DS_Store's)
-.DS_Store 
+# OS generated files #
+######################
+.DS_Store*
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Specific files #
+##################
 # We don't want uploads to get committed (both live and dev)
 resources/uploads/* 
 _dev/site/resources/uploads/* 
