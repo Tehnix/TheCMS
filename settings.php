@@ -10,10 +10,10 @@
  * correct.
  */
 define("DB_TYPE", "MySQL");
-define("DB_SERVER", "localhost");
-define("DB_USER", "root");
-define("DB_PASS", "root");
-define("DB_NAME", "chrules_labs");
+define("DB_SERVER", "servername");
+define("DB_USER", "username");
+define("DB_PASS", "password");
+define("DB_NAME", "databasename");
 
 /**
  * Database Table Constants - these constants
@@ -47,12 +47,11 @@ define("PHP_VERSION_NUM", $PHP_Version);
 /**
  * Directory and URL Constants
  */
-$exploded_root = explode('/', $_SERVER['SCRIPT_NAME']);
 
 define("ADMIN_PATH", "admin");
 define("URL", $_GET['handle']);
 define("DS", DIRECTORY_SEPARATOR);
-define("URL_ROOT", DS . $exploded_root[1] . DS);
+define("URL_ROOT", "/");
 define("ROOT", dirname(__file__) . DS);
 define("MODULE_ROOT", ROOT . 'modules' . DS);
 define("TEMPLATES_ROOT", ROOT . 'templates' . DS);
