@@ -71,7 +71,7 @@ if($Module_blog) {
         else{
             $blogHtml = '';
         }
-        if($getPosts['discussion'] == 1) {
+        if($getPosts['discussion'] == 1 and class_exists('Comments')) {
             $Comments = new Comments;
             $getComments = $Comments->get('blog_post_comments', 'blog_post_id', $getPosts['id']);
             $blogComments = '<section id="blogComments">';
