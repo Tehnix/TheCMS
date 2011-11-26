@@ -6,13 +6,21 @@ head.ready(function() {
 	var ajax_load = "<img src='../resources/img/load.gif' width='12px'>";
 	
 	
-	var loadUrl = "../cgi-bin/backup_server.py?run=";
+	var loadUrl = "../cgi-bin/check.py?backupType=server&run=";
 	$("#backup_server_result .backup_btn").click(function(){
-		$("#backup_server_result").html(ajax_load+" Backing up...").load(loadUrl+"no");
-		
+		$("#backup_server_result").html(ajax_load + " Checking...");
+
+		$.get(loadUrl+"check", function(responseText){
+			if(responseText == "runBackupScript\n"){
+				$("#backup_server_result").html(ajax_load + " backing up...").load(loadUrl+"runBackupScript");
+			}
+			else{
+				$("#backup_server_result").html(responseText);
+			}
+		});
 		$("#backup_server_result .new_backup_btn").live("click", function()
 		{
-			$("#backup_server_result").html(ajax_load+" Backing up...").load(loadUrl+"yes");
+			$("#backup_server_result").html(ajax_load + " Backing up...").load(loadUrl+"runBackupScript");
 		});
 		$("#backup_server_result .old_backup_btn").live("click", function()
 		{
@@ -20,16 +28,24 @@ head.ready(function() {
 		});
 		$("#backup_server_result .reset_backup_btn").live("click", function()
 		{
-			$("#backup_server_result").html(ajax_load+" Resetting…").load(loadUrl+"reset");
+			$("#backup_server_result").html("Backup Cancelled!");
 		});
 	});
-	var loadUrl2 = "../cgi-bin/backup_db.py?run=";
+	var loadUrl2 = "../cgi-bin/check.py?backupType=database&run=";
 	$("#backup_db_result .backup_btn").click(function(){
-		$("#backup_db_result").html(ajax_load+" Backing up...").load(loadUrl2+"no");
-		
+		$("#backup_db_result").html(ajax_load + " Checking...");
+
+		$.get(loadUrl2+"check", function(responseText){
+			if(responseText == "runBackupScript\n"){
+				$("#backup_db_result").html(ajax_load + " backing up...").load(loadUrl2+"runBackupScript");
+			}
+			else{
+				$("#backup_db_result").html(responseText);
+			}
+		});
 		$("#backup_db_result .new_backup_btn").live("click", function()
 		{
-			$("#backup_db_result").html(ajax_load+" Backing up...").load(loadUrl2+"yes");
+			$("#backup_db_result").html(ajax_load + " Backing up...").load(loadUrl2+"runBackupScript");
 		});
 		$("#backup_db_result .old_backup_btn").live("click", function()
 		{
@@ -37,7 +53,7 @@ head.ready(function() {
 		});
 		$("#backup_db_result .reset_backup_btn").live("click", function()
 		{
-			$("#backup_db_result").html(ajax_load+" Resetting…").load(loadUrl2+"reset");
+			$("#backup_db_result").html("Backup Cancelled!");
 		});
 	});
 	
