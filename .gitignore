@@ -13,6 +13,7 @@ Thumbs.db
 *.exe
 *.o
 *.so
+*.pyc
 
 # Specific files #
 ##################
@@ -20,8 +21,7 @@ Thumbs.db
 resources/uploads/* 
 _dev/site/resources/uploads/* 
 # We don't want our backups to get committed (except for .sql backups)
-_backup/*.backup.zip 
-_dev/site/_backup/*.backup.zip 
+*.backup.zip 
 
 # The settings.php file is individual, we then avoid it in further merges
 settings.php
