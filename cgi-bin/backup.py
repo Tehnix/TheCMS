@@ -10,7 +10,7 @@ try:
 except ImportError:
     PYTHON_MYSQL = False
 
-class BackupScript():
+class BackupScript:
     """Backup server and database, but prompts user if already
     backed up today
     """
