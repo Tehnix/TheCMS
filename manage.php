@@ -14,8 +14,8 @@ require('settings.php');
 class Database
 {
     public static $lastinsertid;
-
-    public function execute( $type, $sql, $args ){
+    
+    public function execute($type, $sql, $args){
         try {
             # MySQL with PDO_MYSQL
             if(DB_TYPE == 'MySQL'){
@@ -66,7 +66,7 @@ class Database
         
     }
     
-    private function keysToSql( $keyarray, $seperator, $prefix = "" ){
+    private function keysToSql($keyarray, $seperator, $prefix=''){
         if($keyarray == null) {
             return 1;
         }
@@ -80,7 +80,7 @@ class Database
         }
     }
     
-    private function keysToInsertSql( $keyarray, $seperator, $prefix = "" ){
+    private function keysToInsertSql($keyarray, $seperator, $prefix=''){
         if($keyarray == null) {
             return 1;
         }
@@ -97,27 +97,27 @@ class Database
         }
     }
     
-    public function fetchOne( $table, $filters = null ){
+    public function fetchOne($table, $filters=null){
         $sql = 'SELECT * FROM ' . $table . ' WHERE ' 
                . $this->keysToSql($filters, "AND ", ":") . '';
         
         return $this->execute('fetchone', $sql, $filters);
     }
     
-    public function fetchAll( $table, $filters = null, $additional = ''){
+    public function fetchAll($table, $filters=null, $additional=''){
         $sql = 'SELECT * FROM ' . $table . ' WHERE ' 
                . $this->keysToSql($filters, "AND ", ":") . ' ' . $additional;
         
         return $this->execute('fetchall', $sql, $filters);
     }
     
-    public function insert( $table, $data = null ){
+    public function insert($table, $data=null){
         $sql = 'INSERT INTO ' . $table . ' ' 
                . $this->keysToInsertSql($data, ", ", ":") . '';
         return $this->execute('exec', $sql, $data);
     }
     
-    public function update( $table, $data = null, $filters = null ){
+    public function update($table, $data=null, $filters=null){
         $sql = 'UPDATE ' . $table . ' SET ' 
                . $this->keysToSql($data, ", ", ":") . ' WHERE ' 
                . $this->keysToSql($filters, "AND ", ":filter_") . '';
@@ -131,14 +131,14 @@ class Database
         return $this->execute('exec', $sql, $filters);
     }
     
-    public function delete( $table, $filters = null ){
+    public function delete($table, $filters=null){
         $sql = 'DELETE FROM ' . $table . ' WHERE ' 
         . $this->keysToSql($filters, "AND ", ":") . '';
         
         return $this->execute('exec', $sql, $filters);
     }
     
-    public function backupDatabase( $tables, $filename = null ){
+    public function backupDatabase($tables, $filename=null){
         if(empty($tables)){
             return false;
         }
@@ -218,7 +218,7 @@ class Database
         }
     }
     
-    public function runSQLDump( $filename = null ){
+    public function runSQLDump($filename=null){
         if(!empty($filename)){
             # Temporary variable, used to store current query
             $templine = '';
@@ -246,7 +246,7 @@ class Database
         return self::$lastinsertid;
     }
     
-    public function count( $table, $filters = null ){
+    public function count($table, $filters=null){
         $sql = 'SELECT COUNT(*) FROM ' . $table . ' WHERE ' 
                . $this->keysToSql($filters, "AND ", ":") . '';
         
@@ -268,6 +268,7 @@ class ModulesBase
         $this->database = $Database;
     }
 }
+
 /**                                                                          *
  *                                                                           *
  * The Modules class is meant to simplify handling of                        *
