@@ -21,6 +21,7 @@ Thumbs.db
 resources/uploads/* 
 _dev/site/resources/uploads/* 
 # We don't want our backups to get committed (except for .sql backups)
+*.backup.sql
 *.backup.zip 
 
 # The settings.php file is individual, we then avoid it in further merges
