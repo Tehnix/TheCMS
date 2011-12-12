@@ -6,7 +6,7 @@ if($Module_pages) {
     $template_dir = TEMPLATES_ROOT . end(explode(DS, dirname(__file__))) . DS;
     
     try {
-        $tpl_content = new Template($template_dir . 'pages.tpl');
+        $tpl_content = new Template(Template::getFile('pages/pages.tpl'));
         $tpl_content->set('ID', $getPage['id']);
         $tpl_content->set('TITLE', $getPage['name']);
         $tpl_content->set('CONTENT' , $getPage['content']);

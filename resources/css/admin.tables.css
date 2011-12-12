@@ -71,7 +71,11 @@ td{
 }
 #zebraTable tbody tr{
     background:#FCFCFC;
+    cursor:pointer;
 }
 #zebraTable tbody .alt{
     background:#F9F9F9;
+}
+#zebraTable tbody tr:hover{
+    background:#F3F6FA;
 }

@@ -2,8 +2,6 @@
 if(substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) ob_start("ob_gzhandler"); else ob_start();
 require('manage.php');
 require('urls.php');
-# Set settings values
-$settings = $Database->fetchOne('settings', array('id'=>'1'));
 # URL variable
 $url_query = explode('/', URL);
 # Import the module: Models, URL handlers and Views
@@ -85,7 +83,7 @@ if($Module_admin) {
             ' . $admin_activity_text . '
         </table>';
         
-        $tpl_content = new Template(TEMPLATES_ROOT . ADMIN_PATH . '/dashboard.tpl');
+        $tpl_content = new Template(Template::getAdminFile('dashboard.tpl'));
         $tpl_content->set('SCRIPT', '');
         $tpl_content->set('COUNT' , $count);
         $tpl_content->set('ACTIVITY' , $activity);
@@ -114,10 +112,19 @@ if($Module_admin) {
                                                 'selected'=>$settings['googleanalytics']),
                                           array('0'=>'Turned Off',
                                                 '1'=>'Turned On'));
+        $dir = TEMPLATES_ROOT . 'site';
+        $themeFolder = scandir($dir, 0);
+        $exclude = array('.', '..', '.DS_Store');
+        $themes = array();
+        foreach($themeFolder as $file) {
+            if(!in_array($file, $exclude)){
+                $themes[$file] = $file;
+            }
+        }
         $theme = $admin->select(array('name'=>'settings_theme',
                                       'style'=>'width:130px;',
                                       'selected'=>$settings['theme']),
-                                array());
+                                $themes);
         
         $sitetitle = $admin->input(array('name'=>'settings_sitetitle',
                                          'id'=>'settings_sitetitle',
@@ -209,7 +216,7 @@ if($Module_admin) {
         
         $second = 'Sådan noget som google analytics!';
         
-        $tpl_content = new Template(TEMPLATES_ROOT . ADMIN_PATH . '/settings.tpl');
+        $tpl_content = new Template(Template::getAdminFile('settings.tpl'));
         $tpl_content->set('SCRIPT', $admin->script);
         $tpl_content->set('FIRST' , $first);
         $tpl_content->set('SECOND' , $second);
@@ -239,7 +246,7 @@ if($Module_admin) {
             </tr>
         </table>';
         
-        $tpl_content = new Template(TEMPLATES_ROOT . ADMIN_PATH . '/one_col.tpl');
+        $tpl_content = new Template(Template::getAdminFile('one_col.tpl'));
         $tpl_content->set('SCRIPT', '');
         $tpl_content->set('STYLE', '');
         $tpl_content->set('TOP_RIGHT', '');
@@ -249,7 +256,7 @@ if($Module_admin) {
         $tpl_content = $tpl_content->output();
     }
     # The admin page
-    $tpl_layout = new Template(TEMPLATES_ROOT . ADMIN_PATH . DS . 'index.tpl');
+    $tpl_layout = new Template(Template::getAdminFile('index.tpl'));
     $tpl_layout->set('STYLESHEET', MEDIA_ROOT . 'compressed.php');
     $tpl_layout->set('FAVICON', RESOURCES_ROOT . 'img' . DS . 'favicon.ico');
     $tpl_layout->set('IMG_ROOT', RESOURCES_ROOT . 'img' . DS);
@@ -274,7 +281,7 @@ else if($Module_login){
         $remember = 'checked';
     }
     try{
-        $tpl_layout = new Template(TEMPLATES_ROOT . 'login.tpl');
+        $tpl_layout = new Template(Template::getFile('login.tpl'));
         $tpl_layout->set('URL_ROOT', URL_ROOT);
         $tpl_layout->set('STYLESHEET', MEDIA_ROOT . 'compressed.php');
         $tpl_layout->set('FAVICON', RESOURCES_ROOT . 'img' . DS . 'favicon.ico');
@@ -298,7 +305,7 @@ else if($Module_register){
      * The user is already logged in, not allowed to register.
      */
     if($Session->logged_in){
-        $tpl_layout = new Template(TEMPLATES_ROOT . 'error.tpl');
+        $tpl_layout = new Template(Template::getFile('error.tpl'));
         $tpl_layout->set(
                          'ERROR_MSG',
                          '<h1>Registered</h1>'
@@ -314,7 +321,7 @@ else if($Module_register){
     else if(isset($_SESSION['regsuccess'])){
        /* Registration was successful */
        if($_SESSION['regsuccess']){
-            $tpl_layout = new Template(TEMPLATES_ROOT . 'error.tpl');
+            $tpl_layout = new Template(Template::getFile('error.tpl'));
             $tpl_layout->set(
                              'ERROR_MSG',
                              '<h1>Registered!</h1>'
@@ -326,7 +333,7 @@ else if($Module_register){
        }
        /* Registration failed */
        else{
-            $tpl_layout = new Template(TEMPLATES_ROOT . 'error.tpl');
+            $tpl_layout = new Template(Template::getFile('error.tpl'));
             $tpl_layout->set(
                              'ERROR_MSG',
                              '<h1>Registration Failed</h1>'
@@ -348,7 +355,7 @@ else if($Module_register){
         if($settings['membership'] == 1 or $settings['membership'] == 2){
             try {
                 if($settings['membership'] == 1){
-                    $tpl_layout = new Template(TEMPLATES_ROOT . 'register.tpl');
+                    $tpl_layout = new Template(Template::getFile('register.tpl'));
                     $tpl_layout->set('FORM_USER', $Form->value("user"));
                     $tpl_layout->set('FORM_PASS', $Form->value("pass"));
                     $tpl_layout->set('FORM_FIRSTNAME', $Form->value("first_name"));
@@ -361,7 +368,7 @@ else if($Module_register){
                     $tpl_layout->set('ERROR_LASTNAME', $Form->error("last_name"));
                 }
                 else if($settings['membership'] == 2){
-                    $tpl_layout = new Template(TEMPLATES_ROOT . 'registerregkey.tpl');
+                    $tpl_layout = new Template(Template::getFile('registerregkey.tpl'));
                     $tpl_layout->set('FORM_REG', $Form->value("cregkey"));
                     $tpl_layout->set('ERROR_REG', $Form->error("cregkey"));
                     $tpl_layout->set('FORM_USER', $Form->value("cuser"));
@@ -377,12 +384,12 @@ else if($Module_register){
                 }
             } 
             catch (Exception $e) {
-                $tpl_layout = new Template(TEMPLATES_ROOT . 'error.tpl');
+                $tpl_layout = new Template(Template::getFile('error.tpl'));
                 $tpl_layout->set('ERROR_MSG', "Error loading template !...");
             }
         }
         else{
-            $tpl_layout = new Template(TEMPLATES_ROOT . 'error.tpl');
+            $tpl_layout = new Template(Template::getFile('error.tpl'));
             $tpl_layout->set('ERROR_MSG', "Registration not allowed at the moment");
         }
         $tpl_layout->set('URL_ROOT', URL_ROOT);
@@ -410,23 +417,27 @@ else{
     $tpl_menu .= '</ul>';
 
     # The general page
-    $tpl_layout = new Template(TEMPLATES_ROOT . 'index.tpl');
-    $tpl_layout->set('URL_ROOT', URL_ROOT);
-    $tpl_layout->set('STYLESHEET', MEDIA_ROOT . 'compressed.php');
-    $tpl_layout->set('FAVICON', RESOURCES_ROOT . 'img' . DS . 'favicon.ico');
-    $tpl_layout->set('SITE_TITLE', $settings['sitetitle']);
-    $tpl_layout->set('TITLE', $settings['sitetitle']);
-    $tpl_layout->set('MENU', $tpl_menu);
-    $tpl_layout->set('CONTENT', $tpl_content);
-    $tpl_layout->set('JS_ROOT', RESOURCES_ROOT . 'js' . DS);
-    if($settings['googleanalytics'] == 1){
-        $tpl_layout->set(
-                         'GOOGLE_ANALYTICS',
-                         "<script>head.ready(document, function(){" . $settings['analyticscode'] . "});</script>"
-                        );
+    try{
+        $tpl_layout = new Template(Template::getFile('index.tpl'));
+        $tpl_layout->set('URL_ROOT', URL_ROOT);
+        $tpl_layout->set('STYLESHEET', MEDIA_ROOT . 'compressed.php');
+        $tpl_layout->set('FAVICON', RESOURCES_ROOT . 'img' . DS . 'favicon.ico');
+        $tpl_layout->set('SITE_TITLE', $settings['sitetitle']);
+        $tpl_layout->set('TITLE', $settings['sitetitle']);
+        $tpl_layout->set('MENU', $tpl_menu);
+        $tpl_layout->set('CONTENT', $tpl_content);
+        $tpl_layout->set('JS_ROOT', RESOURCES_ROOT . 'js' . DS);
+        if($settings['googleanalytics'] == 1){
+            $tpl_layout->set(
+                             'GOOGLE_ANALYTICS',
+                             "<script>head.ready(document, function(){" . $settings['analyticscode'] . "});</script>"
+                            );
+        }
+        else{
+            $tpl_layout->set('GOOGLE_ANALYTICS', '');
+        }
+        print $tpl_layout->output();
+    } catch(Exception $e){
+        print $e;
     }
-    else{
-        $tpl_layout->set('GOOGLE_ANALYTICS', '');
-    }
-    print $tpl_layout->output();
 }

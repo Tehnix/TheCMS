@@ -14,9 +14,9 @@ if($$pages_admin_name){
         $pages = '';
         foreach($Pages->get('', 'ORDER BY id DESC '.$pagination->limit) as $item){
             $pages .=
-            '<tr>' .
-            '<td><a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_pages_name . '/update/' 
-            . $item['id'] . '">' . $item['name'] . '</a></td>' .
+            '<tr onclick="document.location.href=\'' . URL_ROOT . ADMIN_PATH 
+            . '/' . $module_pages_name . '/update/' . $item['id'] . '\'">' .
+            '<td>' . $item['name'] . '</td>' .
             '<td>' . $item['comments_count'] . '</td>' .
             '<td>' . date('F d, Y', strtotime($item['modify'])) . '</td>';
         }
@@ -51,7 +51,7 @@ if($$pages_admin_name){
             </tbody>
         </table>';
         
-        $tpl_content = new Template(TEMPLATES_ROOT . ADMIN_PATH . '/one_col.tpl');
+        $tpl_content = new Template(Template::getAdminFile('one_col.tpl'));
         $tpl_content->set('SCRIPT', $admin->script);
         $tpl_content->set('STYLE', $style);
         $tpl_content->set('TOP_RIGHT', $top_right);
@@ -136,7 +136,7 @@ if($$pages_admin_name){
         </table>
         </form>';
         
-        $tpl_content = new Template(TEMPLATES_ROOT . ADMIN_PATH . '/two_col.tpl');
+        $tpl_content = new Template(Template::getAdminFile('two_col.tpl'));
         $tpl_content->set('SCRIPT', $admin->script);
         $tpl_content->set('STYLE', $style);
         $tpl_content->set('TOP_RIGHT', $top_right);
@@ -244,7 +244,7 @@ if($$pages_admin_name){
             $right = '';
         }
         
-        $tpl_content = new Template(TEMPLATES_ROOT . ADMIN_PATH . '/two_col.tpl');
+        $tpl_content = new Template(Template::getAdminFile('two_col.tpl'));
         $tpl_content->set('SCRIPT', $admin->script);
         $tpl_content->set('STYLE', $style);
         $tpl_content->set('TOP_RIGHT', $top_right);

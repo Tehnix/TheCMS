@@ -256,7 +256,7 @@ class Database
 
 /**                                                                          *
  *                                                                           *
- * The ModulesBase class holds all the functio                               *
+ * The ModulesBase class holds all the functions                             *
  * that all modules should inherit                                           *
  */
 class ModulesBase
@@ -304,10 +304,78 @@ class Modules extends ModulesBase
 
 /**                                                                          *
  *                                                                           *
+ * The TemplateBase class holds all the functions                            *
+ * that all templates should inherit                                         *
+ */
+class TemplateBase
+{
+    protected static $_settings;
+    public static $theme;
+    public static $admin_theme;
+
+    public static function setSettings($setting){
+        self::$_settings = $setting;
+        if(isset($setting['theme']) and $setting['theme'] != ''){
+            self::$theme = $setting['theme'];
+        }
+        else{
+            self::$theme = 'default';
+        }
+        if(isset($setting['admintheme']) and $setting['admintheme'] != '' and
+           $setting['admintheme'] != 0){
+            self::$admin_theme = $setting['admintheme'];
+        }
+        else{
+            self::$admin_theme = 'default';
+        }
+    }
+
+    public function getSettings(){
+        return self::$_settings;
+    }
+
+    public function getTheme(){
+        return self::$theme;
+    }
+
+    public static function getFile($file){
+        if(file_exists(TEMPLATES_ROOT . 'site' . DS . self::$theme . DS 
+           . $file)){
+            return TEMPLATES_ROOT . 'site' . DS . self::$theme . DS . $file;
+        }
+        elseif(file_exists(TEMPLATES_ROOT . 'site' . DS . 'default' . DS 
+               . $file)){
+            return TEMPLATES_ROOT . 'site' . DS . 'default' . DS . $file;
+        }
+        else{
+            throw new Exception('Error loading template file (' . $file 
+            . ').<br />');
+        }
+    }
+
+    public static function getAdminFile($file){
+        if(file_exists(TEMPLATES_ROOT . 'admin' . DS . self::$admin_theme . DS 
+           . $file)){
+            return TEMPLATES_ROOT . 'admin' . DS . self::$admin_theme . DS 
+                   . $file;
+        }
+        elseif(file_exists(TEMPLATES_ROOT . 'admin' . DS . 'default' . DS 
+               . $file)){
+            return TEMPLATES_ROOT . 'admin' . DS . 'default' . DS . $file;
+        }
+        else{
+            throw new Exception('Error loading template file (' . $file 
+            . ').<br />');
+        }
+    }
+}
+
+/**                                                                          *
+ *                                                                           *
  * The Templates class is meant to simplify template                         *
  * creation, and merging.                                                    *
  */
-class Template 
+class Template extends TemplateBase
 {
     protected $file;
     protected $values = array();
@@ -2368,6 +2436,11 @@ $Mailer = new Mailer;
 $Session = new Session;
 # Initialize form object
 $Form = new Form;
+
+# Set settings values
+$settings = $Database->fetchOne('settings', array('id'=>'1'));
+# Save our settings in the TemplateBase class
+TemplateBase::setSettings($settings);
 
 
 /**                                                                          *
