@@ -13,15 +13,31 @@ require('settings.php');
  */
 class Database
 {
+    protected $DB_TYPE;
+    protected $DB_SERVER;
+    protected $DB_NAME;
+    protected $DB_USER;
+    protected $DB_PASS;
+    
     public static $lastinsertid;
+
+    public function __construct($DB_TYPE, $DB_SERVER, $DB_NAME, 
+                                $DB_USER, $DB_PASS){
+        $this->DB_TYPE = $DB_TYPE;
+        $this->DB_SERVER = $DB_SERVER;
+        $this->DB_NAME = $DB_NAME;
+        $this->DB_USER = $DB_USER;
+        $this->DB_PASS = $DB_PASS;
+    }
     
     public function execute($type, $sql, $args){
         try {
             # MySQL with PDO_MYSQL
-            if(DB_TYPE == 'MySQL'){
-                $dbh = new PDO('mysql:host='.DB_SERVER.';dbname='.DB_NAME.'',
-                               DB_USER,
-                               DB_PASS);
+            if($this->DB_TYPE == 'MySQL'){
+                $dbh = new PDO('mysql:host=' . $this->DB_SERVER 
+                               . ';dbname=' . $this->DB_NAME . '',
+                               $this->DB_USER,
+                               $this->DB_PASS);
             }
             $dbh->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
             
@@ -2425,7 +2441,7 @@ class Uploader
  */
 
 # Initialize Database object
-$Database = new Database;
+$Database = new Database(DB_TYPE, DB_SERVER, DB_NAME, DB_USER, DB_PASS);
 # Initialize Modules object
 $Modules = new Modules;
 # Initialize userhandler object
@@ -2448,7 +2464,7 @@ TemplateBase::setSettings($settings);
  * This section is for handling the interaction                              *
  * with the core objects in manage.php                                       *
  */
-$FieldStorage = false;
+$FieldStorage = False;
 if($_POST){
     $FieldStorage = $_POST;
 }
@@ -2482,6 +2498,7 @@ if($FieldStorage['action'] == 'settings_settings'){
                       'startpage'=>$FieldStorage['settings_startpage'], 
                       'membership'=>$FieldStorage['settings_membership'],
                       'theme'=>$FieldStorage['settings_theme'],
+                      'themeAdmin'=>$FieldStorage['settings_themeAdmin'],
                       'googleanalytics'=>$FieldStorage['settings_googleanalytics'],
                       'analyticscode'=>$FieldStorage['settings_analyticscode']),
                       array('id'=>'1'));

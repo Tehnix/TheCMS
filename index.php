@@ -125,6 +125,19 @@ if($Module_admin) {
                                       'style'=>'width:130px;',
                                       'selected'=>$settings['theme']),
                                 $themes);
+        $dir = TEMPLATES_ROOT . 'admin';
+        $themeAdminFolder = scandir($dir, 0);
+        $exclude = array('.', '..', '.DS_Store');
+        $themesAdmin = array();
+        foreach($themeAdminFolder as $file) {
+            if(!in_array($file, $exclude)){
+                $themesAdmin[$file] = $file;
+            }
+        }
+        $themeAdmin = $admin->select(array('name'=>'settings_themeAdmin',
+                                            'style'=>'width:130px;',
+                                            'selected'=>$settings['themeAdmin']),
+                                      $themesAdmin);
         
         $sitetitle = $admin->input(array('name'=>'settings_sitetitle',
                                          'id'=>'settings_sitetitle',
@@ -195,6 +208,10 @@ if($Module_admin) {
                 <tr>
                     <td>Theme :</td>
                     <td>' . $theme . '</td>
+                </tr>
+                <tr>
+                    <td>Admin Theme :</td>
+                    <td>' . $themeAdmin . '</td>
                 </tr>
                 <tr>
                     <td>Google Analytics :</td>

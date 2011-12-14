@@ -13,20 +13,45 @@
  */
 
 /* Add your CSS files to this array */
-if(isset($_GET['type'])){
-	$type = $_GET['type'];
+if(isset($_GET['type']) and $_GET['type'] != 'admin'){
+	$type = '.' . $_GET['type'];
+}
+elseif($_GET['type'] == 'admin'){
+    $type = $_GET['type'];
 }
 else{
-	$type = '';
+    $type = '';
 }
-$dir = '../css';
-$cssFolder = scandir($dir, 0);
-$exclude = array('.', '..', '.DS_Store', 'compressed.php');
-$cssFiles = array();
-foreach($cssFolder as $file) {
-	if(!in_array($file, $exclude) and substr($file, 0, strlen($type)) == $type){
-		$cssFiles[] = $file;
-	}
+
+if($type != 'admin'){
+    require('../../settings.php');
+    require('../../manage.php');
+    $getmodules = $Modules->getModules();
+    foreach($getmodules as $module) {
+        if(file_exists(MODULE_ROOT . $module . DS . 'style.css')){
+            $cssFiles[] = MODULE_ROOT . $module . DS . 'style.css';
+        }
+    }
+    $file = 'style' . $type . '.css';
+    if(file_exists(TEMPLATES_ROOT . 'site' . DS . $settings['theme'] . DS 
+       . $file)){
+        $cssFiles[] = TEMPLATES_ROOT . 'site' . DS . $settings['theme'] . DS . $file;
+    }
+    elseif(file_exists(TEMPLATES_ROOT . 'site' . DS . 'default' . DS 
+           . $file)){
+        $cssFiles[] = TEMPLATES_ROOT . 'site' . DS . 'default' . DS . $file;
+    }
+}
+else{
+    $dir = '.';
+    $cssFolder = scandir($dir, 0);
+    $exclude = array('.', '..', '.DS_Store', 'compressed.php');
+    $cssFiles = array();
+    foreach($cssFolder as $file) {
+        if(!in_array($file, $exclude)){
+            $cssFiles[] = $file;
+        }
+    }
 }
 
 /**
@@ -60,4 +85,3 @@ header("Content-type: text/css");
 
 // Write everything out
 echo($buffer);
-?>
