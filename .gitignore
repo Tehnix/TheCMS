@@ -27,17 +27,17 @@ _backup/database/*.backup.sql
 _backup/*.backup.zip 
 
 # The settings.php file is individual, we then avoid it in further merges
-#settings.php
+settings.php
 
 # Exclude themes but keep default
-#templates/site/*
-#templates/admin/*
-#!templates/site/default
-#!templates/admin/default
-#_dev/site/templates/site/*
-#_dev/site/templates/admin/*
-#!_dev/site/templates/site/default
-#!_dev/site/templates/admin/default
+templates/site/*
+templates/admin/*
+!templates/site/default
+!templates/admin/default
+_dev/site/templates/site/*
+_dev/site/templates/admin/*
+!_dev/site/templates/site/default
+!_dev/site/templates/admin/default
 
 # We keep our .gitignore folders incase we ignore full content of a folder
 !.gitignore
