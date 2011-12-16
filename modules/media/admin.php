@@ -15,7 +15,7 @@ if($$media_admin_name){
         foreach($Media->get('', $pagination->limit) as $item){
             $media .=
             '<tr onclick="document.location.href=\'' . URL_ROOT . ADMIN_PATH 
-            . '/' . $module_media_name . '/update/' . $item['id'] . '\'">' .
+            . '/' . $module_media_name . '/view/' . $item['log_id'] . '\'">' .
             '<td>' . $item['log_originalname'] . '</td>' .
             '<td>' . number_format(($item['log_size']/100000), 2, '.', '') . ' MB</td>' .
             '<td>' . date('F d, Y', strtotime($item['log_date'])) . '</td>';
@@ -69,7 +69,7 @@ if($$media_admin_name){
 
             $full = '
                 <form>
-                    <div id="uploader">
+                    <div id="uploader" style="height: 330px;">
                         <p>You browser doesn\'t have Flash, Silverlight, Gears, BrowserPlus or HTML5 support.</p>
                     </div>
                 </form>
@@ -120,7 +120,7 @@ if($$media_admin_name){
             $full = '<div class="errormsg">Sorry, there wasn\'t found any data !</div>';
         }
         
-        $tpl_content = new Template(Template::getAdminFile('two_col.tpl'));
+        $tpl_content = new Template(Template::getAdminFile('one_col.tpl'));
         $tpl_content->set('SCRIPT', $admin->script);
         $tpl_content->set('STYLE', $style);
         $tpl_content->set('TOP_RIGHT', $top_right);

@@ -423,11 +423,23 @@ else{
     $tpl_menu = '<ul id="menu">';
     foreach(Pages::getMenu() as $page){
         if($page['type'] == 'pages'){
-            $tpl_menu .= '<li><a href="' . URL_ROOT . $page['type'] . '/' 
+            if(URL == $page['type'] . '/' . $page['id']){
+            $active = 'class="active-link"';
+            }
+            else{
+                $active = '';
+            }
+            $tpl_menu .= '<li><a ' . $active . ' href="' . URL_ROOT . $page['type'] . '/' 
             . $page['id'] . '">' . $page['name'] . '</a></li>';
         }
         else{
-            $tpl_menu .= '<li><a href="' . URL_ROOT . $page['type'] . '">' 
+            if(URL == $page['type']){
+            $active = 'class="active-link"';
+            }
+            else{
+                $active = '';
+            }
+            $tpl_menu .= '<li><a ' . $active . ' href="' . URL_ROOT . $page['type'] . '">' 
             . $page['name'] . '</a></li>';
         }
     }

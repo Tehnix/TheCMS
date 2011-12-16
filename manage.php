@@ -402,6 +402,18 @@ class Template extends TemplateBase
      */
     public function __construct($file) {
         $this->file = $file;
+
+        # Set some of the default values
+        $this->set('URL_ROOT', URL_ROOT);
+        $this->set('JS_ROOT', RESOURCES_ROOT . 'js' . DS);
+        $this->set('STYLESHEET', MEDIA_ROOT . 'compressed.php');
+        $this->set('IMG_ROOT', RESOURCES_ROOT . 'img' . DS);
+        $this->set('UPLOAD_ROOT', RESOURCES_ROOT . 'uploads' . DS);
+        $this->set('THEME_ROOT', URL_TEMPLATES_ROOT . 'site' . DS 
+                    . Template::$theme . DS);
+        $this->set('FAVICON', RESOURCES_ROOT . 'img' . DS . 'favicon.ico');
+
+        $this->set('SITE_TITLE', $settings['sitetitle']);
     }
     
     /**
@@ -593,9 +605,11 @@ class AdminGenerator
                 // General settings
                 runtimes : 'gears,html5,html4',
                 url : 'index.php?action=upload_file',
-                max_file_size : '20mb',
-                chunk_size : '1mb',
+                max_file_size : '1000mb',
+                chunk_size : '30mb',
                 unique_names : true,
+                flash_swf_url : '" . RESOURCES_ROOT . 'js' 
+                . DS . "plupload.swf'
 
                 // Resize images on clientside if we can
                 // resize : {width : 320, height : 240, quality : 90},
