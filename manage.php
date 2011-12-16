@@ -1305,8 +1305,7 @@ class UsersHandler
      */
     function query($query){
         return mysql_query($query, $this->connection);
-    }
-}
+    }}
 
 /**                                                                          *
  *                                                                           *

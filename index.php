@@ -274,11 +274,6 @@ if($Module_admin) {
     }
     # The admin page
     $tpl_layout = new Template(Template::getAdminFile('index.tpl'));
-    $tpl_layout->set('STYLESHEET', MEDIA_ROOT . 'compressed.php');
-    $tpl_layout->set('FAVICON', RESOURCES_ROOT . 'img' . DS . 'favicon.ico');
-    $tpl_layout->set('IMG_ROOT', RESOURCES_ROOT . 'img' . DS);
-    $tpl_layout->set('JS_ROOT', RESOURCES_ROOT . 'js' . DS);
-    $tpl_layout->set('URL_ROOT', URL_ROOT);
     $tpl_layout->set('HEAD_TITLE', $settings['sitetitle'] . ' | Admin');
     $tpl_layout->set('USERNAME', $Session->username);
     $tpl_layout->set('MENU', $admin_menu);
@@ -299,10 +294,6 @@ else if($Module_login){
     }
     try{
         $tpl_layout = new Template(Template::getFile('login.tpl'));
-        $tpl_layout->set('URL_ROOT', URL_ROOT);
-        $tpl_layout->set('STYLESHEET', MEDIA_ROOT . 'compressed.php');
-        $tpl_layout->set('FAVICON', RESOURCES_ROOT . 'img' . DS . 'favicon.ico');
-        $tpl_layout->set('IMG_ROOT', RESOURCES_ROOT . 'img' . DS);
         $tpl_layout->set('SITE_TITLE', $settings['sitetitle']);
         $tpl_layout->set('FORM_USER', $Form->value("user"));
         $tpl_layout->set('FORM_PASS', $Form->value("pass"));
@@ -409,11 +400,6 @@ else if($Module_register){
             $tpl_layout = new Template(Template::getFile('error.tpl'));
             $tpl_layout->set('ERROR_MSG', "Registration not allowed at the moment");
         }
-        $tpl_layout->set('URL_ROOT', URL_ROOT);
-        $tpl_layout->set('STYLESHEET', MEDIA_ROOT . 'compressed.php');
-        $tpl_layout->set('IMG_ROOT', RESOURCES_ROOT . 'img' . DS);
-        $tpl_layout->set('FAVICON', RESOURCES_ROOT . 'img' . DS . 'favicon.ico');
-        $tpl_layout->set('SITE_TITLE', $settings['sitetitle']);
         print $tpl_layout->output();
         # So Form errors doens't block after input is corrected
         unset($_SESSION['error_array']);
@@ -448,14 +434,9 @@ else{
     # The general page
     try{
         $tpl_layout = new Template(Template::getFile('index.tpl'));
-        $tpl_layout->set('URL_ROOT', URL_ROOT);
-        $tpl_layout->set('STYLESHEET', MEDIA_ROOT . 'compressed.php');
-        $tpl_layout->set('FAVICON', RESOURCES_ROOT . 'img' . DS . 'favicon.ico');
-        $tpl_layout->set('SITE_TITLE', $settings['sitetitle']);
         $tpl_layout->set('TITLE', $settings['sitetitle']);
         $tpl_layout->set('MENU', $tpl_menu);
         $tpl_layout->set('CONTENT', $tpl_content);
-        $tpl_layout->set('JS_ROOT', RESOURCES_ROOT . 'js' . DS);
         if($settings['googleanalytics'] == 1){
             $tpl_layout->set(
                              'GOOGLE_ANALYTICS',
