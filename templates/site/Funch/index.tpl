@@ -13,6 +13,7 @@
     <script>
     !window.jQuery && document.write('<script src="{% JS_ROOT %}jquery-1.7.1.min.js"><\/script>');
     head.js('{% THEME_ROOT %}slideshow.js');
+    
     $(document).ready(function () {
         var w=window,d=document,e=d.documentElement,g=d.getElementsByTagName('body')[0],x=w.innerWidth||e.clientWidth||g.clientWidth,y=w.innerHeight||e.clientHeight||g.clientHeight;
         $("#slideshow").css({"width":x, "height":y});
