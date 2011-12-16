@@ -5,9 +5,11 @@
 	<title>{% HEAD_TITLE %}</title>
 	<link rel="stylesheet" type="text/css" media="screen, print, projection" href="{% STYLESHEET %}?type=admin">
 	<link rel="shortcut icon" type="image/x-icon" href="{% FAVICON %}">
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 	<script src="{% JS_ROOT %}head.load.min.js" type="text/javascript" charset="utf-8"></script>
 	<script> 
+    // Make sure jQuery is loaded, but we prefer from googles CDN
+    !window.jQuery && document.write('<script src="{% JS_ROOT %}jquery-1.7.1.min.js"><\/script>');
 	$(document).ready(function () {
 		var up = true;
 		function slideDownMenu(){

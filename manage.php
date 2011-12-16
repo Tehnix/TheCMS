@@ -402,6 +402,18 @@ class Template extends TemplateBase
      */
     public function __construct($file) {
         $this->file = $file;
+
+        # Set some of the default values
+        $this->set('URL_ROOT', URL_ROOT);
+        $this->set('JS_ROOT', RESOURCES_ROOT . 'js' . DS);
+        $this->set('STYLESHEET', MEDIA_ROOT . 'compressed.php');
+        $this->set('IMG_ROOT', RESOURCES_ROOT . 'img' . DS);
+        $this->set('UPLOAD_ROOT', RESOURCES_ROOT . 'uploads' . DS);
+        $this->set('THEME_ROOT', URL_TEMPLATES_ROOT . 'site' . DS 
+                    . Template::$theme . DS);
+        $this->set('FAVICON', RESOURCES_ROOT . 'img' . DS . 'favicon.ico');
+
+        $this->set('SITE_TITLE', $settings['sitetitle']);
     }
     
     /**
@@ -1291,8 +1303,7 @@ class UsersHandler
      */
     function query($query){
         return mysql_query($query, $this->connection);
-    }
-}
+    }}
 
 /**                                                                          *
  *                                                                           *
