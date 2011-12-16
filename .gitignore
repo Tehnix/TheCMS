@@ -17,6 +17,8 @@ Thumbs.db
 
 # Specific files #
 ##################
+_labs/*
+_thetime/*
 # We don't want uploads to get committed (both live and dev)
 resources/uploads/* 
 _dev/site/resources/uploads/* 
