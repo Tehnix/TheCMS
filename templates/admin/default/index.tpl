@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<<<<<<< HEAD
     <meta charset="UTF-8">
     <title>{% HEAD_TITLE %}</title>
     <link rel="stylesheet" type="text/css" media="screen, print, projection" href="{% STYLESHEET %}?type=admin">
@@ -42,6 +43,49 @@
         $('div[id^=content_display]').css('visibility','visible').hide().fadeIn();
     });
     </script>
+=======
+	<meta charset="UTF-8">
+	<title>{% HEAD_TITLE %}</title>
+	<link rel="stylesheet" type="text/css" media="screen, print, projection" href="{% STYLESHEET %}?type=admin">
+	<link rel="shortcut icon" type="image/x-icon" href="{% FAVICON %}">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="{% JS_ROOT %}head.load.min.js" type="text/javascript" charset="utf-8"></script>
+	<script> 
+    // Make sure jQuery is loaded, but we prefer from googles CDN
+    !window.jQuery && document.write('<script src="{% JS_ROOT %}jquery-1.7.1.min.js"><\/script>');
+	$(document).ready(function () {
+		var up = true;
+		function slideDownMenu(){
+			$('ul.menu_body').slideDown(1);
+			$('#MenuQuickBarHeader').css({
+			"background":"none"});
+			up = false;
+		}
+		function slideUpMenu(){
+			$('ul.menu_body').slideUp(1, function() {
+				$('#MenuQuickBarHeader').css({
+				"background":"none"});
+			});
+			up = true;
+		}
+		$('.menu_head').click(function () {  
+			if(up){
+				slideDownMenu();
+			}
+			else{
+				slideUpMenu();
+			}
+			$('html').one('click',function() {
+				slideUpMenu();
+			});
+			event.stopPropagation();
+		});
+		
+		$('#zebraTable tr:odd').addClass("alt");
+		$('div[id^=content_display]').css('visibility','visible').hide().fadeIn();
+	});
+	</script>
+>>>>>>> 2350639252d4d3e9679e50824d0e30fbf18a1b60
 </head>
 
 
