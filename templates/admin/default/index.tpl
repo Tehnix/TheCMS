@@ -7,7 +7,8 @@
 	<link rel="shortcut icon" type="image/x-icon" href="{% FAVICON %}">
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 	<script src="{% JS_ROOT %}head.load.min.js" type="text/javascript" charset="utf-8"></script>
-	<script> 
+	<script>
+     
     // Make sure jQuery is loaded, but we prefer from googles CDN
     !window.jQuery && document.write('<script src="{% JS_ROOT %}jquery-1.7.1.min.js"><\/script>');
 	$(document).ready(function () {
