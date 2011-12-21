@@ -2527,4 +2527,4 @@ if($_GET['action'] == 'upload_file'){
 # Interaction with the Process object
 if($_POST['action'] == 'process'){
     $Process = new Process;
-}
+        }

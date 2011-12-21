@@ -20,7 +20,7 @@
         <nav>
             {% MENU %}
         </nav>
-
+        
         <div id="content">
             {% CONTENT %}
         </div>
