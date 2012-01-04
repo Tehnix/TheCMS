@@ -1,1 +1,0 @@
-DROP TABLE `pages`, `pages_comments`, `pages_preview`;

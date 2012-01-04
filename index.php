@@ -274,11 +274,6 @@ if($Module_admin) {
     }
     # The admin page
     $tpl_layout = new Template(Template::getAdminFile('index.tpl'));
-    $tpl_layout->set('STYLESHEET', MEDIA_ROOT . 'compressed.php');
-    $tpl_layout->set('FAVICON', RESOURCES_ROOT . 'img' . DS . 'favicon.ico');
-    $tpl_layout->set('IMG_ROOT', RESOURCES_ROOT . 'img' . DS);
-    $tpl_layout->set('JS_ROOT', RESOURCES_ROOT . 'js' . DS);
-    $tpl_layout->set('URL_ROOT', URL_ROOT);
     $tpl_layout->set('HEAD_TITLE', $settings['sitetitle'] . ' | Admin');
     $tpl_layout->set('USERNAME', $Session->username);
     $tpl_layout->set('MENU', $admin_menu);
@@ -299,11 +294,6 @@ else if($Module_login){
     }
     try{
         $tpl_layout = new Template(Template::getFile('login.tpl'));
-        $tpl_layout->set('URL_ROOT', URL_ROOT);
-        $tpl_layout->set('STYLESHEET', MEDIA_ROOT . 'compressed.php');
-        $tpl_layout->set('FAVICON', RESOURCES_ROOT . 'img' . DS . 'favicon.ico');
-        $tpl_layout->set('IMG_ROOT', RESOURCES_ROOT . 'img' . DS);
-        $tpl_layout->set('SITE_TITLE', $settings['sitetitle']);
         $tpl_layout->set('FORM_USER', $Form->value("user"));
         $tpl_layout->set('FORM_PASS', $Form->value("pass"));
         $tpl_layout->set('FORM_REMEMBER', $remember);
@@ -409,35 +399,40 @@ else if($Module_register){
             $tpl_layout = new Template(Template::getFile('error.tpl'));
             $tpl_layout->set('ERROR_MSG', "Registration not allowed at the moment");
         }
-        $tpl_layout->set('URL_ROOT', URL_ROOT);
-        $tpl_layout->set('STYLESHEET', MEDIA_ROOT . 'compressed.php');
-        $tpl_layout->set('IMG_ROOT', RESOURCES_ROOT . 'img' . DS);
-        $tpl_layout->set('FAVICON', RESOURCES_ROOT . 'img' . DS . 'favicon.ico');
-        $tpl_layout->set('SITE_TITLE', $settings['sitetitle']);
         print $tpl_layout->output();
         # So Form errors doens't block after input is corrected
         unset($_SESSION['error_array']);
     }
 }
 else{
+    $curPage = '';
     $tpl_menu = '<ul id="menu">';
-    foreach(Pages::getMenu() as $page){
-        if($page['type'] == 'pages'){
-            if(URL == $page['type'] . '/' . $page['id']){
-            $active = 'class="active-link"';
+    foreach(Pages::getMenu() as $page) {
+        $active = '';
+        if(URL == null) {
+            if($page['id'] == $settings['startpage']) {
+                $active = 'class="active-link"';
+                $curPage = $page['name'];
             }
-            else{
-                $active = '';
+            if($page['type'] == 'pages'){
+                $tpl_menu .= '<li><a ' . $active . ' href="' . URL_ROOT . $page['type'] . '/' 
+                . $page['id'] . '">' . $page['name'] . '</a></li>';
+            } else {
+                $tpl_menu .= '<li><a ' . $active . ' href="' . URL_ROOT . $page['type'] . '">' 
+                . $page['name'] . '</a></li>';
+            }
+            
+        } elseif($page['type'] == 'pages') {
+            if(URL == $page['type'] . '/' . $page['id']) {
+                $active = 'class="active-link"';
+                $curPage = $page['name'];
             }
             $tpl_menu .= '<li><a ' . $active . ' href="' . URL_ROOT . $page['type'] . '/' 
             . $page['id'] . '">' . $page['name'] . '</a></li>';
-        }
-        else{
-            if(URL == $page['type']){
-            $active = 'class="active-link"';
-            }
-            else{
-                $active = '';
+        } else {
+            if(URL == $page['type']) {
+                $active = 'class="active-link"';
+                $curPage = $page['name'];
             }
             $tpl_menu .= '<li><a ' . $active . ' href="' . URL_ROOT . $page['type'] . '">' 
             . $page['name'] . '</a></li>';
@@ -446,27 +441,23 @@ else{
     $tpl_menu .= '</ul>';
 
     # The general page
-    try{
+    try {
         $tpl_layout = new Template(Template::getFile('index.tpl'));
-        $tpl_layout->set('URL_ROOT', URL_ROOT);
-        $tpl_layout->set('STYLESHEET', MEDIA_ROOT . 'compressed.php');
-        $tpl_layout->set('FAVICON', RESOURCES_ROOT . 'img' . DS . 'favicon.ico');
-        $tpl_layout->set('SITE_TITLE', $settings['sitetitle']);
+        $tpl_layout->set('SITE_TITLE', $curPage . ' | ' . $settings['sitetitle']);
         $tpl_layout->set('TITLE', $settings['sitetitle']);
         $tpl_layout->set('MENU', $tpl_menu);
         $tpl_layout->set('CONTENT', $tpl_content);
-        $tpl_layout->set('JS_ROOT', RESOURCES_ROOT . 'js' . DS);
-        if($settings['googleanalytics'] == 1){
+        if($settings['googleanalytics'] == 1 and $settings['analyticscode'] != '') {
             $tpl_layout->set(
                              'GOOGLE_ANALYTICS',
                              "<script>head.ready(document, function(){" . $settings['analyticscode'] . "});</script>"
                             );
         }
-        else{
+        else {
             $tpl_layout->set('GOOGLE_ANALYTICS', '');
         }
         print $tpl_layout->output();
-    } catch(Exception $e){
+    } catch(Exception $e) {
         print $e;
     }
 }

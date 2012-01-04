@@ -22,7 +22,7 @@ if($$blog_admin_name){
             '<td>' . $item['title'] . '</td>' .
             '<td>' . $item['author_name'] . '</td>' .
             '<td>' . $item['comments_count'] . '</td>' .
-            '<td>' . $item['date_posted'] . '</td>';
+            '<td>' . date('F d, Y <br> g:m a', strtotime($item['date_posted'])) . '</td>';
         }
         
         $style = '<style></style>';

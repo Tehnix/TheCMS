@@ -11,46 +11,47 @@
  * To use this in your HTML, link to it in the usual way:
  * <link rel="stylesheet" type="text/css" media="screen, print, projection" href="/css/compressed.css.php" />
  */
+require('../../settings.php');
+require('../../manage.php');
 
 /* Add your CSS files to this array */
-if(isset($_GET['type']) and $_GET['type'] != 'admin'){
+if (isset($_GET['type']) and $_GET['type'] != 'admin') {
 	$type = '.' . $_GET['type'];
-}
-elseif($_GET['type'] == 'admin'){
+} elseif ($_GET['type'] == 'admin') {
     $type = $_GET['type'];
-}
-else{
+} else {
     $type = '';
 }
 
-if($type != 'admin'){
-    require('../../settings.php');
-    require('../../manage.php');
+if ($type != 'admin') {
     $getmodules = $Modules->getModules();
     foreach($getmodules as $module) {
-        if(file_exists(MODULE_ROOT . $module . DS . 'style.css')){
+        if (file_exists(MODULE_ROOT . $module . DS . 'style.css')) {
             $cssFiles[] = MODULE_ROOT . $module . DS . 'style.css';
         }
     }
     $file = 'style' . $type . '.css';
-    if(file_exists(TEMPLATES_ROOT . 'site' . DS . $settings['theme'] . DS 
-       . $file)){
+    if (file_exists(TEMPLATES_ROOT . 'site' . DS . $settings['theme'] . DS 
+       . $file)) {
         $cssFiles[] = TEMPLATES_ROOT . 'site' . DS . $settings['theme'] . DS . $file;
-    }
-    elseif(file_exists(TEMPLATES_ROOT . 'site' . DS . 'default' . DS 
-           . $file)){
+    } elseif (file_exists(TEMPLATES_ROOT . 'site' . DS . 'default' . DS 
+           . $file)) {
         $cssFiles[] = TEMPLATES_ROOT . 'site' . DS . 'default' . DS . $file;
     }
-}
-else{
-    $dir = '.';
-    $cssFolder = scandir($dir, 0);
-    $exclude = array('.', '..', '.DS_Store', 'compressed.php');
-    $cssFiles = array();
-    foreach($cssFolder as $file) {
-        if(!in_array($file, $exclude)){
-            $cssFiles[] = $file;
+} else {
+    $getmodules = $Modules->getModules();
+    foreach($getmodules as $module) {
+        if (file_exists(MODULE_ROOT . $module . DS . 'style.admin.css')) {
+            $cssFiles[] = MODULE_ROOT . $module . DS . 'style.admin.css';
         }
+    }
+    $file = 'style.css';
+    if (file_exists(TEMPLATES_ROOT . 'admin' . DS . $settings['admin_theme'] . DS 
+       . $file)) {
+        $cssFiles[] = TEMPLATES_ROOT . 'admin' . DS . $settings['admin_theme'] . DS . $file;
+    } elseif (file_exists(TEMPLATES_ROOT . 'admin' . DS . 'default' . DS 
+           . $file)) {
+        $cssFiles[] = TEMPLATES_ROOT . 'admin' . DS . 'default' . DS . $file;
     }
 }
 

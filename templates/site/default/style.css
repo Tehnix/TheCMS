@@ -68,7 +68,8 @@ nav {
     nav a:link {color:#000;}
     nav a:visited {color:#000;}
     nav a:hover {color:#ff6a57; text-decoration: none;}
-    nav a:active {color:#000;}
+    nav a:active {color:#ff6a57;}
+    nav a.active-link {color:#ff6a57;}
     nav ul { 
         white-space:nowrap;
         list-style-type:none;

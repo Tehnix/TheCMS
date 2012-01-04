@@ -33,34 +33,34 @@ class Database
     public function execute($type, $sql, $args){
         try {
             # MySQL with PDO_MYSQL
-            if($this->DB_TYPE == 'MySQL'){
+            if ($this->DB_TYPE == 'MySQL') {
                 $dbh = new PDO('mysql:host=' . $this->DB_SERVER 
                                . ';dbname=' . $this->DB_NAME . '',
                                $this->DB_USER,
                                $this->DB_PASS);
             }
-            $dbh->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+            $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             
             $stmt = $dbh->prepare($sql);
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             
-            if($type === 'fetchone'){
+            if ($type === 'fetchone') {
                 $stmt->execute($args);
                 $data = $stmt->fetch();
             }
-            else if($type === 'fetchall'){
+            else if ($type === 'fetchall') {
                 $stmt->execute($args);
                 $data = $stmt->fetchAll();
             }
-            else if($type === 'fetchall_nonassoc'){
+            else if ($type === 'fetchall_nonassoc') {
                 $stmt->execute($args);
                 $data = $stmt->fetchAll(PDO::FETCH_BOTH);
             }
-            else if($type === 'count'){
+            else if ($type === 'count') {
                 $count = $stmt->execute($args);
                 $data = $stmt->fetchColumn(); 
             }
-            else if($type === 'exec'){
+            else if ($type === 'exec') {
                 $dbh->beginTransaction();
                 $stmt->execute($args);
                 self::$lastinsertid = $dbh->lastInsertId();
@@ -70,8 +70,8 @@ class Database
             
             return $data;
         }
-        catch(PDOException $e){
-            if($type == 'exec'){
+        catch (PDOException $e) {
+            if ($type == 'exec') {
                 $dbh->rollBack();
             }
             file_put_contents('includes/errors/PDOErrors.txt',
@@ -83,7 +83,7 @@ class Database
     }
     
     private function keysToSql($keyarray, $seperator, $prefix=''){
-        if($keyarray == null) {
+        if ($keyarray == null) {
             return 1;
         }
         else {
@@ -97,7 +97,7 @@ class Database
     }
     
     private function keysToInsertSql($keyarray, $seperator, $prefix=''){
-        if($keyarray == null) {
+        if ($keyarray == null) {
             return 1;
         }
         else {
@@ -163,7 +163,7 @@ class Database
                 $filename = ROOT . '_backup/database/' . date("Y-m-d.H-i") 
                             . '.backup.sql';
             }
-            # get all of the tables
+            # Get all of the tables
             if($tables == '*'){
                 $tables = array();
                 $query = $this->execute('fetchall_nonassoc', 'SHOW TABLES');
@@ -212,10 +212,10 @@ class Database
                         $row[$j] = addslashes($row[$j]);
                         $row[$j] = ereg_replace("\n", "\\n", $row[$j]);
                         if(isset($row[$j])){
-                            $return .= '"' . $row[$j] . '"'; 
+                            $return .= "'" . $row[$j] . "'"; 
                         }
                         else{
-                            $return .= '""';
+                            $return .= "''";
                         }
                         if($j<($num_fields-1)){
                             $return .= ',';
@@ -402,7 +402,7 @@ class Template extends TemplateBase
      */
     public function __construct($file) {
         $this->file = $file;
-
+        
         # Set some of the default values
         $this->set('URL_ROOT', URL_ROOT);
         $this->set('JS_ROOT', RESOURCES_ROOT . 'js' . DS);
@@ -444,7 +444,15 @@ class Template extends TemplateBase
             . ').<br />');
         }
         $output = file_get_contents($this->file);
-        
+        /**
+        * Execute the PHP code in our template file (if there is any)
+        * We do this before the key replacement, so that we can make loops containing
+        * actual keys and such.
+        */
+        ob_start();
+        eval('?>' . $output);
+        $output = ob_get_contents();
+        ob_end_clean();
         foreach ($this->values as $key => $value) {
             $tagToReplace = '{% ' . $key . ' %}';
             $output = str_replace($tagToReplace, $value, $output);

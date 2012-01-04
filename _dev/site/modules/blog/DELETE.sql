@@ -1,1 +1,0 @@
-DROP TABLE `blog_post_comments`, `blog_posts`, `blog_post_archive`, `blog_post_categories`, `blog_post_tags`;
