@@ -28,7 +28,7 @@
     
     <footer>
         Copyright &copy; 2009 - 2011 Christian Laustsen, 
-        <a href="{% URL_ROOT %}resources/BSDLicense.html">All rights reserved</a> |
+        <a href="{% URL_ROOT %}LICENSE">All rights reserved</a> |
         <a href="{% URL_ROOT %}admin">Administration</a>
     </footer>
     {% GOOGLE_ANALYTICS %}
