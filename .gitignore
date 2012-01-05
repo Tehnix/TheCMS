@@ -1,12 +1,15 @@
-# OS generated files #
-######################
+#+--------------------------------------------------------------------------+#
+#|                    OS generated files (+ misc)                           |#
+#+--------------------------------------------------------------------------+#
 .DS_Store*
 ehthumbs.db
 Icon?
 Thumbs.db
+.tm_properties
 
-# Compiled source #
-###################
+#+--------------------------------------------------------------------------+#
+#|                           Compiled source                                |#
+#+--------------------------------------------------------------------------+#
 *.com
 *.class
 *.dll
@@ -15,32 +18,40 @@ Thumbs.db
 *.so
 *.pyc
 
-# Specific files #
-##################
-.tm_properties
-_labs/*
-_thetime/*
-# We don't want uploads to get committed (both live and dev)
-resources/uploads/* 
-_dev/site/resources/uploads/* 
-# We don't want our backups to get committed (except for .sql backups)
-*.backup.sql
-*.backup.zip 
-_backup/database/*.backup.sql
-_backup/*.backup.zip 
-
+#+--------------------------------------------------------------------------+#
+#|                            Specific files                                |#
+#+--------------------------------------------------------------------------+#
 # The settings.php file is individual, we then avoid it in further merges
 settings.php
 
-# Exclude themes but keep default
+# We don't want our backups to get committed
+_backup/database/*.backup.sql
+_backup/*.backup.zip 
+
+#+--------------------------------------------------------------------------+#
+#|                           Specific folders                               |#
+#+--------------------------------------------------------------------------+#
+# Other folders that just happen to lie around
+_labs/*
+_thetime/*
+_dev/*
+
+# Exclude all themes except default ones
 templates/site/*
 templates/admin/*
+
+# We don't want uploads to get committed (both live and dev)
+resources/uploads/* 
+
+
+#+--------------------------------------------------------------------------+#
+#|                         Keep these folders                               |#
+#+--------------------------------------------------------------------------+#
+# Keep our default themes
 !templates/site/default
 !templates/admin/default
-_dev/site/templates/site/*
-_dev/site/templates/admin/*
-!_dev/site/templates/site/default
-!_dev/site/templates/admin/default
 
-# We keep our .gitignore folders incase we ignore full content of a folder
+#+--------------------------------------------------------------------------+#
+#|                          Keep these files                                |#
+#+--------------------------------------------------------------------------+#
 !.gitignore
