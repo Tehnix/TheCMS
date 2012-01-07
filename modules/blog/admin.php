@@ -67,7 +67,7 @@ if($$blog_admin_name){
         $tpl_content = $tpl_content->output();
     }
     else if($blog_admin_new){
-        $admin_title .= ' -> Add New';
+        $admin_title .= ' / New';
         
         $textarea = $admin->textarea(array('name'=>'blog_post',
                                            'class'=>'advancedEditor',
@@ -170,7 +170,7 @@ if($$blog_admin_name){
             if(empty($blog['id'])){
                 $error = true;
             }
-            $admin_title .= ' -> Update';
+            $admin_title .= ' / Update';
             
             $id = $admin->input(array('name'=>'blog_id',
                                       'type'=>'hidden',

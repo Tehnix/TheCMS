@@ -36,23 +36,34 @@ class Pages extends ModulesBase
     
     public function get( $id=null, $additional = null ){
         if(!empty($id)) {
-            $pagesArray = $this->database->fetchOne('pages', array('id'=>$id));
+            $pagesArray = $this->database->execute('fetchone', 
+                                                    "SELECT `p`.*, 
+                                                    (SELECT `name` FROM `pages_type` WHERE `key` = `p`.`type`) AS `type_name`, 
+                                                    (SELECT COUNT(*) FROM `pages_comments` WHERE `pages_id` = `p`.`id`) AS `comments_count` 
+                                                    FROM `pages` AS `p` 
+                                                    WHERE `p`.`id` = :id
+                                                    ORDER BY `weight`",
+                                                    array('id'=>$id));
             if(get_magic_quotes_gpc()){
                 $pagesArray['name'] = stripslashes($pagesArray['name']);
                 $pagesArray['content'] = stripslashes($pagesArray['content']);
             }
-            $pagesArray['comments_count'] = $this->database->count('pages_comments', array('pages_id'=>$id));
         }
         else {
             $pagesArray = array();
-            $pagesArray = $this->database->fetchAll('pages', array('trash'=>'0'), $additional);
-            for($i=0; $i<sizeof($pagesArray); $i++){
-                if(get_magic_quotes_gpc()){
+            $pagesArray = $this->database->execute('fetchall', 
+                                                    "SELECT `p`.*, 
+                                                    (SELECT `name` FROM `pages_type` WHERE `key` = `p`.`type`) AS `type_name`, 
+                                                    (SELECT COUNT(*) FROM `pages_comments` WHERE `pages_id` = `p`.`id`) AS `comments_count` 
+                                                    FROM `pages` AS `p` 
+                                                    WHERE `p`.`trash` = :trash
+                                                    ORDER BY `weight`",
+                                                    array('trash'=>'0'));
+            if(get_magic_quotes_gpc()){
+                for($i=0; $i<sizeof($pagesArray); $i++){
                     $pagesArray[$i]['name'] = stripslashes($pagesArray[$i]['name']);
                     $pagesArray[$i]['content'] = stripslashes($pagesArray[$i]['content']);
                 }
-                $pagesArray[$i]['comments_count'] = $this->database->count('pages_comments', 
-                                                                           array('pages_id'=>$pagesArray[$i]['id']));
             }
         }
         

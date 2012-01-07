@@ -17,6 +17,7 @@ if($$pages_admin_name){
             '<tr onclick="document.location.href=\'' . URL_ROOT . ADMIN_PATH 
             . '/' . $module_pages_name . '/update/' . $item['id'] . '\'">' .
             '<td>' . $item['name'] . '</td>' .
+            '<td>' . $item['type_name'] . '</td>' .
             '<td>' . $item['comments_count'] . '</td>' .
             '<td>' . date('F d, Y', strtotime($item['modify'])) . '</td>';
         }
@@ -31,6 +32,7 @@ if($$pages_admin_name){
             <thead>
                 <tr>
                     <th style="width:60%;">Title</th>
+                    <th style="width:20%;">Type</th>
                     <th style="width:10%;">
                         <img src="' . RESOURCES_ROOT . 'img/icons/comment.png" style="width:20px;margin-left:-5px">
                     </th>
@@ -40,6 +42,7 @@ if($$pages_admin_name){
             <tfoot>
                 <tr>
                     <td>Title</td>
+                    <td style="width:20%;">Type</td>
                     <td>
                         <img src="' . RESOURCES_ROOT . 'img/icons/comment.png" style="width:20px;margin-left:-5px">
                     </td>
@@ -61,7 +64,7 @@ if($$pages_admin_name){
         $tpl_content = $tpl_content->output();
     }
     else if($pages_admin_new){
-        $admin_title .= ' -> Add New';
+        $admin_title .= ' / New';
         
         $textarea = $admin->textarea(array('name'=>'pages_content',
                                            'class'=>'advancedEditor',
@@ -154,7 +157,7 @@ if($$pages_admin_name){
             if(empty($page['id'])){
                 $error = true;
             }
-            $admin_title .= ' -> Update';
+            $admin_title .= ' / Update';
             
             $id = $admin->input(array('name'=>'pages_id',
                                       'type'=>'hidden',

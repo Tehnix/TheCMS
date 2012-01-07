@@ -74,17 +74,23 @@ head.ready(function() {
 }
 </style>
 
+<div id="content_display" style="float:left;"> 
+	<div id="content-header"><span id="dashboardTitle">Settings</span></div>
+</div>
 <div style="clear:both;padding-top:8px;"></div>
 
-<div id="content_display" style="clear:both;border-top:1px solid #CCC;padding-top:8px;">
+<div id="content_display" style="clear:both;">
 	{% FIRST %}
 </div>
 
 <br><br><br>
 
+<div id="content_display" style="float:left;"> 
+	<div id="content-header"><span id="dashboardTitle">Backup</span></div>
+</div>
 <div style="clear:both;padding-top:8px;"></div>
 
-<div id="content_display" style="clear:both;border-top:1px solid #CCC;padding-top:8px;">
+<div id="content_display" style="clear:both;">
 	{% SECOND %}
 	<div id="backup_server_result">
 		<input class="backup_btn" type="button" value="Backup website !">

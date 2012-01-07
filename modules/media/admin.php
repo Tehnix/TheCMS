@@ -57,7 +57,7 @@ if($$media_admin_name){
         $tpl_content = $tpl_content->output();
     }
     else if($media_admin_new) {
-        $admin_title .= ' -> Add New';
+        $admin_title .= ' / New';
         
         if(is_writable(UPLOAD_ROOT)){
             $admin->uploader("uploader");
@@ -102,7 +102,7 @@ if($$media_admin_name){
             if(empty($media['log_id'])){
                 $error = true;
             }
-            $admin_title .= ' -> View';
+            $admin_title .= ' / View';
             
             $displayMedia = $Media->display($media['log_filename']);
             
