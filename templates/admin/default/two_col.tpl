@@ -4,21 +4,25 @@ head.ready(function() {
 });
 </script>
 {% STYLE %}
-<div style="float:left;"> 
-	{% TOP_RIGHT %}
+
+<div id="content_display" style="float:left;">
+	<div id="content-header">
+        <div style="float:left;"> 
+        	{% TOP_RIGHT %}
+        </div>
+        <div style="float:right;">
+        	<div id="btn">{% TOP_LEFT %}</div>
+        </div>
+	</div>
 </div>
 
-<div id="btn" style="float:right;">
-	{% TOP_LEFT %}
-</div>
+<div style="clear:both;padding-top:15px;"></div>
 
-<div style="clear:both;padding-top:8px;"></div>
-
-<div id="content_display" style="float:left;width:67%;border-top:1px solid #CCC;">
+<div id="content_display" style="float:left;width:67%;">
 	{% LEFT %}
 </div>
 
-<div id="content_display" style="float:right;width:27%;border-top:1px solid #CCC;">
+<div id="content_display" style="float:right;width:27%;">
 	{% RIGHT %}
 </div>
 <div style="clear:both;"></div>

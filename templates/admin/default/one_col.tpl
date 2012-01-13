@@ -5,17 +5,20 @@ head.ready(function() {
 </script>
 {% STYLE %}
 
-<div style="float:left;"> 
-	{% TOP_RIGHT %}
-</div>
-
-<div id="btn" style="float:right;">
-	{% TOP_LEFT %}
+<div id="content_display" style="float:left;">
+	<div id="content-header">
+        <div style="float:left;"> 
+        	{% TOP_RIGHT %}
+        </div>
+        <div style="float:right;">
+        	<div id="btn">{% TOP_LEFT %}</div>
+        </div>
+	</div>
 </div>
 
 <div style="clear:both;padding-top:8px;"></div>
 
-<div id="content_display" style="clear:both;border-top:1px solid #CCC;padding-top:8px;">
+<div id="content_display" style="clear:both;padding-top:15px;">
 	{% FULL %}
 </div>
 

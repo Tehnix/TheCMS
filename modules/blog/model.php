@@ -46,7 +46,8 @@ class Blog extends ModulesBase
 {   
     public function get($inLimit=null, $inId=null, $inCategoryId=null, $inTagId=null, $inArchiveId=null){
         if(!empty($inId)){
-            $sql = "SELECT b.*, u.username, u.first_name, u.last_name, u.email, u.userlevel 
+            $sql = "SELECT b.*, u.username, u.first_name, u.last_name, u.email, u.userlevel,
+            (SELECT COUNT(*) FROM `blog_post_comments` WHERE `blog_post_id` = `b`.`id`) AS `comments_count`  
             FROM blog_posts AS b 
             LEFT JOIN usersdb AS u ON b.author_id = u.id
             WHERE b.id = :id
@@ -60,7 +61,6 @@ class Blog extends ModulesBase
             $posts['category'] = $this->getCategory($post['id']);
             $posts['tags'] = $this->getTags($post['id']);
             $posts['archive'] = $this->getArchive($post['id']);
-            $posts['comments_count'] = $this->database->count('blog_post_comments', array('blog_post_id'=>$inId));
             $posts['author_username'] = $posts['username'];
             if(empty($posts['first_name']) and empty($posts['last_name'])){
                 $posts['author_name'] = 'Guest';
@@ -74,7 +74,8 @@ class Blog extends ModulesBase
         else{
             if (!empty($inTagId))
             {
-                $sql = 'SELECT b.*, u.username, u.first_name, u.last_name, u.email, u.userlevel
+                $sql = 'SELECT b.*, u.username, u.first_name, u.last_name, u.email, u.userlevel,
+                (SELECT COUNT(*) FROM `blog_post_comments` WHERE `blog_post_id` = `b`.`id`) AS `comments_count` 
                 FROM blog_post_tags AS bt
                 LEFT JOIN blog_posts AS b ON bt.blog_post_id = b.id
                 LEFT JOIN usersdb AS u ON b.author_id = u.id 
@@ -84,7 +85,8 @@ class Blog extends ModulesBase
             }
             else if (!empty($inCategoryId))
             {
-                $sql = 'SELECT b.*, u.username, u.first_name, u.last_name, u.email, u.userlevel
+                $sql = 'SELECT b.*, u.username, u.first_name, u.last_name, u.email, u.userlevel,
+                (SELECT COUNT(*) FROM `blog_post_comments` WHERE `blog_post_id` = `b`.`id`) AS `comments_count` 
                 FROM blog_post_categories AS bc
                 LEFT JOIN blog_posts AS b ON bc.blog_post_id = b.id
                 LEFT JOIN usersdb AS u ON b.author_id = u.id 
@@ -94,7 +96,8 @@ class Blog extends ModulesBase
             }
             else if (!empty($inArchiveId))
             {
-                $sql = 'SELECT b.*, u.username, u.first_name, u.last_name, u.email, u.userlevel
+                $sql = 'SELECT b.*, u.username, u.first_name, u.last_name, u.email, u.userlevel,
+                (SELECT COUNT(*) FROM `blog_post_comments` WHERE `blog_post_id` = `b`.`id`) AS `comments_count` 
                 FROM blog_post_archive AS ba
                 LEFT JOIN blog_posts AS b ON ba.blog_post_id = b.id
                 LEFT JOIN usersdb AS u ON b.author_id = u.id 
@@ -103,7 +106,8 @@ class Blog extends ModulesBase
                 $posts = $this->database->execute('fetchall', $sql, array('inArchiveId'=>$inArchiveId));
             }
             else{
-                $sql = "SELECT b.*, u.username, u.first_name, u.last_name, u.email, u.userlevel 
+                $sql = "SELECT b.*, u.username, u.first_name, u.last_name, u.email, u.userlevel,
+                (SELECT COUNT(*) FROM `blog_post_comments` WHERE `blog_post_id` = `b`.`id`) AS `comments_count` 
                 FROM blog_posts AS b 
                 LEFT JOIN usersdb AS u ON b.author_id = u.id
                 WHERE b.trash = :trash
@@ -119,8 +123,6 @@ class Blog extends ModulesBase
                 $posts[$i]['category'] = $this->getCategory($posts[$i]['id']);
                 $posts[$i]['tags'] = $this->getTags($posts[$i]['id']);
                 $posts[$i]['archive'] = $this->getArchive($posts[$i]['id']);
-                $posts[$i]['comments_count'] = $this->database->count('blog_post_comments', 
-                array('blog_post_id'=>$posts[$i]['id']));
                 $posts[$i]['author_username'] = $posts[$i]['username'];
                 if(empty($posts[$i]['first_name']) and empty($posts[$i]['last_name'])){
                     $posts[$i]['author_name'] = 'Guest';
@@ -169,9 +171,9 @@ class Blog extends ModulesBase
             
             $blogInsertId = Database::lastInsertId();
             
+            # Adds the current action to the _recent_activity table
             $this->database->insert('_recent_activity', array('name'=>'blog', 'grouping'=>'blog'.date("Y-m-d"), 
             'action'=>'update', 'additional'=>$title));
-            // Adds the current action to the _recent_activity table
             /*
             addArchive($blogInsertId);  
             addTags($tags, $blogInsertId);
@@ -183,7 +185,7 @@ class Blog extends ModulesBase
     }
     
     public function addArchive( $insertid=null ){
-        // create archive value from current Month and year and add to database
+        # create archive value from current Month and year and add to database
         $archive = Date('F y');
 
         $archive = $this->database->fetchOne('archive', array('name'=>$archive), 'ORDER BY id');

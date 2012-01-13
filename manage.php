@@ -22,7 +22,7 @@ class Database
     public static $lastinsertid;
 
     public function __construct($DB_TYPE, $DB_SERVER, $DB_NAME, 
-                                $DB_USER, $DB_PASS){
+                                $DB_USER, $DB_PASS) {
         $this->DB_TYPE = $DB_TYPE;
         $this->DB_SERVER = $DB_SERVER;
         $this->DB_NAME = $DB_NAME;
@@ -30,7 +30,7 @@ class Database
         $this->DB_PASS = $DB_PASS;
     }
     
-    public function execute($type, $sql, $args){
+    public function execute($type, $sql, $args) {
         try {
             # MySQL with PDO_MYSQL
             if ($this->DB_TYPE == 'MySQL') {
@@ -47,20 +47,16 @@ class Database
             if ($type === 'fetchone') {
                 $stmt->execute($args);
                 $data = $stmt->fetch();
-            }
-            else if ($type === 'fetchall') {
+            } else if ($type === 'fetchall') {
                 $stmt->execute($args);
                 $data = $stmt->fetchAll();
-            }
-            else if ($type === 'fetchall_nonassoc') {
+            } else if ($type === 'fetchall_nonassoc') {
                 $stmt->execute($args);
                 $data = $stmt->fetchAll(PDO::FETCH_BOTH);
-            }
-            else if ($type === 'count') {
+            } else if ($type === 'count') {
                 $count = $stmt->execute($args);
                 $data = $stmt->fetchColumn(); 
-            }
-            else if ($type === 'exec') {
+            } else if ($type === 'exec') {
                 $dbh->beginTransaction();
                 $stmt->execute($args);
                 self::$lastinsertid = $dbh->lastInsertId();
@@ -82,11 +78,10 @@ class Database
         
     }
     
-    private function keysToSql($keyarray, $seperator, $prefix=''){
+    private function keysToSql($keyarray, $seperator, $prefix='') {
         if ($keyarray == null) {
             return 1;
-        }
-        else {
+        } else {
             $list = array();
             foreach($keyarray as $key => $value) {
                 $list[] = $key . ' = ' . $prefix . $key . ' ';
@@ -96,11 +91,10 @@ class Database
         }
     }
     
-    private function keysToInsertSql($keyarray, $seperator, $prefix=''){
+    private function keysToInsertSql($keyarray, $seperator, $prefix='') {
         if ($keyarray == null) {
             return 1;
-        }
-        else {
+        } else {
             $list = array();
             foreach($keyarray as $key => $value) {
                 $list[] = $key;
@@ -113,27 +107,27 @@ class Database
         }
     }
     
-    public function fetchOne($table, $filters=null){
+    public function fetchOne($table, $filters=null) {
         $sql = 'SELECT * FROM ' . $table . ' WHERE ' 
                . $this->keysToSql($filters, "AND ", ":") . '';
         
         return $this->execute('fetchone', $sql, $filters);
     }
     
-    public function fetchAll($table, $filters=null, $additional=''){
+    public function fetchAll($table, $filters=null, $additional='') {
         $sql = 'SELECT * FROM ' . $table . ' WHERE ' 
                . $this->keysToSql($filters, "AND ", ":") . ' ' . $additional;
         
         return $this->execute('fetchall', $sql, $filters);
     }
     
-    public function insert($table, $data=null){
+    public function insert($table, $data=null) {
         $sql = 'INSERT INTO ' . $table . ' ' 
                . $this->keysToInsertSql($data, ", ", ":") . '';
         return $this->execute('exec', $sql, $data);
     }
     
-    public function update($table, $data=null, $filters=null){
+    public function update($table, $data=null, $filters=null) {
         $sql = 'UPDATE ' . $table . ' SET ' 
                . $this->keysToSql($data, ", ", ":") . ' WHERE ' 
                . $this->keysToSql($filters, "AND ", ":filter_") . '';
@@ -147,31 +141,29 @@ class Database
         return $this->execute('exec', $sql, $filters);
     }
     
-    public function delete($table, $filters=null){
+    public function delete($table, $filters=null) {
         $sql = 'DELETE FROM ' . $table . ' WHERE ' 
         . $this->keysToSql($filters, "AND ", ":") . '';
         
         return $this->execute('exec', $sql, $filters);
     }
     
-    public function backupDatabase($tables, $filename=null){
-        if(empty($tables)){
+    public function backupDatabase($tables, $filename=null) {
+        if (empty($tables)){
             return false;
-        }
-        else{
-            if(empty($filename)){
+        } else {
+            if (empty($filename)){
                 $filename = ROOT . '_backup/database/' . date("Y-m-d.H-i") 
                             . '.backup.sql';
             }
             # Get all of the tables
-            if($tables == '*'){
+            if ($tables == '*'){
                 $tables = array();
                 $query = $this->execute('fetchall_nonassoc', 'SHOW TABLES');
-                foreach($query as $row){
+                foreach($query as $row) {
                     $tables[] = $row[0];
                 }
-            }
-            else{
+            } else {
                 $tables = is_array($tables) ? $tables : explode(',',$tables);
             }
             $return .= "--\n";
@@ -188,7 +180,7 @@ class Database
             $return .= "-- --------------------------------------------------"
                        . "------\n\n";
             # cycle through tables
-            for($k=0; $k<sizeof($tables);$k++){
+            for ($k=0; $k<sizeof($tables);$k++) {
                 $table = $tables[$k];
                 $sql = 'SELECT * FROM ' . $table;
                 $query = $this->execute('fetchall_nonassoc', $sql);
@@ -205,19 +197,19 @@ class Database
                            . "`\n--\n\n";
                 # $query is diveded by two because we're stuck 
                 # with PDO::FECTCH_BOTH
-                for($p=0;$p<(sizeof($query)/2);$p++){
+                for ($p=0;$p<(sizeof($query)/2);$p++){
                     $row = $query[$p];
                     $return .= 'INSERT INTO ' . $table . ' VALUES(';
-                    for($j=0; $j<$num_fields; $j++){
+                    for ($j=0; $j<$num_fields; $j++){
                         $row[$j] = addslashes($row[$j]);
                         $row[$j] = ereg_replace("\n", "\\n", $row[$j]);
-                        if(isset($row[$j])){
+                        if (isset($row[$j])){
                             $return .= "'" . $row[$j] . "'"; 
                         }
-                        else{
+                        else {
                             $return .= "''";
                         }
-                        if($j<($num_fields-1)){
+                        if ($j<($num_fields-1)){
                             $return .= ',';
                         }
                     }
@@ -234,8 +226,8 @@ class Database
         }
     }
     
-    public function runSQLDump($filename=null){
-        if(!empty($filename)){
+    public function runSQLDump($filename=null) {
+        if (!empty($filename)){
             # Temporary variable, used to store current query
             $templine = '';
             # Read in entire file
@@ -243,12 +235,12 @@ class Database
             # Loop through each line
             foreach($lines as $line_num => $line){
                 # Only continue if it's not a comment
-                if(substr($line, 0, 2) != '--' && $line != ''){
+                if (substr($line, 0, 2) != '--' && $line != ''){
                     # Add this line to the current segment
                     $templine .= $line;
                     # If it has a semicolon at the end, it's the 
                     # end of the query
-                    if(substr(trim($line), -1, 1) == ';'){
+                    if (substr(trim($line), -1, 1) == ';'){
                         $this->execute('exec', $templine);
                         # Reset temp variable to empty
                         $templine = '';
@@ -258,7 +250,7 @@ class Database
         }
     }
     
-    public static function lastInsertId(){
+    public static function lastInsertId() {
         return self::$lastinsertid;
     }
     
@@ -279,7 +271,7 @@ class ModulesBase
 {
     protected $database;
 
-    public function __construct(){
+    public function __construct() {
         global $Database;
         $this->database = $Database;
     }
@@ -298,7 +290,7 @@ class Modules extends ModulesBase
         $exclude = array('.', '..', '.DS_Store');
         
         foreach($modulesfolder as $module) {
-            if(!in_array($module, $exclude)) {
+            if (!in_array($module, $exclude)) {
                 $modules[$module] = $module;
             }
         }
@@ -329,57 +321,57 @@ class TemplateBase
     public static $theme;
     public static $admin_theme;
 
-    public static function setSettings($setting){
+    public static function setSettings($setting) {
         self::$_settings = $setting;
-        if(isset($setting['theme']) and $setting['theme'] != ''){
+        if (isset($setting['theme']) and $setting['theme'] != ''){
             self::$theme = $setting['theme'];
         }
-        else{
+        else {
             self::$theme = 'default';
         }
-        if(isset($setting['admintheme']) and $setting['admintheme'] != '' and
+        if (isset($setting['admintheme']) and $setting['admintheme'] != '' and
            $setting['admintheme'] != 0){
             self::$admin_theme = $setting['admintheme'];
         }
-        else{
+        else {
             self::$admin_theme = 'default';
         }
     }
 
-    public function getSettings(){
+    public function getSettings() {
         return self::$_settings;
     }
 
-    public function getTheme(){
+    public function getTheme() {
         return self::$theme;
     }
 
-    public static function getFile($file){
-        if(file_exists(TEMPLATES_ROOT . 'site' . DS . self::$theme . DS 
+    public static function getFile($file) {
+        if (file_exists(TEMPLATES_ROOT . 'site' . DS . self::$theme . DS 
            . $file)){
             return TEMPLATES_ROOT . 'site' . DS . self::$theme . DS . $file;
         }
-        elseif(file_exists(TEMPLATES_ROOT . 'site' . DS . 'default' . DS 
+        elseif (file_exists(TEMPLATES_ROOT . 'site' . DS . 'default' . DS 
                . $file)){
             return TEMPLATES_ROOT . 'site' . DS . 'default' . DS . $file;
         }
-        else{
+        else {
             throw new Exception('Error loading template file (' . $file 
             . ').<br />');
         }
     }
 
-    public static function getAdminFile($file){
-        if(file_exists(TEMPLATES_ROOT . 'admin' . DS . self::$admin_theme . DS 
+    public static function getAdminFile($file) {
+        if (file_exists(TEMPLATES_ROOT . 'admin' . DS . self::$admin_theme . DS 
            . $file)){
             return TEMPLATES_ROOT . 'admin' . DS . self::$admin_theme . DS 
                    . $file;
         }
-        elseif(file_exists(TEMPLATES_ROOT . 'admin' . DS . 'default' . DS 
+        elseif (file_exists(TEMPLATES_ROOT . 'admin' . DS . 'default' . DS 
                . $file)){
             return TEMPLATES_ROOT . 'admin' . DS . 'default' . DS . $file;
         }
-        else{
+        else {
             throw new Exception('Error loading template file (' . $file 
             . ').<br />');
         }
@@ -453,6 +445,7 @@ class Template extends TemplateBase
         eval('?>' . $output);
         $output = ob_get_contents();
         ob_end_clean();
+        
         foreach ($this->values as $key => $value) {
             $tagToReplace = '{% ' . $key . ' %}';
             $output = str_replace($tagToReplace, $value, $output);
@@ -508,10 +501,10 @@ class AdminGenerator
             $val_items .= "$('#$val').isValid(); $('#$val').focus();";
         }
         $val = "
-        if(" . implode('&&', $check) . "){
+        if (" . implode('&&', $check) . "){
             return true;
         }
-        else{
+        else {
             alert('Please fill out the required fields !');" 
             . $val_items . "
             return false;
@@ -521,20 +514,20 @@ class AdminGenerator
     
     public function validateField($type, $target){
         $id = $target['id'];
-        if(isset($target['error'])){
+        if (isset($target['error'])){
             $error = $target['error'];
         }
-        else{
+        else {
             $error = '';
         }
-        if(isset($target['class'])){
+        if (isset($target['class'])){
             $class = $target['class'];
         }
-        else{
+        else {
             $class = '';
         }
         
-        if($type == 'email'){
+        if ($type == 'email'){
             $val = "
             var $id = $('#$id');
             $id.valid8({
@@ -560,7 +553,7 @@ class AdminGenerator
             });
             ";
         }
-        else if($type == 'required'){
+        else if ($type == 'required'){
             $val = "
                 var $id = $('#$id');
                 $id.valid8({
@@ -570,7 +563,7 @@ class AdminGenerator
                 });
                 ";
         }
-        else if($type == 'numeric'){
+        else if ($type == 'numeric'){
             $val = "
                 var $id = $('#$id');
                 $id.valid8({
@@ -581,7 +574,7 @@ class AdminGenerator
                 $id.numeric();
                 ";
         }
-        else if($type == 'alphanumeric'){
+        else if ($type == 'alphanumeric'){
             $val = "
                 var $id = $('#$id');
                 $id.valid8({
@@ -592,7 +585,7 @@ class AdminGenerator
                 $id.alphanumeric();
                 ";
         }
-        else if($type == 'alpha'){
+        else if ($type == 'alpha'){
             $val = "
                 var $id = $('#$id');
                 $id.valid8({
@@ -671,17 +664,17 @@ class AdminGenerator
     }
     
     public function input($widget){
-        if(isset($widget['defaultvalue'])){
+        if (isset($widget['defaultvalue'])){
             $value = $widget['defaultvalue'];
             $jssnippet = $this->defaultText();
             $style = 'color:#808080;' . $widget['style'];
             
         }
-        else{
+        else {
             $value = $widget['value'];
             $style = $widget['style'];
         }
-        if(isset($widget['placerholder'])){
+        if (isset($widget['placerholder'])){
             $placeholder = 
             "$('#" .  $widget['id'] . " [placeholder] ').defaultValue();";
             $this->script .= $placeholder;
@@ -706,14 +699,14 @@ class AdminGenerator
     }
     
     public function select($widget, $options = null){
-        if(isset($options)){
+        if (isset($options)){
             $opts = '';
             foreach($options as $key=>$value){
-                if($widget['selected'] == $key){
+                if ($widget['selected'] == $key){
                     $opts .= '<option value="' . $key . '" SELECTED>' 
                              . $value . '</option>';
                 }
-                else{
+                else {
                     $opts .= '<option value="' . $key . '">' 
                              . $value . '</option>';
                 }
@@ -746,11 +739,11 @@ class AdminGenerator
     }
     
     public function form($widget){
-        if(isset($widget['validate'])){
+        if (isset($widget['validate'])){
             $val = $this->validateForm($widget['validate']);
             $validateForm = 'onsubmit="' . $val . '"';
         }
-        else{
+        else {
             $validateForm = '';
         }
         $action = $this->input(array('name'=>'action',
@@ -797,17 +790,17 @@ class Paginator
         $this->mid_range = 7;
         $this->items_per_page = (!empty($pagination_page)) 
                                 ? $pagination_ipp:$this->default_ipp;
-        if($url_query[0] == 'admin'){
-            if(isset($url_query[0])){
+        if ($url_query[0] == 'admin'){
+            if (isset($url_query[0])){
                 $this->url_prefix = '' . URL_ROOT . $url_query[0] 
                                     . '/' . $url_query[1] . '/';
             }
-            else{
+            else {
                 $this->url_prefix = '' . URL_ROOT 
                                     . $url_query[0] . '/';
             }
         }
-        else{
+        else {
             $this->url_prefix = '' . URL_ROOT . $url_query[0] . '/';
         }
     }
@@ -817,47 +810,47 @@ class Paginator
                       $pagination_ipp = null){
         $this->items_total = $this->db->count($count_tbl);
         
-        if($pagination_ipp == 'All'){
+        if ($pagination_ipp == 'All'){
             $this->num_pages = ceil($this->items_total/$this->default_ipp);
             $this->items_per_page = $this->default_ipp;
         }
-        else{
-            if(!is_numeric($this->items_per_page) 
+        else {
+            if (!is_numeric($this->items_per_page) 
                or $this->items_per_page <= 0){
                 $this->items_per_page = $this->default_ipp;
             }
             $this->num_pages = ceil($this->items_total/$this->items_per_page);
         }
         $this->current_page = (int) $pagination_page; # must be numeric > 0
-        if($this->current_page < 1 
+        if ($this->current_page < 1 
            or !is_numeric($this->current_page)){
             $this->current_page = 1;
         }
-        if($this->current_page > $this->num_pages){
+        if ($this->current_page > $this->num_pages){
             $this->current_page = $this->num_pages;
         }
         $prev_page = $this->current_page-1;
         $next_page = $this->current_page+1;
 
-        if($_GET){
+        if ($_GET){
             $args = explode("&", $_SERVER['QUERY_STRING']);
             foreach($args as $arg){
                 $keyval = explode("=", $arg);
-                if($keyval[0] != "page" And $keyval[0] != "ipp"){
+                if ($keyval[0] != "page" And $keyval[0] != "ipp"){
                     $this->querystring .= "&" . $arg;
                 }
             }
         }
 
-        if($_POST){
+        if ($_POST){
             foreach($_POST as $key=>$val){
-                if($key != "page" And $key != "ipp"){
+                if ($key != "page" And $key != "ipp"){
                     $this->querystring .= "&" . $key . "=" . $val;
                 }
             }
         }
 
-        if($this->num_pages > 10){
+        if ($this->num_pages > 10){
             $this->return = ($this->current_page != 1 
                              and $this->items_total >= 10) 
                             ? "<a class=\"paginate\"  " 
@@ -873,22 +866,22 @@ class Paginator
             $this->end_range = $this->current_page 
                                + floor($this->mid_range / 2);
 
-            if($this->start_range <= 0){
+            if ($this->start_range <= 0){
                 $this->end_range += abs($this->start_range) + 1;
                 $this->start_range = 1;
             }
-            if($this->end_range > $this->num_pages){
+            if ($this->end_range > $this->num_pages){
                 $this->start_range -= $this->end_range-$this->num_pages;
                 $this->end_range = $this->num_pages;
             }
             $this->range = range($this->start_range,$this->end_range);
 
-            for($i=1;$i<=$this->num_pages;$i++){
-                if($this->range[0] > 2 and $i == $this->range[0]){
+            for ($i=1;$i<=$this->num_pages;$i++){
+                if ($this->range[0] > 2 and $i == $this->range[0]){
                     $this->return .= " ... ";
                 }
                 # loop through all pages. if first, last, or in range, display
-                if($i==1 Or $i==$this->num_pages Or in_array($i,$this->range))
+                if ($i==1 Or $i==$this->num_pages Or in_array($i,$this->range))
                 {
                     $this->return .= ($i == $this->current_page 
                                      and $pagination_page != 'All') 
@@ -907,7 +900,7 @@ class Paginator
                                        . "\">" . $i 
                                        . "</a> ";
                 }
-                if($this->range[$this->mid_range-1] < $this->num_pages-1 
+                if ($this->range[$this->mid_range-1] < $this->num_pages-1 
                    and $i == $this->range[$this->mid_range-1]){
                     $this->return .= " ... ";
                 }
@@ -931,8 +924,8 @@ class Paginator
                                . $this->url_prefix 
                                . "page/All/ipp/All\">All</a> \n";
         }
-        else{
-            for($i=1;$i<=$this->num_pages;$i++){
+        else {
+            for ($i=1;$i<=$this->num_pages;$i++){
                 $this->return .= ($i == $this->current_page 
                                   and $pagination_page != 'All') 
                                  ? "<a class=\"current\" href=\"#\">"
@@ -975,7 +968,7 @@ class Paginator
     }
 
     function display_jump_menu(){
-        for($i = 1; $i <= $this->num_pages; $i++){
+        for ($i = 1; $i <= $this->num_pages; $i++){
             $option .= ($i == $this->current_page) 
                        ? "<option value=\"" . $i . "\" selected>" 
                          . $i . "</option>\n"
@@ -1023,7 +1016,7 @@ class UsersHandler
          */
         $this->num_members = -1;
         
-        if(TRACK_VISITORS){
+        if (TRACK_VISITORS){
             /* Calculate number of users at site */
             $this->calcNumActiveUsers();
         
@@ -1042,7 +1035,7 @@ class UsersHandler
      */
     function confirmUserPass($username, $password){
         /* Add slashes if necessary (for query) */
-        if(!get_magic_quotes_gpc()) {
+        if (!get_magic_quotes_gpc()) {
             $username = addslashes($username);
         }
 
@@ -1050,7 +1043,7 @@ class UsersHandler
         $q = "SELECT password FROM " . TBL_USERS 
              . " WHERE username = '$username'";
         $result = mysql_query($q, $this->connection);
-        if(!$result || (mysql_numrows($result) < 1)){
+        if (!$result || (mysql_numrows($result) < 1)){
             return 1; //Indicates username failure
         }
 
@@ -1060,10 +1053,10 @@ class UsersHandler
         $password = stripslashes($password);
 
         /* Validate that password is correct */
-        if($password == $dbarray['password']){
+        if ($password == $dbarray['password']){
             return 0; //Success! Username and password confirmed
         }
-        else{
+        else {
             return 2; //Indicates password failure
         }
     }
@@ -1078,7 +1071,7 @@ class UsersHandler
      */
     function confirmUserID($username, $userid){
         /* Add slashes if necessary (for query) */
-        if(!get_magic_quotes_gpc()) {
+        if (!get_magic_quotes_gpc()) {
             $username = addslashes($username);
         }
 
@@ -1086,7 +1079,7 @@ class UsersHandler
         $q = "SELECT userid FROM " . TBL_USERS 
              . " WHERE username = '$username'";
         $result = mysql_query($q, $this->connection);
-        if(!$result || (mysql_numrows($result) < 1)){
+        if (!$result || (mysql_numrows($result) < 1)){
             return 1; //Indicates username failure
         }
 
@@ -1096,10 +1089,10 @@ class UsersHandler
         $userid = stripslashes($userid);
 
         /* Validate that userid is correct */
-        if($userid == $dbarray['userid']){
+        if ($userid == $dbarray['userid']){
             return 0; //Success! Username and userid confirmed
         }
-        else{
+        else {
             return 2; //Indicates userid invalid
         }
     }
@@ -1109,7 +1102,7 @@ class UsersHandler
      * been taken by another user, false otherwise.
      */
     function usernameTaken($username){
-        if(!get_magic_quotes_gpc()){
+        if (!get_magic_quotes_gpc()){
             $username = addslashes($username);
         }
         $q = "SELECT username FROM " . TBL_USERS 
@@ -1123,7 +1116,7 @@ class UsersHandler
      * been banned by the administrator.
      */
     function usernameBanned($username){
-        if(!get_magic_quotes_gpc()){
+        if (!get_magic_quotes_gpc()){
             $username = addslashes($username);
         }
         $q = "SELECT username FROM " . TBL_BANNED_USERS 
@@ -1141,9 +1134,9 @@ class UsersHandler
                         $last_name, $email){
         $time = time();
         /* If admin sign up, give admin user level */
-        if(strcasecmp($username, ADMIN_NAME) == 0){
+        if (strcasecmp($username, ADMIN_NAME) == 0){
             $ulevel = ADMIN_LEVEL;
-        }else{
+        }else {
             $ulevel = USER_LEVEL;
         }
         $q = "INSERT INTO " . TBL_USERS 
@@ -1161,9 +1154,9 @@ class UsersHandler
                           $clast_name, $cemail, $cregkey){
         $time = time();
         /* If admin sign up, give admin user level */
-        if(strcasecmp($username, ADMIN_NAME) == 0){
+        if (strcasecmp($username, ADMIN_NAME) == 0){
             $ulevel = ADMIN_LEVEL;
-        }else{
+        }else {
             $ulevel = USER_LEVEL;
         }
         $q = "UPDATE " . TBL_USERS 
@@ -1194,7 +1187,7 @@ class UsersHandler
         $q = "SELECT * FROM " . TBL_USERS . " WHERE username = '$username'";
         $result = mysql_query($q, $this->connection);
         /* Error occurred, return given name by default */
-        if(!$result || (mysql_numrows($result) < 1)){
+        if (!$result || (mysql_numrows($result) < 1)){
             return NULL;
         }
         /* Return result array */
@@ -1211,7 +1204,7 @@ class UsersHandler
      * not querying the database when no call is made.
      */
     function getNumMembers(){
-        if($this->num_members < 0){
+        if ($this->num_members < 0){
             $q = "SELECT * FROM ".TBL_USERS;
             $result = mysql_query($q, $this->connection);
             $this->num_members = mysql_numrows($result);
@@ -1251,7 +1244,7 @@ class UsersHandler
             . " SET timestamp = '$time' WHERE username = '$username'";
         mysql_query($q, $this->connection);
         
-        if(!TRACK_VISITORS) return;
+        if (!TRACK_VISITORS) return;
         $q = "REPLACE INTO " . TBL_ACTIVE_USERS 
             . " VALUES ('$username', '$time')";
         mysql_query($q, $this->connection);
@@ -1260,7 +1253,7 @@ class UsersHandler
     
     /* addActiveGuest - Adds guest to active guests table */
     function addActiveGuest($ip, $time){
-        if(!TRACK_VISITORS) return;
+        if (!TRACK_VISITORS) return;
         $q = "REPLACE INTO " . TBL_ACTIVE_GUESTS . " VALUES ('$ip', '$time')";
         mysql_query($q, $this->connection);
         $this->calcNumActiveGuests();
@@ -1270,7 +1263,7 @@ class UsersHandler
     
     /* removeActiveUser */
     function removeActiveUser($username){
-        if(!TRACK_VISITORS) return;
+        if (!TRACK_VISITORS) return;
         $q = "DELETE FROM " . TBL_ACTIVE_USERS 
             . " WHERE username = '$username'";
         mysql_query($q, $this->connection);
@@ -1279,7 +1272,7 @@ class UsersHandler
     
     /* removeActiveGuest */
     function removeActiveGuest($ip){
-        if(!TRACK_VISITORS) return;
+        if (!TRACK_VISITORS) return;
         $q = "DELETE FROM " . TBL_ACTIVE_GUESTS 
             . " WHERE ip = '$ip'";
         mysql_query($q, $this->connection);
@@ -1288,7 +1281,7 @@ class UsersHandler
     
     /* removeInactiveUsers */
     function removeInactiveUsers(){
-        if(!TRACK_VISITORS) return;
+        if (!TRACK_VISITORS) return;
         $timeout = time()-USER_TIMEOUT*60;
         $q = "DELETE FROM " . TBL_ACTIVE_USERS 
              . " WHERE timestamp < $timeout";
@@ -1298,7 +1291,7 @@ class UsersHandler
 
     /* removeInactiveGuests */
     function removeInactiveGuests(){
-        if(!TRACK_VISITORS) return;
+        if (!TRACK_VISITORS) return;
         $timeout = time()-GUEST_TIMEOUT*60;
         $q = "DELETE FROM " . TBL_ACTIVE_GUESTS 
              . " WHERE timestamp < $timeout";
@@ -1374,7 +1367,7 @@ class Form
          * Get form value and error arrays, used when there
          * is an error with a user-submitted form.
          */
-        if(isset($_SESSION['value_array']) 
+        if (isset($_SESSION['value_array']) 
            && isset($_SESSION['error_array'])){
             $this->values = $_SESSION['value_array'];
             $this->errors = $_SESSION['error_array'];
@@ -1383,7 +1376,7 @@ class Form
             unset($_SESSION['value_array']);
             unset($_SESSION['error_array']);
         }
-        else{
+        else {
             $this->num_errors = 0;
         }
     }
@@ -1410,9 +1403,9 @@ class Form
      * field, if none exists, the empty string is returned.
      */
     function value($field){
-        if(array_key_exists($field,$this->values)){
+        if (array_key_exists($field,$this->values)){
             return htmlspecialchars(stripslashes($this->values[$field]));
-        }else{
+        }else {
             return "";
         }
     }
@@ -1422,10 +1415,10 @@ class Form
      * given field, if none exists, the empty string is returned.
      */
     function error($field){
-        if(array_key_exists($field,$this->errors)){
+        if (array_key_exists($field,$this->errors)){
             return "<font size=\"2\" color=\"#ff0000\">" 
                    . $this->errors[$field] . "</font>";
-        }else{
+        }else {
             return "";
         }
     }
@@ -1485,14 +1478,14 @@ class Session
          * Set guest value to users not logged in, and update
          * active guests table accordingly.
          */
-        if(!$this->logged_in){
+        if (!$this->logged_in){
             $this->username = $_SESSION['username'] = GUEST_NAME;
             $this->userlevel = GUEST_LEVEL;
             $UsersHandler->addActiveGuest($_SERVER['REMOTE_ADDR'],
                                         $this->time);
         }
         /* Update users last active timestamp */
-        else{
+        else {
             $UsersHandler->addActiveUser($this->username, $this->time);
         }
         
@@ -1501,9 +1494,9 @@ class Session
         $UsersHandler->removeInactiveGuests();
         
         /* Set referrer page */
-        if(isset($_SESSION['url'])){
+        if (isset($_SESSION['url'])){
             $this->referrer = $_SESSION['url'];
-        }else{
+        }else {
             $this->referrer = "/";
         }
 
@@ -1521,16 +1514,16 @@ class Session
     function checkLogin(){
         global $UsersHandler;  //The database connection
         /* Check if user has been remembered */
-        if(isset($_COOKIE['cookname']) && isset($_COOKIE['cookid'])){
+        if (isset($_COOKIE['cookname']) && isset($_COOKIE['cookid'])){
             $this->username = $_SESSION['username'] = $_COOKIE['cookname'];
             $this->userid    = $_SESSION['userid']    = $_COOKIE['cookid'];
         }
 
         /* Username and userid have been set and not guest */
-        if(isset($_SESSION['username']) && isset($_SESSION['userid']) &&
+        if (isset($_SESSION['username']) && isset($_SESSION['userid']) &&
             $_SESSION['username'] != GUEST_NAME){
             /* Confirm that username and userid are valid */
-            if($UsersHandler->confirmUserID($_SESSION['username'], 
+            if ($UsersHandler->confirmUserID($_SESSION['username'], 
             $_SESSION['userid']) != 0){
                 /* Variables are incorrect, user not logged in */
                 unset($_SESSION['username']);
@@ -1550,7 +1543,7 @@ class Session
         return true;
         }
         /* User not logged in */
-        else{
+        else {
             return false;
         }
     }
@@ -1566,24 +1559,24 @@ class Session
 
         /* Username error checking */
         $field = "user";  //Use field name for username
-        if(!$subuser || strlen($subuser = trim($subuser)) == 0){
+        if (!$subuser || strlen($subuser = trim($subuser)) == 0){
             $Form->setError($field, "* Username not entered");
         }
-        else{
+        else {
             /* Check if username is not alphanumeric */
-            if(!eregi("^([0-9a-z])*$", $subuser)){
+            if (!eregi("^([0-9a-z])*$", $subuser)){
                 $Form->setError($field, "* Username not alphanumeric");
             }
         }
 
         /* Password error checking */
         $field = "pass";  //Use field name for password
-        if(!$subpass){
+        if (!$subpass){
             $Form->setError($field, "* Password not entered");
         }
         
         /* Return if form errors exist */
-        if($Form->num_errors > 0){
+        if ($Form->num_errors > 0){
             return false;
         }
 
@@ -1592,17 +1585,17 @@ class Session
         $result = $UsersHandler->confirmUserPass($subuser, md5($subpass));
 
         /* Check error codes */
-        if($result == 1){
+        if ($result == 1){
             $field = "user";
             $Form->setError($field, "* Username not found");
         }
-        else if($result == 2){
+        else if ($result == 2){
             $field = "pass";
             $Form->setError($field, "* Invalid password");
         }
         
         /* Return if form errors exist */
-        if($Form->num_errors > 0){
+        if ($Form->num_errors > 0){
             return false;
         }
 
@@ -1634,7 +1627,7 @@ class Session
          * we will log him in automatically, but only if he didn't log out 
          * before he left.
          */
-        if($subremember){
+        if ($subremember){
             setcookie("cookname", 
                     $this->username,
                     time() + COOKIE_EXPIRE, 
@@ -1662,7 +1655,7 @@ class Session
          * so just negate what you added when creating the
          * cookie.
          */
-        if(isset($_COOKIE['cookname']) && isset($_COOKIE['cookid'])){
+        if (isset($_COOKIE['cookname']) && isset($_COOKIE['cookid'])){
             setcookie("cookname", "", time()-COOKIE_EXPIRE, COOKIE_PATH);
             setcookie("cookid",    "", time()-COOKIE_EXPIRE, COOKIE_PATH);
         }
@@ -1700,49 +1693,49 @@ class Session
         
         /* Username error checking */
         $field = "user";  //Use field name for username
-        if(!$subuser || strlen($subuser = trim($subuser)) == 0){
+        if (!$subuser || strlen($subuser = trim($subuser)) == 0){
             $Form->setError($field, "* Username not entered");
         }
-        else{
+        else {
             /* Spruce up username, check length */
             $subuser = stripslashes($subuser);
-            if(strlen($subuser) < 3){
+            if (strlen($subuser) < 3){
                 $Form->setError($field, "* Username below 3 characters");
             }
-            else if(strlen($subuser) > 30){
+            else if (strlen($subuser) > 30){
                 $Form->setError($field, "* Username above 30 characters");
             }
             /* Check if username is not alphanumeric */
-            else if(!eregi("^([0-9a-z])+$", $subuser)){
+            else if (!eregi("^([0-9a-z])+$", $subuser)){
                 $Form->setError($field, "* Username not alphanumeric");
             }
             /* Check if username is reserved */
-            else if(strcasecmp($subuser, GUEST_NAME) == 0){
+            else if (strcasecmp($subuser, GUEST_NAME) == 0){
                 $Form->setError($field, "* Username reserved word");
             }
             /* Check if username is already in use */
-            else if($UsersHandler->usernameTaken($subuser)){
+            else if ($UsersHandler->usernameTaken($subuser)){
                 $Form->setError($field, "* Username already in use");
             }
             /* Check if username is banned */
-            else if($UsersHandler->usernameBanned($subuser)){
+            else if ($UsersHandler->usernameBanned($subuser)){
                 $Form->setError($field, "* Username banned");
             }
         }
 
         /* Password error checking */
         $field = "pass";  # Use field name for password
-        if(!$subpass){
+        if (!$subpass){
             $Form->setError($field, "* Password not entered");
         }
-        else{
+        else {
             /* Spruce up password and check length*/
             $subpass = stripslashes($subpass);
-            if(strlen($subpass) < 4){
+            if (strlen($subpass) < 4){
                 $Form->setError($field, "* Password too short");
             }
             /* Check if password is not alphanumeric */
-            else if(!eregi("^([0-9a-z])+$", ($subpass = trim($subpass)))){
+            else if (!eregi("^([0-9a-z])+$", ($subpass = trim($subpass)))){
                 $Form->setError($field, "* Password not alphanumeric");
             }
             /**
@@ -1755,12 +1748,12 @@ class Session
         
     /* first name error checking */
         $field = "first_name";  //Use field name for first name
-        if(!$subfirst_name){
+        if (!$subfirst_name){
             $Form->setError($field, "* First name not entered");
         }
     /* last name error checking */
         $field = "last_name";  //Use field name for last name
-        if(!$sublast_name){
+        if (!$sublast_name){
             $Form->setError($field, "* Last name not entered");
         }
     
@@ -1768,32 +1761,32 @@ class Session
 
         /* Email error checking */
         $field = "email";  //Use field name for email
-        if(!$subemail || strlen($subemail = trim($subemail)) == 0){
+        if (!$subemail || strlen($subemail = trim($subemail)) == 0){
             $Form->setError($field, "* Email not entered");
         }
-        else{
+        else {
             /* Check if valid email address */
             $regex = "^[_+a-z0-9-]+(\.[_+a-z0-9-]+)*"
                       ."@[a-z0-9-]+(\.[a-z0-9-]{1,})*"
                       ."\.([a-z]{2,}){1}$";
-            if(!eregi($regex,$subemail)){
+            if (!eregi($regex,$subemail)){
                 $Form->setError($field, "* Email invalid");
             }
             $subemail = stripslashes($subemail);
         }
 
         /* Errors exist, have user correct them */
-        if($Form->num_errors > 0){
+        if ($Form->num_errors > 0){
             return 1;  //Errors with form
         }
         /* No errors, add the new account to the */
-        else{
-            if($UsersHandler->addNewUser($subuser,
+        else {
+            if ($UsersHandler->addNewUser($subuser,
                                       md5($subpass),
                                       $subfirst_name,
                                       $sublast_name,
                                       $subemail)){
-                if(EMAIL_WELCOME){
+                if (EMAIL_WELCOME){
                     $Mailer->sendWelcome($subuser,
                                     $subemail,
                                     $subpass,
@@ -1801,7 +1794,7 @@ class Session
                                     $sublast_name);
                 }
                 return 0;  //New user added succesfully
-            }else{
+            }else {
                 return 2;  //Registration attempt failed
             }
         }
@@ -1819,49 +1812,49 @@ class Session
         
         /* Username error checking */
         $field = "cuser";  //Use field name for username
-        if(!$subcuser || strlen($subcuser = trim($subcuser)) == 0){
+        if (!$subcuser || strlen($subcuser = trim($subcuser)) == 0){
             $Form->setError($field, "* Username not entered");
         }
-        else{
+        else {
             /* Spruce up username, check length */
             $subcuser = stripslashes($subcuser);
-            if(strlen($subcuser) < 3){
+            if (strlen($subcuser) < 3){
                 $Form->setError($field, "* Username below 3 characters");
             }
-            else if(strlen($subcuser) > 30){
+            else if (strlen($subcuser) > 30){
                 $Form->setError($field, "* Username above 30 characters");
             }
             /* Check if username is not alphanumeric */
-            else if(!eregi("^([0-9a-z])+$", $subcuser)){
+            else if (!eregi("^([0-9a-z])+$", $subcuser)){
                 $Form->setError($field, "* Username not alphanumeric");
             }
             /* Check if username is reserved */
-            else if(strcasecmp($subcuser, GUEST_NAME) == 0){
+            else if (strcasecmp($subcuser, GUEST_NAME) == 0){
                 $Form->setError($field, "* Username reserved word");
             }
             /* Check if username is already in use */
-            else if($UsersHandler->usernameTaken($subcuser)){
+            else if ($UsersHandler->usernameTaken($subcuser)){
                 $Form->setError($field, "* Username already in use");
             }
             /* Check if username is banned */
-            else if($UsersHandler->usernameBanned($subcuser)){
+            else if ($UsersHandler->usernameBanned($subcuser)){
                 $Form->setError($field, "* Username banned");
             }
         }
 
         /* Password error checking */
         $field = "cpass";  //Use field name for password
-        if(!$subcpass){
+        if (!$subcpass){
             $Form->setError($field, "* Password not entered");
         }
-        else{
+        else {
             /* Spruce up password and check length*/
             $subcpass = stripslashes($subcpass);
-            if(strlen($subcpass) < 4){
+            if (strlen($subcpass) < 4){
                 $Form->setError($field, "* Password too short");
             }
             /* Check if password is not alphanumeric */
-            else if(!eregi("^([0-9a-z])+$", ($subcpass = trim($subcpass)))){
+            else if (!eregi("^([0-9a-z])+$", ($subcpass = trim($subcpass)))){
                 $Form->setError($field, "* Password not alphanumeric");
             }
             /**
@@ -1874,50 +1867,50 @@ class Session
         
     /* first name error checking */
         $field = "cfirst_name";  //Use field name for first name
-        if(!$subcfirst_name){
+        if (!$subcfirst_name){
             $Form->setError($field, "* Firstname not entered");
         }
     /* last name error checking */
         $field = "clast_name";  //Use field name for last name
-        if(!$subclast_name){
+        if (!$subclast_name){
             $Form->setError($field, "* Lastname not entered");
         }
     /* firm error checking */
         $field = "cregkey";  //Use field name for firm
-        if(!$subcregkey){
+        if (!$subcregkey){
             $Form->setError($field, "* Registration key not entered");
         }
 
     /* Email error checking */
         $field = "cemail";  //Use field name for email
-        if(!$subcemail || strlen($subcemail = trim($subcemail)) == 0){
+        if (!$subcemail || strlen($subcemail = trim($subcemail)) == 0){
             $Form->setError($field, "* Email not entered");
         }
-        else{
+        else {
             /* Check if valid email address */
             $regex = "^[_+a-z0-9-]+(\.[_+a-z0-9-]+)*"
                       ."@[a-z0-9-]+(\.[a-z0-9-]{1,})*"
                       ."\.([a-z]{2,}){1}$";
-            if(!eregi($regex,$subcemail)){
+            if (!eregi($regex,$subcemail)){
                 $Form->setError($field, "* Email invalid");
             }
             $subcemail = stripslashes($subcemail);
         }
 
         /* Errors exist, have user correct them */
-        if($Form->num_errors > 0){
+        if ($Form->num_errors > 0){
             return 1;  //Errors with form
         }
         /* No errors, add the new account to the */
-        else{
-            if($UsersHandler->createNewUser($subcuser,
+        else {
+            if ($UsersHandler->createNewUser($subcuser,
                                             md5($subcpass),
                                             $subcfirst_name,
                                             $subclast_name,
                                             $subcemail,
                                             $subcregkey)){
                 return 0;  //New user added succesfully
-            }else{
+            }else {
                 return 2;  //Registration attempt failed
             }
         }
@@ -1933,22 +1926,22 @@ class Session
     function editAccount($subcurpass, $subnewpass, $subemail){
         global $UsersHandler, $Form;  //The database and form object
         /* New password entered */
-        if($subnewpass){
+        if ($subnewpass){
             /* Current Password error checking */
             $field = "curpass";  //Use field name for current password
-            if(!$subcurpass){
+            if (!$subcurpass){
                 $Form->setError($field, "* Current Password not entered");
             }
-            else{
+            else {
                 /* Check if password too short or is not alphanumeric */
                 $subcurpass = stripslashes($subcurpass);
-                if(strlen($subcurpass) < 4 ||
+                if (strlen($subcurpass) < 4 ||
                     !eregi("^([0-9a-z])+$", 
                            ($subcurpass = trim($subcurpass)))){
                     $Form->setError($field, "* Current Password incorrect");
                 }
                 /* Password entered is incorrect */
-                if($UsersHandler->confirmUserPass($this->username,
+                if ($UsersHandler->confirmUserPass($this->username,
                                               md5($subcurpass)) != 0){
                     $Form->setError($field, "* Current Password incorrect");
                 }
@@ -1958,17 +1951,17 @@ class Session
             $field = "newpass";  //Use field name for new password
             /* Spruce up password and check length*/
             $subpass = stripslashes($subnewpass);
-            if(strlen($subnewpass) < 4){
+            if (strlen($subnewpass) < 4){
                 $Form->setError($field, "* New Password too short");
             }
             /* Check if password is not alphanumeric */
-            else if(!eregi("^([0-9a-z])+$", 
+            else if (!eregi("^([0-9a-z])+$", 
                     ($subnewpass = trim($subnewpass)))){
                 $Form->setError($field, "* New Password not alphanumeric");
             }
         }
         /* Change password attempted */
-        else if($subcurpass){
+        else if ($subcurpass){
             /* New Password error reporting */
             $field = "newpass";  //Use field name for new password
             $Form->setError($field, "* New Password not entered");
@@ -1976,31 +1969,31 @@ class Session
         
         /* Email error checking */
         $field = "email";  //Use field name for email
-        if($subemail && strlen($subemail = trim($subemail)) > 0){
+        if ($subemail && strlen($subemail = trim($subemail)) > 0){
             /* Check if valid email address */
             $regex = "^[_+a-z0-9-]+(\.[_+a-z0-9-]+)*"
                       ."@[a-z0-9-]+(\.[a-z0-9-]{1,})*"
                       ."\.([a-z]{2,}){1}$";
-            if(!eregi($regex,$subemail)){
+            if (!eregi($regex,$subemail)){
                 $Form->setError($field, "* Email invalid");
             }
             $subemail = stripslashes($subemail);
         }
         
         /* Errors exist, have user correct them */
-        if($Form->num_errors > 0){
+        if ($Form->num_errors > 0){
             return false;  //Errors with form
         }
         
         /* Update password since there were no errors */
-        if($subcurpass && $subnewpass){
+        if ($subcurpass && $subnewpass){
             $UsersHandler->updateUserField($this->username,
                                         "password",
                                         md5($subnewpass));
         }
         
         /* Change Email */
-        if($subemail){
+        if ($subemail){
             $UsersHandler->updateUserField($this->username,
                                         "email",
                                         $subemail);
@@ -2059,13 +2052,13 @@ class Session
      */
     function generateRandStr($length){
         $randstr = "";
-        for($i=0; $i<$length; $i++){
+        for ($i=0; $i<$length; $i++){
             $randnum = mt_rand(0,61);
-            if($randnum < 10){
+            if ($randnum < 10){
                 $randstr .= chr($randnum+48);
-            }else if($randnum < 36){
+            }else if ($randnum < 36){
                 $randstr .= chr($randnum+55);
-            }else{
+            }else {
                 $randstr .= chr($randnum+61);
             }
         }
@@ -2079,23 +2072,23 @@ class Process
     function __construct(){
         global $Session;
         /* User submitted login form */
-        if(isset($_POST['sublogin'])){
+        if (isset($_POST['sublogin'])){
             $this->procLogin();
         }
         /* User submitted registration form */
-        else if(isset($_POST['subjoin'])){
+        else if (isset($_POST['subjoin'])){
             $this->procRegister();
         }
         /* User submitted account creation form */
-        else if(isset($_POST['subcreate'])){
+        else if (isset($_POST['subcreate'])){
             $this->procCreate();
         }
         /* User submitted forgot password form */
-        else if(isset($_POST['subforgot'])){
+        else if (isset($_POST['subforgot'])){
             $this->procForgotPass();
         }
         /* User submitted edit account form */
-        else if(isset($_POST['subedit'])){
+        else if (isset($_POST['subedit'])){
             $this->procEditAccount();
         }
         /**
@@ -2103,14 +2096,14 @@ class Process
          * is if he wants to logout, which means user is
          * logged in currently.
          */
-        else if($Session->logged_in){
+        else if ($Session->logged_in){
             $this->procLogout();
         }
         /**
          * Should not get here, which means user is viewing this page
          * by mistake and therefore is redirected.
          */
-         else{
+         else {
              header("Location: " . URL_ROOT);
          }
     }
@@ -2128,16 +2121,16 @@ class Process
                                 isset($_POST['remember']));
         
         /* Login successful */
-        if($retval){
-            if($Session->isAdmin()){
+        if ($retval){
+            if ($Session->isAdmin()){
                 header("Location: " . URL_ROOT . ADMIN_PATH);
             }
-            else{
+            else {
                 header("Location: " . URL_ROOT);
             }
         }
         /* Login failed */
-        else{
+        else {
             $_SESSION['value_array'] = $_POST;
             $_SESSION['error_array'] = $Form->getErrorArray();
             #header("Location: " . $Session->referrer);
@@ -2164,7 +2157,7 @@ class Process
     function procRegister(){
         global $Session, $Form;
         /* Convert username to all lowercase (by option) */
-        if(ALL_LOWERCASE){
+        if (ALL_LOWERCASE){
             $_POST['user'] = strtolower($_POST['user']);
         }
         /* Registration attempt */
@@ -2175,19 +2168,19 @@ class Process
                                     $_POST['last_name']);
         
         /* Registration Successful */
-        if($retval == 0){
+        if ($retval == 0){
             $_SESSION['reguname'] = $_POST['user'];
             $_SESSION['regsuccess'] = true;
             #header("Location: ".$Session->referrer);
         }
         /* Error found with form */
-        else if($retval == 1){
+        else if ($retval == 1){
             $_SESSION['value_array'] = $_POST;
             $_SESSION['error_array'] = $Form->getErrorArray();
             #header("Location: ".$Session->referrer);
         }
         /* Registration attempt failed */
-        else if($retval == 2){
+        else if ($retval == 2){
             $_SESSION['reguname'] = $_POST['user'];
             $_SESSION['regsuccess'] = false;
             #header("Location: ".$Session->referrer);
@@ -2204,7 +2197,7 @@ class Process
     function procCreate(){
         global $Session, $Form;
         /* Convert username to all lowercase (by option) */
-        if(ALL_LOWERCASE){
+        if (ALL_LOWERCASE){
             $_POST['cuser'] = strtolower($_POST['cuser']);
         }
         /* Registration attempt */
@@ -2216,19 +2209,19 @@ class Process
                                  $_POST['cregkey']);
         
         /* Registration Successful */
-        if($retval == 0){
+        if ($retval == 0){
             $_SESSION['reguname'] = $_POST['cuser'];
             $_SESSION['regsuccess'] = true;
             #header("Location: ".$Session->referrer);
         }
         /* Error found with form */
-        else if($retval == 1){
+        else if ($retval == 1){
             $_SESSION['value_array'] = $_POST;
             $_SESSION['error_array'] = $Form->getErrorArray();
             #header("Location: " . $Session->referrer);
         }
         /* Registration attempt failed */
-        else if($retval == 2){
+        else if ($retval == 2){
             $_SESSION['reguname'] = $_POST['cuser'];
             $_SESSION['regsuccess'] = false;
             #header("Location: " . $Session->referrer);
@@ -2245,13 +2238,13 @@ class Process
         /* Username error checking */
         $subuser = $_POST['user'];
         $field = "user";  //Use field name for username
-        if(!$subuser || strlen($subuser = trim($subuser)) == 0){
+        if (!$subuser || strlen($subuser = trim($subuser)) == 0){
             $Form->setError($field, "* Username not entered<br>");
         }
-        else{
+        else {
             /* Make sure username is in database */
             $subuser = stripslashes($subuser);
-            if(strlen($subuser) < 5 || strlen($subuser) > 30 ||
+            if (strlen($subuser) < 5 || strlen($subuser) > 30 ||
                 !eregi("^([0-9a-z])+$", $subuser) ||
                 (!$UsersHandler->usernameTaken($subuser))){
                 $Form->setError($field, "* Username does not exist<br>");
@@ -2259,12 +2252,12 @@ class Process
         }
         
         /* Errors exist, have user correct them */
-        if($Form->num_errors > 0){
+        if ($Form->num_errors > 0){
             $_SESSION['value_array'] = $_POST;
             $_SESSION['error_array'] = $Form->getErrorArray();
         }
         /* Generate new password and email it to user */
-        else{
+        else {
             /* Generate new password */
             $newpass = $Session->generateRandStr(8);
             
@@ -2273,7 +2266,7 @@ class Process
             $email  = $usrinf['email'];
             
             /* Attempt to send the email with new password */
-            if($Mailer->sendNewPass($subuser,$email,$newpass)){
+            if ($Mailer->sendNewPass($subuser,$email,$newpass)){
                 /* Email sent, update database */
                 $UsersHandler->updateUserField($subuser,
                                             "password",
@@ -2281,7 +2274,7 @@ class Process
                 $_SESSION['forgotpass'] = true;
             }
             /* Email failure, do not change password */
-            else{
+            else {
                 $_SESSION['forgotpass'] = false;
             }
         }
@@ -2302,12 +2295,12 @@ class Process
                                       $_POST['email']);
 
         /* Account edit successful */
-        if($retval){
+        if ($retval){
             $_SESSION['useredit'] = true;
             header("Location: " . $Session->referrer);
         }
         /* Error found with form */
-        else{
+        else {
             $_SESSION['value_array'] = $_POST;
             $_SESSION['error_array'] = $Form->getErrorArray();
             header("Location: " . $Session->referrer);
@@ -2353,7 +2346,7 @@ class Uploader
         $fileName = preg_replace('/[^\w\._]+/', '', $fileName);
 
         # Make sure the fileName is unique but only if chunking is disabled
-        if($chunks < 2 && 
+        if ($chunks < 2 && 
             file_exists($targetDir . DIRECTORY_SEPARATOR . $fileName)){
             $ext = strrpos($fileName, '.');
             $fileName_a = substr($fileName, 0, $ext);
@@ -2368,29 +2361,29 @@ class Uploader
         }
 
         # Create target dir
-        if(!file_exists($targetDir))
+        if (!file_exists($targetDir))
             @mkdir($targetDir);
 
         # Look for the content type header
-        if(isset($_SERVER["HTTP_CONTENT_TYPE"]))
+        if (isset($_SERVER["HTTP_CONTENT_TYPE"]))
             $contentType = $_SERVER["HTTP_CONTENT_TYPE"];
 
-        if(isset($_SERVER["CONTENT_TYPE"]))
+        if (isset($_SERVER["CONTENT_TYPE"]))
             $contentType = $_SERVER["CONTENT_TYPE"];
 
         # Handle non multipart uploads older WebKit versions didn't 
         # support multipart in HTML5
-        if(strpos($contentType, "multipart") !== false){
-            if(isset($_FILES['file']['tmp_name']) && 
+        if (strpos($contentType, "multipart") !== false){
+            if (isset($_FILES['file']['tmp_name']) && 
                 is_uploaded_file($_FILES['file']['tmp_name'])){
                 # Open temp file
                 $out = fopen($targetDir . DIRECTORY_SEPARATOR . $fileName,
                              $chunk == 0 ? "wb" : "ab");
-                if($out){
+                if ($out){
                     # Read binary input stream and append it to temp file
                     $in = fopen($_FILES['file']['tmp_name'], "rb");
 
-                    if($in){
+                    if ($in){
                         while ($buff = fread($in, 4096))
                             fwrite($out, $buff);
                     } else
@@ -2487,32 +2480,29 @@ TemplateBase::setSettings($settings);
  * with the core objects in manage.php                                       *
  */
 $FieldStorage = False;
-if($_POST){
+if ($_POST){
     $FieldStorage = $_POST;
-}
-else if($_GET){
+} else if ($_GET){
     $FieldStorage = $_GET;
 }
 # Interaction with the Database object
-if($FieldStorage['action'] == 'backup_db'){
-    if(isset($FieldStorage['output'])){
+if ($FieldStorage['action'] == 'backup_db') {
+    if (isset($FieldStorage['output'])){
         $output = $FieldStorage['output'];
-    }
-    else{
+    } else {
         $output = '';
     }
     $backup_db = $Database->backupDatabase('*');
-    if($backup_db and $output == 'print'){
+    if ($backup_db and $output == 'print') {
         print 'The database has been backed up successfully !';
-    }
-    else{
+    } else {
         print 'Something went wrong while trying to backup the database, '
               . 'please try again <input class="old_backup_btn" '
               . 'type="button" value="Backup database !">';
     }
 }
 # Interaction with the AdminGenerator object
-if($FieldStorage['action'] == 'settings_settings'){
+if ($FieldStorage['action'] == 'settings_settings') {
     $Database->update('settings',
                       array('sitetitle'=>$FieldStorage['settings_sitetitle'],
                       'url'=>$FieldStorage['settings_url'],
@@ -2527,12 +2517,12 @@ if($FieldStorage['action'] == 'settings_settings'){
     header("Location: " . $FieldStorage['referer'] . "");
 }
 # Interaction with the Uploader object
-if($_GET['action'] == 'upload_file'){
+if ($_GET['action'] == 'upload_file') {
     # Initialize Uploader object
     $Uploader = new Uploader;
     $Uploader->upload($_REQUEST);
 }
 # Interaction with the Process object
-if($_POST['action'] == 'process'){
+if ($_POST['action'] == 'process') {
     $Process = new Process;
-        }
+}

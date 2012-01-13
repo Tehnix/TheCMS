@@ -18,7 +18,13 @@
         </header>
 
         <nav>
-            {% MENU %}
+            <ul id="menu">
+            <?php
+                foreach(Pages::getMenu() as $menu){
+                    print '<li><a ' . $menu['active'] . ' href="' . $menu['href'] . '">' . $menu['name'] . '</a></li>';
+                }
+            ?>
+            </ul>
         </nav>
         
         <div id="content">

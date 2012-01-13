@@ -13,13 +13,19 @@ if($$pages_admin_name){
         
         $pages = '';
         foreach($Pages->get('', 'ORDER BY id DESC '.$pagination->limit) as $item){
+            $checkBox = $admin->input(array('name'=>'multiSelect',
+                                            'id'=>'multiSelect',
+                                            'style'=>'margin:0 10px 0 -5px;',
+                                            'type'=>'checkbox'));
+            $onclick = 'onclick="document.location.href=\'' . URL_ROOT . ADMIN_PATH 
+            . '/' . $module_pages_name . '/update/' . $item['id'] . '\'"';
             $pages .=
-            '<tr onclick="document.location.href=\'' . URL_ROOT . ADMIN_PATH 
-            . '/' . $module_pages_name . '/update/' . $item['id'] . '\'">' .
-            '<td>' . $item['name'] . '</td>' .
-            '<td>' . $item['type_name'] . '</td>' .
-            '<td>' . $item['comments_count'] . '</td>' .
-            '<td>' . date('F d, Y', strtotime($item['modify'])) . '</td>';
+            '<tr>' .
+            '<td> ' . $checkBox . '</td>' .
+            '<td ' . $onclick . '>' . $item['name'] . '</td>' .
+            '<td ' . $onclick . '>' . $item['type_name'] . '</td>' .
+            '<td ' . $onclick . '>' . $item['comments_count'] . '</td>' .
+            '<td ' . $onclick . '>' . date('F d, Y', strtotime($item['modify'])) . '</td>';
         }
         
         $style = '<style></style>';
@@ -31,6 +37,7 @@ if($$pages_admin_name){
         <table id="zebraTable">
             <thead>
                 <tr>
+                    <th style="width:10px;"></th>
                     <th style="width:60%;">Title</th>
                     <th style="width:20%;">Type</th>
                     <th style="width:10%;">
@@ -41,6 +48,7 @@ if($$pages_admin_name){
             </thead>
             <tfoot>
                 <tr>
+                    <td></td>
                     <td>Title</td>
                     <td style="width:20%;">Type</td>
                     <td>
@@ -52,7 +60,10 @@ if($$pages_admin_name){
             <tbody>' 
             . $pages . '
             </tbody>
-        </table>';
+        </table>
+        <br>
+        <p>With selected : delete</p>
+        ';
         
         $tpl_content = new Template(Template::getAdminFile('one_col.tpl'));
         $tpl_content->set('SCRIPT', $admin->script);
@@ -64,8 +75,6 @@ if($$pages_admin_name){
         $tpl_content = $tpl_content->output();
     }
     else if($pages_admin_new){
-        $admin_title .= ' / New';
-        
         $textarea = $admin->textarea(array('name'=>'pages_content',
                                            'class'=>'advancedEditor',
                                            'rows'=>'20',
@@ -93,6 +102,11 @@ if($$pages_admin_name){
                                      'placeholder'=>'Enter title here...'));
         $admin->validateField('required', array('id'=>'pages_title',
                                                 'error'=>'Please enter a title !'));
+        $weight = $admin->input(array('name'=>'pages_weight',
+                                      'id'=>'pages_weight',
+                                      'class'=>'input',
+                                      'style'=>'width:95%;',
+                                      'type'=>'text'));
         
         $submit = $admin->input(array('id'=>'pages_submit',
                                       'class'=>'button darkblue',
@@ -105,7 +119,7 @@ if($$pages_admin_name){
                              
         $style = '<style></style>';
         
-        $top_right = '';
+        $top_right = 'New';
         $top_left = '<a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_pages_name . '">View All</a>';
         
         $left = $form . $textarea;
@@ -126,6 +140,10 @@ if($$pages_admin_name){
                 <tr>
                     <td>Type :</td>
                     <td>' . $type . '</td>
+                </tr>
+                <tr>
+                    <td>Weight :</td>
+                    <td>' . $weight . '</td>
                 </tr>
                 <tr>
                     <td>Allow comments :</td>
@@ -157,7 +175,6 @@ if($$pages_admin_name){
             if(empty($page['id'])){
                 $error = true;
             }
-            $admin_title .= ' / Update';
             
             $id = $admin->input(array('name'=>'pages_id',
                                       'type'=>'hidden',
@@ -192,6 +209,13 @@ if($$pages_admin_name){
                                          'value'=>$page['name']));
             $admin->validateField('required', array('id'=>'pages_title',
                                                     'error'=>'Please enter a title !'));
+            $weight = $admin->input(array('name'=>'pages_weight',
+                                          'id'=>'pages_weight',
+                                          'class'=>'input',
+                                          'style'=>'width:95%;',
+                                          'type'=>'text',
+                                          'value'=>$page['weight']));
+            
 
             $submit = $admin->input(array('id'=>'pages_submit',
                                           'class'=>'button darkblue',
@@ -204,7 +228,7 @@ if($$pages_admin_name){
             
             $style = '<style></style>';
             
-            $top_right = '';
+            $top_right = 'Update';
             $top_left = '<a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_pages_name . '">View All</a>';
 
             $left = $form . $id . $textarea;
@@ -225,6 +249,10 @@ if($$pages_admin_name){
                     <tr>
                         <td>Type :</td>
                         <td>' . $type . '</td>
+                    </tr>
+                    <tr>
+                        <td>Weight :</td>
+                        <td>' . $weight . '</td>
                     </tr>
                     <tr>
                         <td>Allow comments :</td>

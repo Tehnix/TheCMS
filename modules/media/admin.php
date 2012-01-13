@@ -13,23 +13,30 @@ if($$media_admin_name){
         
         $media = '';
         foreach($Media->get('', $pagination->limit) as $item){
+            $checkBox = $admin->input(array('name'=>'multiSelect',
+                                            'id'=>'multiSelect',
+                                            'style'=>'margin:0 10px 0 -5px;',
+                                            'type'=>'checkbox'));
+            $onclick = 'onclick="document.location.href=\'' . URL_ROOT . ADMIN_PATH 
+            . '/' . $module_media_name . '/view/' . $item['log_id'] . '\'"';
             $media .=
-            '<tr onclick="document.location.href=\'' . URL_ROOT . ADMIN_PATH 
-            . '/' . $module_media_name . '/view/' . $item['log_id'] . '\'">' .
-            '<td>' . $item['log_originalname'] . '</td>' .
-            '<td>' . number_format(($item['log_size']/100000), 2, '.', '') . ' MB</td>' .
-            '<td>' . date('F d, Y', strtotime($item['log_date'])) . '</td>';
+            '<tr>' .
+            '<td> ' . $checkBox . '</td>' .
+            '<td ' . $onclick . '>' . $item['log_originalname'] . '</td>' .
+            '<td ' . $onclick . '>' . number_format(($item['log_size']/100000), 2, '.', '') . ' MB</td>' .
+            '<td ' . $onclick . '>' . date('F d, Y', strtotime($item['log_date'])) . '</td>';
         }
         
         $style = '<style></style>';
         
         $top_right = $pagination->display_pages();
-        $top_left = '<a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_media_name . '/new">Add New Media <b>+</b></a> ';
+        $top_left = '<a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_media_name . '/new">Upload New Media <b>+</b></a> ';
         
         $full = '
         <table id="zebraTable">
             <thead>
                 <tr>
+                    <th style="width:10px;"></th>
                     <th style="width:60%;">File</th>
                     <th style="width:20%;">Size</th>
                     <th style="width:10%;">Date</th>
@@ -37,6 +44,7 @@ if($$media_admin_name){
             </thead>
             <tfoot>
                 <tr>
+                    <td></td>
                     <td>File</td>
                     <td>Size</td>
                     <td>Date</td>
@@ -57,14 +65,12 @@ if($$media_admin_name){
         $tpl_content = $tpl_content->output();
     }
     else if($media_admin_new) {
-        $admin_title .= ' / New';
-        
         if(is_writable(UPLOAD_ROOT)){
             $admin->uploader("uploader");
             
             $style = '<style></style>';
             
-            $top_right = '';
+            $top_right = 'Upload';
             $top_left = '<a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_media_name . '">View All</a> ';
 
             $full = '
@@ -75,8 +81,8 @@ if($$media_admin_name){
                 </form>
             ';
         }
-        else{
-            $top_right = '';
+        else {
+            $top_right = 'Upload';
             $top_left = '<a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_media_name . '">View All</a> ';
 
             $full = '
@@ -86,7 +92,7 @@ if($$media_admin_name){
         }
         
         $tpl_content = new Template(Template::getAdminFile('one_col.tpl'));
-        $tpl_content->set('SCRIPT', $script.$admin->script);
+        $tpl_content->set('SCRIPT', $script . $admin->script);
         $tpl_content->set('STYLE', $style);
         $tpl_content->set('TOP_RIGHT', $top_right);
         $tpl_content->set('TOP_LEFT', $top_left);
@@ -102,13 +108,11 @@ if($$media_admin_name){
             if(empty($media['log_id'])){
                 $error = true;
             }
-            $admin_title .= ' / View';
-            
             $displayMedia = $Media->display($media['log_filename']);
             
             $style = '<style></style>';
             
-            $top_right = '';
+            $top_right = 'View';
             $top_left = '<a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_media_name . '">View All</a>';
             
             $full =  $displayMedia;

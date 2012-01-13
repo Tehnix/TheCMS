@@ -16,13 +16,19 @@ if($$blog_admin_name){
         
         $blog = '';
         foreach($Blog->get($pagination->limit) as $item){
+            $checkBox = $admin->input(array('name'=>'multiSelect',
+                                            'id'=>'multiSelect',
+                                            'style'=>'margin:0 10px 0 -5px;',
+                                            'type'=>'checkbox'));
+            $onclick = 'onclick="document.location.href=\'' . URL_ROOT . ADMIN_PATH 
+            . '/' . $module_blog_name . '/update/' . $item['id'] . '\'"';
             $blog .=
-            '<tr onclick="document.location.href=\'' . URL_ROOT . ADMIN_PATH 
-            . '/' . $module_blog_name . '/update/' . $item['id'] . '\'">' .
-            '<td>' . $item['title'] . '</td>' .
-            '<td>' . $item['author_name'] . '</td>' .
-            '<td>' . $item['comments_count'] . '</td>' .
-            '<td>' . date('F d, Y <br> g:m a', strtotime($item['date_posted'])) . '</td>';
+            '<tr>' .
+            '<td> ' . $checkBox . '</td>' .
+            '<td ' . $onclick . '>' . $item['title'] . '</td>' .
+            '<td ' . $onclick . '>' . $item['author_name'] . '</td>' .
+            '<td ' . $onclick . '>' . $item['comments_count'] . '</td>' .
+            '<td ' . $onclick . '>' . date('F d, Y <br> g:m a', strtotime($item['date_posted'])) . '</td>';
         }
         
         $style = '<style></style>';
@@ -34,6 +40,7 @@ if($$blog_admin_name){
         <table id="zebraTable">
             <thead>
                 <tr>
+                    <th style="width:10px;"></th>
                     <th style="width:60%;">Title</th>
                     <th style="width:20%;">Author</th>
                     <th style="width:10%;">
@@ -44,6 +51,7 @@ if($$blog_admin_name){
             </thead>
             <tfoot>
                 <tr>
+                    <td></td>
                     <td>Title</td>
                     <td>Author</td>
                     <td>
@@ -55,7 +63,8 @@ if($$blog_admin_name){
             <tbody>' 
             . $blog . '
             </tbody>
-        </table>';
+        </table>
+        ';
         
         $tpl_content = new Template(Template::getAdminFile('one_col.tpl'));
         $tpl_content->set('SCRIPT', $admin->script);
@@ -66,9 +75,7 @@ if($$blog_admin_name){
 
         $tpl_content = $tpl_content->output();
     }
-    else if($blog_admin_new){
-        $admin_title .= ' / New';
-        
+    else if($blog_admin_new){        
         $textarea = $admin->textarea(array('name'=>'blog_post',
                                            'class'=>'advancedEditor',
                                            'rows'=>'20',
@@ -114,7 +121,7 @@ if($$blog_admin_name){
                              
         $style = '<style></style>';
         
-        $top_right = '';
+        $top_right = 'New';
         $top_left = '<a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_blog_name . '">View All</a>';
         
         $left = $form . $textarea;
@@ -169,9 +176,7 @@ if($$blog_admin_name){
             $blog = $Blog->get('', $url_query[3]);
             if(empty($blog['id'])){
                 $error = true;
-            }
-            $admin_title .= ' / Update';
-            
+            }            
             $id = $admin->input(array('name'=>'blog_id',
                                       'type'=>'hidden',
                                       'value'=>$blog['id']));
@@ -225,7 +230,7 @@ if($$blog_admin_name){
             
             $style = '<style></style>';
 
-            $top_right = '';
+            $top_right = 'Update';
             $top_left = '<a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_blog_name . '">View All</a>';
 
             $left = $form . $id . $textarea;

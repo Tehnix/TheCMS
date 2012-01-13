@@ -1,5 +1,5 @@
 <?php
-if(substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) ob_start("ob_gzhandler"); else ob_start();
+if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) ob_start("ob_gzhandler"); else ob_start();
 require('manage.php');
 require('urls.php');
 # URL variable
@@ -10,13 +10,13 @@ foreach($getmodules as $module) {
     include(MODULE_ROOT . $module . DS . 'model.php');
 }
 # Redirect to startpage if page is empty
-if(empty($url_query[0])){
-    $startpage = Pages::getMenu($settings['startpage']); # Make it take id for page, and return type plus id...
-    if($startpage['type'] != 'pages'){
+if (empty($url_query[0])){
+    $startpage = Pages::getMenu($settings['startpage']);
+    $startpage = $startpage[0];
+    if ($startpage['type'] != 'pages'){
         $url_query[0] = $startpage['type'];
         $url_query[1] = $startpage['id'];
-    }
-    else{
+    } else {
         $url_query[0] = $startpage['type'];
     }
 }
@@ -26,7 +26,7 @@ foreach($getmodules as $module) {
 }
 
 # Construct the layout from the template
-if($Module_admin) {
+if ($Module_admin) {
     # Create the dashboard arrays
     $admin_count_array_left = array();
     $admin_count_array_right = array();
@@ -34,7 +34,7 @@ if($Module_admin) {
     # Construct the admin menu
     $admin_menu_array = array('dashboard'=>'Dashboard');
     foreach($getmodules as $module) {
-        if(is_file(MODULE_ROOT . $module . DS . 'admin.php')){
+        if (is_file(MODULE_ROOT . $module . DS . 'admin.php')){
             include(MODULE_ROOT . $module . DS . 'admin.php');
             $admin_menu_array[$module] = ucwords($module);
         }
@@ -44,14 +44,14 @@ if($Module_admin) {
     }
     
     # Set admin title
-    if(isset($url_query[1]) and $url_query[1] != '' or isset($admin_title)){
+    if (isset($url_query[1]) and $url_query[1] != '' or isset($admin_title)){
         $admin_title = ucfirst($url_query[1]) . $admin_title;
     }
-    else{
+    else {
         # Fallback is dashboard
         $admin_title = 'Dashboard';
     }
-    if($admin_title == 'Dashboard'){
+    if ($admin_title == 'Dashboard'){
         # And then we construct the dashboard items
         foreach($admin_count_array_left as $key => $value){
             $admin_dashboard_left .= '<tr><td><b>' . $key . '</b></td><td>' . $value . '</td></tr>';
@@ -90,7 +90,7 @@ if($Module_admin) {
         
         $tpl_content = $tpl_content->output();
     }
-    else if($admin_title == 'Settings'){
+    else if ($admin_title == 'Settings'){
         $admin = new AdminGenerator;
         $pages_array = array();
         $pages = $Database->fetchAll('pages');
@@ -117,7 +117,7 @@ if($Module_admin) {
         $exclude = array('.', '..', '.DS_Store');
         $themes = array();
         foreach($themeFolder as $file) {
-            if(!in_array($file, $exclude)){
+            if (!in_array($file, $exclude)){
                 $themes[$file] = $file;
             }
         }
@@ -130,7 +130,7 @@ if($Module_admin) {
         $exclude = array('.', '..', '.DS_Store');
         $themesAdmin = array();
         foreach($themeAdminFolder as $file) {
-            if(!in_array($file, $exclude)){
+            if (!in_array($file, $exclude)){
                 $themesAdmin[$file] = $file;
             }
         }
@@ -240,7 +240,7 @@ if($Module_admin) {
         
         $tpl_content = $tpl_content->output();
     }
-    else if($admin_title == 'Profile'){
+    else if ($admin_title == 'Profile'){
         $top_left = '<a href="' . URL_ROOT . ADMIN_PATH . '/profile/edit">Edit Profile</a>';
 
         $full = '
@@ -281,7 +281,7 @@ if($Module_admin) {
     $tpl_layout->set('CONTENT', $tpl_content);
     print $tpl_layout->output();
 }
-else if($Module_login){
+else if ($Module_login){
     /**
      * User not logged in, display the login form.
      * If user has already tried to login, but errors were
@@ -289,7 +289,7 @@ else if($Module_login){
      * If errors occurred, they will be displayed.
      */
     $remember = '';
-    if($Form->value('remember') != ''){
+    if ($Form->value('remember') != ''){
         $remember = 'checked';
     }
     try{
@@ -307,11 +307,11 @@ else if($Module_login){
         print 'Error loading template !...';
     }
 }
-else if($Module_register){
+else if ($Module_register){
     /**
      * The user is already logged in, not allowed to register.
      */
-    if($Session->logged_in){
+    if ($Session->logged_in){
         $tpl_layout = new Template(Template::getFile('error.tpl'));
         $tpl_layout->set(
                          'ERROR_MSG',
@@ -325,9 +325,9 @@ else if($Module_register){
      * The user has submitted the registration form and the
      * results have been processed.
      */
-    else if(isset($_SESSION['regsuccess'])){
+    else if (isset($_SESSION['regsuccess'])){
        /* Registration was successful */
-       if($_SESSION['regsuccess']){
+       if ($_SESSION['regsuccess']){
             $tpl_layout = new Template(Template::getFile('error.tpl'));
             $tpl_layout->set(
                              'ERROR_MSG',
@@ -339,7 +339,7 @@ else if($Module_register){
                             );
        }
        /* Registration failed */
-       else{
+       else {
             $tpl_layout = new Template(Template::getFile('error.tpl'));
             $tpl_layout->set(
                              'ERROR_MSG',
@@ -358,10 +358,10 @@ else if($Module_register){
      * of the input fields are important and should not
      * be changed.
      */
-    else{
-        if($settings['membership'] == 1 or $settings['membership'] == 2){
+    else {
+        if ($settings['membership'] == 1 or $settings['membership'] == 2){
             try {
-                if($settings['membership'] == 1){
+                if ($settings['membership'] == 1){
                     $tpl_layout = new Template(Template::getFile('register.tpl'));
                     $tpl_layout->set('FORM_USER', $Form->value("user"));
                     $tpl_layout->set('FORM_PASS', $Form->value("pass"));
@@ -374,7 +374,7 @@ else if($Module_register){
                     $tpl_layout->set('ERROR_FIRSTNAME', $Form->error("first_name"));
                     $tpl_layout->set('ERROR_LASTNAME', $Form->error("last_name"));
                 }
-                else if($settings['membership'] == 2){
+                else if ($settings['membership'] == 2){
                     $tpl_layout = new Template(Template::getFile('registerregkey.tpl'));
                     $tpl_layout->set('FORM_REG', $Form->value("cregkey"));
                     $tpl_layout->set('ERROR_REG', $Form->error("cregkey"));
@@ -395,7 +395,7 @@ else if($Module_register){
                 $tpl_layout->set('ERROR_MSG', "Error loading template !...");
             }
         }
-        else{
+        else {
             $tpl_layout = new Template(Template::getFile('error.tpl'));
             $tpl_layout->set('ERROR_MSG', "Registration not allowed at the moment");
         }
@@ -404,56 +404,19 @@ else if($Module_register){
         unset($_SESSION['error_array']);
     }
 }
-else{
-    $curPage = '';
-    $tpl_menu = '<ul id="menu">';
-    foreach(Pages::getMenu() as $page) {
-        $active = '';
-        if(URL == null) {
-            if($page['id'] == $settings['startpage']) {
-                $active = 'class="active-link"';
-                $curPage = $page['name'];
-            }
-            if($page['type'] == 'pages'){
-                $tpl_menu .= '<li><a ' . $active . ' href="' . URL_ROOT . $page['type'] . '/' 
-                . $page['id'] . '">' . $page['name'] . '</a></li>';
-            } else {
-                $tpl_menu .= '<li><a ' . $active . ' href="' . URL_ROOT . $page['type'] . '">' 
-                . $page['name'] . '</a></li>';
-            }
-            
-        } elseif($page['type'] == 'pages') {
-            if(URL == $page['type'] . '/' . $page['id']) {
-                $active = 'class="active-link"';
-                $curPage = $page['name'];
-            }
-            $tpl_menu .= '<li><a ' . $active . ' href="' . URL_ROOT . $page['type'] . '/' 
-            . $page['id'] . '">' . $page['name'] . '</a></li>';
-        } else {
-            if(URL == $page['type']) {
-                $active = 'class="active-link"';
-                $curPage = $page['name'];
-            }
-            $tpl_menu .= '<li><a ' . $active . ' href="' . URL_ROOT . $page['type'] . '">' 
-            . $page['name'] . '</a></li>';
-        }
-    }
-    $tpl_menu .= '</ul>';
-
+else {
     # The general page
     try {
         $tpl_layout = new Template(Template::getFile('index.tpl'));
-        $tpl_layout->set('SITE_TITLE', $curPage . ' | ' . $settings['sitetitle']);
+        $tpl_layout->set('SITE_TITLE', Pages::get_cur_page() . ' | ' . $settings['sitetitle']);
         $tpl_layout->set('TITLE', $settings['sitetitle']);
-        $tpl_layout->set('MENU', $tpl_menu);
         $tpl_layout->set('CONTENT', $tpl_content);
-        if($settings['googleanalytics'] == 1 and $settings['analyticscode'] != '') {
+        if ($settings['googleanalytics'] == 1 and $settings['analyticscode'] != '') {
             $tpl_layout->set(
                              'GOOGLE_ANALYTICS',
                              "<script>head.ready(document, function(){" . $settings['analyticscode'] . "});</script>"
                             );
-        }
-        else {
+        } else {
             $tpl_layout->set('GOOGLE_ANALYTICS', '');
         }
         print $tpl_layout->output();
