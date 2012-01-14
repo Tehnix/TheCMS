@@ -1,14 +1,10 @@
 <?php
 if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) ob_start("ob_gzhandler"); else ob_start();
-require('manage.php');
+require_once('manage.php');
+require_once('interact.php');
 require('urls.php');
 # URL variable
 $url_query = explode('/', URL);
-# Import the module: Models, URL handlers and Views
-$getmodules = $Modules->getModules();
-foreach($getmodules as $module) {
-    include(MODULE_ROOT . $module . DS . 'model.php');
-}
 # Redirect to startpage if page is empty
 if (empty($url_query[0])){
     $startpage = Pages::getMenu($settings['startpage']);

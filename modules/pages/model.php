@@ -34,7 +34,7 @@ class Pages extends ModulesBase
 {
     protected $maxPages = 100;
     
-    public function get( $id=null, $additional = null ){
+    public function get($id=null, $additional = null ){
         if (!empty($id)) {
             $pagesArray = $this->database->execute('fetchone', 
                                                     "SELECT `p`.*, 
@@ -63,9 +63,8 @@ class Pages extends ModulesBase
                                                      WHERE `pages_id` = `p`.`id`) 
                                                     AS `comments_count` 
                                                     FROM `pages` AS `p` 
-                                                    WHERE `p`.`trash` = :trash
-                                                    ORDER BY `weight`",
-                                                    array('trash'=>'0'));
+                                                    WHERE `p`.`trash` = '0'
+                                                    ORDER BY `weight`");
             if (get_magic_quotes_gpc()) {
                 for ($i=0; $i<sizeof($pagesArray); $i++) {
                     $pagesArray[$i]['name'] = stripslashes($pagesArray[$i]['name']);
@@ -136,6 +135,28 @@ class Pages extends ModulesBase
         }
     }
     
+    public function trash($id=null) {
+        if (empty($id)) {
+            return false;
+        } else {
+            $this->database->update('pages', 
+                                    array('trash'=>'1'),
+                                    array('id'=>$id));
+            
+            $name = $this->database->fetchone('pages', array('id'=>$id));
+            $name = $name['name'];
+            $this->database->insert('_recent_activity',
+                                    array('name'=>'pages',
+                                          'grouping'=>'pages'.date("Y-m-d"),
+                                          'action'=>'delete',
+                                          'additional'=>$name)
+                                    );
+            
+            return true;
+        }
+    }
+    
+    
     public static function getTypes() {
         global $Database;
         $typeArray = array();
@@ -149,12 +170,11 @@ class Pages extends ModulesBase
     }
     
     public static function getMenu($id=null) {
-        global $Database;
-        
+        $Pages = new Pages();
         if (!empty($id)){
-            $menu = $Database->fetchAll('pages', array('id'=>$id));
+            $menu = $Pages->get($id);
         } else {
-            $menu = $Database->fetchAll('pages', array(), 'ORDER BY weight ASC');
+            $menu = $Pages->get();
         }
         $menuArray = array();
         $i = 0;
@@ -228,7 +248,6 @@ class Pages extends ModulesBase
     
 }
 
-
 # Handle all interaction with this modules model class
 if ($FieldStorage['action'] == 'pages_newPage') {
     $Pages = new Pages;
@@ -251,4 +270,13 @@ if ($FieldStorage['action'] == 'pages_newPage') {
                    $FieldStorage['pages_weight']
                   );
     header("Location: " . $FieldStorage['referer']);
+} else if ($FieldStorage['action'] == 'pages_multi') {
+    if ($FieldStorage['multiAction'] == 'delete') {
+        $items = explode(',', $FieldStorage['data']);
+        $Pages = new Pages;
+        foreach ($items as $item) {
+            print 'success!';
+            $Pages->trash($item);
+        }
+    }
 }

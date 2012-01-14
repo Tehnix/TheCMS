@@ -16,7 +16,8 @@ if($$media_admin_name){
             $checkBox = $admin->input(array('name'=>'multiSelect',
                                             'id'=>'multiSelect',
                                             'style'=>'margin:0 10px 0 -5px;',
-                                            'type'=>'checkbox'));
+                                            'type'=>'checkbox',
+                                            'value'=>$item['log_id']));
             $onclick = 'onclick="document.location.href=\'' . URL_ROOT . ADMIN_PATH 
             . '/' . $module_media_name . '/view/' . $item['log_id'] . '\'"';
             $media .=
@@ -27,12 +28,15 @@ if($$media_admin_name){
             '<td ' . $onclick . '>' . date('F d, Y', strtotime($item['log_date'])) . '</td>';
         }
         
+        $multiForm = $admin->multi_form(array('referer'=>ADMIN_PATH . '/' . $module_pages_name,
+                                              'module'=>'media_multi'));
+        
         $style = '<style></style>';
         
         $top_right = $pagination->display_pages();
         $top_left = '<a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_media_name . '/new">Upload New Media <b>+</b></a> ';
         
-        $full = '
+        $full = $multiForm . '
         <table id="zebraTable">
             <thead>
                 <tr>
@@ -53,7 +57,11 @@ if($$media_admin_name){
             <tbody id="zebraTableBody">' 
             . $media . '
             </tbody>
-        </table>';
+        </table>
+        </form>
+        <br>
+        <p>With selected : <input type="button" value="Delete" id="multiDeleteButton"></p>
+        ';
         
         $tpl_content = new Template(Template::getAdminFile('one_col.tpl'));
         $tpl_content->set('SCRIPT', $admin->script);

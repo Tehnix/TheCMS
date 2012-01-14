@@ -19,7 +19,8 @@ if($$blog_admin_name){
             $checkBox = $admin->input(array('name'=>'multiSelect',
                                             'id'=>'multiSelect',
                                             'style'=>'margin:0 10px 0 -5px;',
-                                            'type'=>'checkbox'));
+                                            'type'=>'checkbox',
+                                            'value'=>$item['id']));
             $onclick = 'onclick="document.location.href=\'' . URL_ROOT . ADMIN_PATH 
             . '/' . $module_blog_name . '/update/' . $item['id'] . '\'"';
             $blog .=
@@ -31,12 +32,15 @@ if($$blog_admin_name){
             '<td ' . $onclick . '>' . date('F d, Y <br> g:m a', strtotime($item['date_posted'])) . '</td>';
         }
         
+        $multiForm = $admin->multi_form(array('referer'=>ADMIN_PATH . '/' . $module_pages_name,
+                                              'module'=>'blog_multi'));
+        
         $style = '<style></style>';
         
         $top_right = $pagination->display_pages();
         $top_left = '<a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_blog_name . '/new">Add New Post <b>+</b></a>';
         
-        $full = '
+        $full = $multiForm . '
         <table id="zebraTable">
             <thead>
                 <tr>
@@ -64,6 +68,9 @@ if($$blog_admin_name){
             . $blog . '
             </tbody>
         </table>
+        </form>
+        <br>
+        <p>With selected : <input type="button" value="Delete" id="multiDeleteButton"></p>
         ';
         
         $tpl_content = new Template(Template::getAdminFile('one_col.tpl'));

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>{% HEAD_TITLE %}</title>
-	<link rel="stylesheet" type="text/css" media="screen, print, projection" href="{% STYLESHEET %}?type=admin">
+	<link rel="stylesheet" type="text/css" media="screen, print, projection" href="{% STYLESHEET %}&amp;type=admin">
 	<link rel="shortcut icon" type="image/x-icon" href="{% FAVICON %}">
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 	<script src="{% JS_ROOT %}head.load.min.js" type="text/javascript" charset="utf-8"></script>

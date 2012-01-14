@@ -30,10 +30,29 @@ class Media extends ModulesBase
         }
         else {
             $mediaArray = array();
-            $mediaArray = $this->database->fetchAll('_uploads_log', array(), 'ORDER BY log_id DESC ' . $limit);
+            $mediaArray = $this->database->fetchAll('_uploads_log', array('trash'=>'0'), 'ORDER BY log_id DESC ' . $limit);
         }
 
         return $mediaArray;
+    }
+    
+    public function trash($id=null) {
+        if (empty($id)) {
+            return false;
+        } else {
+            $this->database->update('_uploads_log', 
+                                    array('trash'=>'1'),
+                                    array('log_id'=>$id));
+            $name = $this->database->fetchone('_uploads_log', array('log_id'=>$id));
+            $name = $name['log_originalname'];
+            $this->database->insert('_recent_activity',
+                                    array('name'=>'uploads',
+                                          'grouping'=>'uploads'.date("Y-m-d"),
+                                          'action'=>'delete',
+                                          'additional'=>$name)
+                                    );
+            return true;
+        }
     }
     
     public function display( $filename=null ){
@@ -70,5 +89,16 @@ class Media extends ModulesBase
             $media = "Download this file here : <a href='".RESOURCES_ROOT."uploads/$filename'>$filename</a>";
         }
         return $media;
+    }
+}
+
+if ($FieldStorage['action'] == 'media_multi') {
+    if ($FieldStorage['multiAction'] == 'delete') {
+        $items = explode(',', $FieldStorage['data']);
+        $Media = new Media;
+        foreach ($items as $item) {
+            print 'success!';
+            $Media->trash($item);
+        }
     }
 }

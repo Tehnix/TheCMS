@@ -16,7 +16,8 @@ if($$pages_admin_name){
             $checkBox = $admin->input(array('name'=>'multiSelect',
                                             'id'=>'multiSelect',
                                             'style'=>'margin:0 10px 0 -5px;',
-                                            'type'=>'checkbox'));
+                                            'type'=>'checkbox',
+                                            'value'=>$item['id']));
             $onclick = 'onclick="document.location.href=\'' . URL_ROOT . ADMIN_PATH 
             . '/' . $module_pages_name . '/update/' . $item['id'] . '\'"';
             $pages .=
@@ -28,12 +29,15 @@ if($$pages_admin_name){
             '<td ' . $onclick . '>' . date('F d, Y', strtotime($item['modify'])) . '</td>';
         }
         
+        $multiForm = $admin->multi_form(array('referer'=>ADMIN_PATH . '/' . $module_pages_name,
+                                              'module'=>'pages_multi'));
+        
         $style = '<style></style>';
         
         $top_right = $pagination->display_pages();
         $top_left = '<a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_pages_name . '/new">Add New Page <b>+</b></a>';
         
-        $full = '
+        $full = $multiForm . '
         <table id="zebraTable">
             <thead>
                 <tr>
@@ -61,8 +65,9 @@ if($$pages_admin_name){
             . $pages . '
             </tbody>
         </table>
+        </form>
         <br>
-        <p>With selected : delete</p>
+        <p>With selected : <input type="button" value="Delete" id="multiDeleteButton"></p>
         ';
         
         $tpl_content = new Template(Template::getAdminFile('one_col.tpl'));

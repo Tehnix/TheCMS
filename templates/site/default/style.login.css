@@ -1,12 +1,12 @@
 /* Page-level */
 body {
-	background: #2F2F36 url("../img/backgroundTile.png");
+	background: #2F2F36 url("{% THEME %}/img/backgroundTile.png");
 	margin:0 auto; 
 	font: 13px/18px 'Lucida Grande', Tahoma, Verdana, Sans-Serif;
 }
 @font-face {
 	font-family: nevisBold;
-	src: url("../fonts/nevis.ttf");
+	src: url("{% THEME %}/fonts/nevis.ttf");
 }
 h1, h2, h3 {
 	font-family:nevisBold;

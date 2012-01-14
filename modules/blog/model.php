@@ -184,6 +184,25 @@ class Blog extends ModulesBase
         }
     }
     
+    public function trash($id=null) {
+        if (empty($id)) {
+            return false;
+        } else {
+            $this->database->update('blog_posts', 
+                                    array('trash'=>'1'),
+                                    array('id'=>$id));
+            $name = $this->database->fetchone('blog_posts', array('id'=>$id));
+            $name = $name['title'];
+            $this->database->insert('_recent_activity',
+                                    array('name'=>'blog',
+                                          'grouping'=>'blog'.date("Y-m-d"),
+                                          'action'=>'delete',
+                                          'additional'=>$name)
+                                    );
+            return true;
+        }
+    }
+    
     public function addArchive( $insertid=null ){
         # create archive value from current Month and year and add to database
         $archive = Date('F y');
@@ -369,4 +388,13 @@ if($FieldStorage['action'] == 'blog_updateBlogPost'){
                   $FieldStorage['blog_discussion']
                  );
     header("Location: " . $FieldStorage['referer']);
+} else if ($FieldStorage['action'] == 'blog_multi') {
+    if ($FieldStorage['multiAction'] == 'delete') {
+        $items = explode(',', $FieldStorage['data']);
+        $Blog = new Blog;
+        foreach ($items as $item) {
+            print 'success!';
+            $Blog->trash($item);
+        }
+    }
 }

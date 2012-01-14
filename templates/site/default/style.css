@@ -1,6 +1,6 @@
 /* Page-level */
 body {
-    background: #f4f4f4 url("../img/pattern.jpg") fixed;
+    background: #f4f4f4 url("{% THEME %}/img/pattern.jpg") fixed;
     margin:0 auto; 
     padding:0px; 
     font: 13px/18px 'Lucida Grande', Tahoma, Verdana, Sans-Serif;
@@ -9,11 +9,11 @@ body {
 }
 @font-face {
     font-family: nevisBold;
-    src: url("../fonts/nevis.eot"); /* EOT file for IE */
+    src: url("{% THEME %}/fonts/nevis.eot"); /* EOT file for IE */
 }
 @font-face {
     font-family: nevisBold;
-    src: url("../fonts/nevis.ttf");
+    src: url("{% THEME %}/fonts/nevis.ttf");
 }
 h1, h2, h3 {
     font-family:nevisBold;

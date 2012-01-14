@@ -398,7 +398,7 @@ class Template extends TemplateBase
         # Set some of the default values
         $this->set('URL_ROOT', URL_ROOT);
         $this->set('JS_ROOT', RESOURCES_ROOT . 'js' . DS);
-        $this->set('STYLESHEET', MEDIA_ROOT . 'compressed.php');
+        $this->set('STYLESHEET', URL_ROOT . 'interact.php?css=css');
         $this->set('IMG_ROOT', RESOURCES_ROOT . 'img' . DS);
         $this->set('UPLOAD_ROOT', RESOURCES_ROOT . 'uploads' . DS);
         $this->set('THEME_ROOT', URL_TEMPLATES_ROOT . 'site' . DS 
@@ -749,13 +749,50 @@ class AdminGenerator
         $action = $this->input(array('name'=>'action',
                                      'type'=>'hidden',
                                      'value'=>$widget['action']));
+        $ref = URL_ROOT . $widget['referer'];
         $referer = $this->input(array('name'=>'referer',
                                       'type'=>'hidden',
-                                      'value'=>URL_ROOT 
-                                               . $widget['referer']));
+                                      'value'=>$ref)
+                                      );
         $form = '<form action="' . URL_ROOT . 'index.php" method="POST" ' 
                 . $validateForm . '>' 
                 . $action . $referer;
+        return $form;
+    }
+    
+    public function multi_form($widget) {
+        $action = $this->input(array('name'=>'action',
+                                     'type'=>'hidden',
+                                     'value'=>'multipleSelect'));
+        $ref = URL_ROOT . $widget['referer'];
+        $referer = $this->input(array('name'=>'referer',
+                                      'type'=>'hidden',
+                                      'value'=>$ref)
+                                      );
+        $targetModule = $widget['module'];
+        $form = '<form action="' . URL_ROOT . 'index.php" method="POST">' 
+                . $action . $referer;
+        $targetButtons = "
+        $('#multiDeleteButton').on('click', function() {
+            var targetModule = '" . $targetModule . "';
+            var allData = new Array();
+            $('input:checked').each(function(i) {
+                    allData.push($(this).val());
+            });
+            allData = allData.join(',');
+            
+            $.ajax({
+                url: '" . URL_ROOT . "interact.php',
+                type: 'POST',
+                data: {action: targetModule, multiAction: 'delete', data: allData},
+                success: function(response) {
+                    console.log(response);
+                    //location.href = location.href;
+                }
+            }); 
+        });
+        ";
+        $this->script .= $targetButtons;
         return $form;
     }
 }
@@ -2447,82 +2484,4 @@ class Uploader
             . '"id" : "id"}');
 
     }
-}
-
-/**                                                                          *
- *                                                                           *
- * This section is where class that needs                                    *
- * it, are instantiated                                                      *
- */
-
-# Initialize Database object
-$Database = new Database(DB_TYPE, DB_SERVER, DB_NAME, DB_USER, DB_PASS);
-# Initialize Modules object
-$Modules = new Modules;
-# Initialize userhandler object
-$UsersHandler = new UsersHandler;
-# Initialize mailer object
-$Mailer = new Mailer;
-# Initialize session object
-$Session = new Session;
-# Initialize form object
-$Form = new Form;
-
-# Set settings values
-$settings = $Database->fetchOne('settings', array('id'=>'1'));
-# Save our settings in the TemplateBase class
-TemplateBase::setSettings($settings);
-
-
-/**                                                                          *
- *                                                                           *
- * This section is for handling the interaction                              *
- * with the core objects in manage.php                                       *
- */
-$FieldStorage = False;
-if ($_POST){
-    $FieldStorage = $_POST;
-} else if ($_GET){
-    $FieldStorage = $_GET;
-}
-# Interaction with the Database object
-if ($FieldStorage['action'] == 'backup_db') {
-    if (isset($FieldStorage['output'])){
-        $output = $FieldStorage['output'];
-    } else {
-        $output = '';
-    }
-    $backup_db = $Database->backupDatabase('*');
-    if ($backup_db and $output == 'print') {
-        print 'The database has been backed up successfully !';
-    } else {
-        print 'Something went wrong while trying to backup the database, '
-              . 'please try again <input class="old_backup_btn" '
-              . 'type="button" value="Backup database !">';
-    }
-}
-# Interaction with the AdminGenerator object
-if ($FieldStorage['action'] == 'settings_settings') {
-    $Database->update('settings',
-                      array('sitetitle'=>$FieldStorage['settings_sitetitle'],
-                      'url'=>$FieldStorage['settings_url'],
-                      'email'=>$FieldStorage['settings_email'],
-                      'startpage'=>$FieldStorage['settings_startpage'], 
-                      'membership'=>$FieldStorage['settings_membership'],
-                      'theme'=>$FieldStorage['settings_theme'],
-                      'themeAdmin'=>$FieldStorage['settings_themeAdmin'],
-                      'googleanalytics'=>$FieldStorage['settings_googleanalytics'],
-                      'analyticscode'=>$FieldStorage['settings_analyticscode']),
-                      array('id'=>'1'));
-    header("Location: " . $FieldStorage['referer'] . "");
-}
-# Interaction with the Uploader object
-if ($_GET['action'] == 'upload_file') {
-    # Initialize Uploader object
-    $Uploader = new Uploader;
-    $Uploader->upload($_REQUEST);
-}
-# Interaction with the Process object
-if ($_POST['action'] == 'process') {
-    $Process = new Process;
 }
