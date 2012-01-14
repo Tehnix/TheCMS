@@ -34,7 +34,7 @@ class Pages extends ModulesBase
 {
     protected $maxPages = 100;
     
-    public function get($id=null, $additional = null ){
+    public function get($id=null, $additional=null){
         if (!empty($id)) {
             $pagesArray = $this->database->execute('fetchone', 
                                                     "SELECT `p`.*, 
@@ -172,7 +172,7 @@ class Pages extends ModulesBase
     public static function getMenu($id=null) {
         $Pages = new Pages();
         if (!empty($id)){
-            $menu = $Pages->get($id);
+            $menu = array($Pages->get($id));
         } else {
             $menu = $Pages->get();
         }
