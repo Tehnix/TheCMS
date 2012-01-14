@@ -393,7 +393,6 @@ if($FieldStorage['action'] == 'blog_updateBlogPost'){
         $items = explode(',', $FieldStorage['data']);
         $Blog = new Blog;
         foreach ($items as $item) {
-            print 'success!';
             $Blog->trash($item);
         }
     }

@@ -97,7 +97,6 @@ if ($FieldStorage['action'] == 'media_multi') {
         $items = explode(',', $FieldStorage['data']);
         $Media = new Media;
         foreach ($items as $item) {
-            print 'success!';
             $Media->trash($item);
         }
     }

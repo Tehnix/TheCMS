@@ -786,8 +786,7 @@ class AdminGenerator
                 type: 'POST',
                 data: {action: targetModule, multiAction: 'delete', data: allData},
                 success: function(response) {
-                    console.log(response);
-                    //location.href = location.href;
+                    location.href = location.href;
                 }
             }); 
         });

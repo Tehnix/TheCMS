@@ -275,7 +275,6 @@ if ($FieldStorage['action'] == 'pages_newPage') {
         $items = explode(',', $FieldStorage['data']);
         $Pages = new Pages;
         foreach ($items as $item) {
-            print 'success!';
             $Pages->trash($item);
         }
     }
