@@ -473,7 +473,7 @@ class Template extends TemplateBase
                     AJAX_load_content($(this).attr('href'));
                 });
                 var loadingImg = '<img class=\"ajax-loading\" src=\"" . URL_ROOT 
-                . "resources/load.gif\" alt=\"Loading...\">';
+                . "resources/img/load.gif\" alt=\"Loading...\">';
                 function AJAX_load_content(href) {
                     $(ajaxTarget).fadeOut(0);
                     $(ajaxTarget).html(loadingImg);
