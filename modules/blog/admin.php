@@ -1,8 +1,8 @@
 <?php
-$admin_count_array_left['Blog Posts'] = $Database->count('blog_posts');
-$admin_count_array_right['Tags'] = $Database->count('tags');
-$admin_count_array_right['Categories'] = $Database->count('categories');
-$admin_count_array_right['Comments'] = $Database->count('comments');
+$admin_count_array_left['Blog Posts'] = $Database->count('blog_posts', array('trash'=>'0'));
+$admin_count_array_right['Tags'] = $Database->count('tags', array('trash'=>'0'));
+$admin_count_array_right['Categories'] = $Database->count('categories', array('trash'=>'0'));
+$admin_count_array_right['Comments'] = $Database->count('comments', array('trash'=>'0'));
 $admin_activity['blog'] = array('insert'=>'Added a new blog post with title {% ADDIT %}', 'update'=>'Updated blog post {% ADDIT %}', 'delete'=>'Deleted blog post {% ADDIT %}');
 if($$blog_admin_name){
     $Blog = new Blog;

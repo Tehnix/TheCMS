@@ -1,5 +1,5 @@
 <?php
-$admin_count_array_left['Media'] = $Database->count('_uploads_log');
+$admin_count_array_left['Media'] = $Database->count('_uploads_log', array('trash'=>'0'));
 $admin_activity['uploads'] = array('upload'=>'Added a new file called {% ADDIT %}', 'delete'=>'Deleted a file called {% ADDIT %}');
 if($$media_admin_name){
     $Media = new Media;
@@ -41,7 +41,7 @@ if($$media_admin_name){
             <thead>
                 <tr>
                     <th style="width:10px;"></th>
-                    <th style="width:60%;">File</th>
+                    <th style="width:70%;">File</th>
                     <th style="width:20%;">Size</th>
                     <th style="width:10%;">Date</th>
                 </tr>
