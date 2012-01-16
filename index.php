@@ -4,7 +4,7 @@ require_once('manage.php');
 require_once('interact.php');
 require('urls.php');
 # URL variable
-if (AJAX) {
+if (AJAX and $_POST['ajax'] == 'getContent') {
     # Remove 3, because of the #!/ in the url
     $target = substr($_POST['target'], 3);
     $url_query = explode('/', $target);
