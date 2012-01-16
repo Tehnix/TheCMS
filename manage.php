@@ -2,8 +2,16 @@
 #____________________________________________________________________________#
 # File: manage.php                                                           #
 #____________________________________________________________________________#
-
-require('settings.php');
+if(!file_exists('settings.php')) {
+    $settingFile = file_get_contents(dirname(__file__) . DIRECTORY_SEPARATOR 
+    . 'resources' . DIRECTORY_SEPARATOR . 'settings.txt');
+    file_put_contents('settings.php', $settingFile);
+}
+require_once('settings.php');
+if (!$CORRECT_SETTINGS) {
+    print 'There seems to be a problem with the settings file!';
+    exit();
+}
 
 /**                                                                          *
  *                                                                           *
@@ -754,7 +762,7 @@ class AdminGenerator
                                       'type'=>'hidden',
                                       'value'=>$ref)
                                       );
-        $form = '<form action="' . URL_ROOT . 'index.php" method="POST" ' 
+        $form = '<form action="' . URL_ROOT . 'interact.php" method="POST" ' 
                 . $validateForm . '>' 
                 . $action . $referer;
         return $form;
@@ -773,7 +781,7 @@ class AdminGenerator
         $form = '<form action="' . URL_ROOT . 'index.php" method="POST">' 
                 . $action . $referer;
         $targetButtons = "
-        $('#multiDeleteButton').on('click', function() {
+        $(document).on('click', '#multiDeleteButton', function() {
             var targetModule = '" . $targetModule . "';
             var allData = new Array();
             $('input:checked').each(function(i) {

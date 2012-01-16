@@ -196,7 +196,7 @@ if($$blog_admin_name){
 
             $discussion = $admin->select(array('name'=>'blog_discussion',
                                                'style'=>'width:99%;',
-                                               'selected'=>$page['discussion']),
+                                               'selected'=>$blog['discussion']),
                                          array('1'=>'Yes',
                                                '0'=>'No'));
 

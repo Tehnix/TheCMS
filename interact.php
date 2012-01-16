@@ -42,7 +42,7 @@ foreach($getmodules as $module) {
     include(MODULE_ROOT . $module . DS . 'model.php');
 }
 
-# Creation of the minified and gzip compressed css
+# Creation of the minified and gzippid compressed css
 if ($_GET['css'] == 'css') {
     /* Add your CSS files to this array */
     if (isset($_GET['type']) and $_GET['type'] != 'admin') {
