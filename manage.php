@@ -458,6 +458,40 @@ class Template extends TemplateBase
             $tagToReplace = '{% ' . $key . ' %}';
             $output = str_replace($tagToReplace, $value, $output);
         }
+        if (AJAX) {
+            $value = "
+            $(document).ready(function () {
+                var ajaxTarget = '.ajax-content';
+                var ajaxMenu = '.ajax-menu';
+                var rootUrlLength = '" . URL_ROOT . "'.length;
+                
+    			$(ajaxMenu + ' a').each(function () {
+    				var href = '#!/' + $(this).attr('href').substr(rootUrlLength);
+    				$(this).attr('href', href);
+    			});
+                $(ajaxMenu).on('click', 'a', function () {
+                    AJAX_load_content($(this).attr('href'));
+                });
+                var loadingImg = '<img class=\"ajax-loading\" src=\"" . URL_ROOT 
+                . "resources/load.gif\" alt=\"Loading...\">';
+                function AJAX_load_content(href) {
+                    $(ajaxTarget).fadeOut(0);
+                    $(ajaxTarget).html(loadingImg);
+                    $.ajax({
+                        url: '" . URL_ROOT . "index.php',
+                        type: 'POST',
+                        data: {ajax: 'getContent', target: href},
+                        success: function(response) {
+                            $(ajaxTarget).html(response);
+                            $(ajaxTarget).fadeIn();
+                        }
+                    });
+                }
+            });
+            ";
+            $tagToReplace = '//{% AJAX %}';
+            $output = str_replace($tagToReplace, $value, $output);
+        }
         
         return $output;
     }

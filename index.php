@@ -4,7 +4,13 @@ require_once('manage.php');
 require_once('interact.php');
 require('urls.php');
 # URL variable
-$url_query = explode('/', URL);
+if (AJAX) {
+    # Remove 3, because of the #!/ in the url
+    $target = substr($_POST['target'], 3);
+    $url_query = explode('/', $target);
+} else {
+    $url_query = explode('/', URL);
+}
 # Redirect to startpage if page is empty
 if (empty($url_query[0])){
     $startpage = Pages::getMenu($settings['startpage']);
@@ -403,19 +409,23 @@ else if ($Module_register){
 else {
     # The general page
     try {
-        $tpl_layout = new Template(Template::getFile('index.tpl'));
-        $tpl_layout->set('SITE_TITLE', Pages::get_cur_page() . ' | ' . $settings['sitetitle']);
-        $tpl_layout->set('TITLE', $settings['sitetitle']);
-        $tpl_layout->set('CONTENT', $tpl_content);
-        if ($settings['googleanalytics'] == 1 and $settings['analyticscode'] != '') {
-            $tpl_layout->set(
-                             'GOOGLE_ANALYTICS',
-                             "<script>head.ready(document, function(){" . $settings['analyticscode'] . "});</script>"
-                            );
+        if ($_POST['ajax'] == 'getContent') {
+            print $tpl_content;
         } else {
-            $tpl_layout->set('GOOGLE_ANALYTICS', '');
+            $tpl_layout = new Template(Template::getFile('index.tpl'));
+            $tpl_layout->set('SITE_TITLE', Pages::get_cur_page() . ' | ' . $settings['sitetitle']);
+            $tpl_layout->set('TITLE', $settings['sitetitle']);
+            $tpl_layout->set('CONTENT', $tpl_content);
+            if ($settings['googleanalytics'] == 1 and $settings['analyticscode'] != '') {
+                $tpl_layout->set(
+                                 'GOOGLE_ANALYTICS',
+                                 "<script>head.ready(document, function(){" . $settings['analyticscode'] . "});</script>"
+                                );
+            } else {
+                $tpl_layout->set('GOOGLE_ANALYTICS', '');
+            }
+            print $tpl_layout->output();
         }
-        print $tpl_layout->output();
     } catch(Exception $e) {
         print $e;
     }

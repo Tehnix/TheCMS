@@ -9,6 +9,12 @@
 exit('Please fill out the settings.php file first!');
 
 /**
+ * If AJAX content loading functionality should be included
+ * the target will be class="ajax-content".
+ */
+define("AJAX", true);
+
+/**
  * Database Constants - these constants are required
  * in order for there to be a successful connection
  * to the MySQL database. Make sure the information is
