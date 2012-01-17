@@ -246,6 +246,33 @@ class Pages extends ModulesBase
         return $curPage;
     }
     
+    public static function get_startpage($return='array') {
+        global $settings;
+        if ($return == 'array') {
+            $url_query = array();
+            $startpage = Pages::getMenu($settings['startpage']);
+            $startpage = $startpage[0];
+            if ($startpage['type'] == 'pages'){
+                $url_query[0] = $startpage['type'];
+                $url_query[1] = $startpage['id'];
+            } else {
+                $url_query[0] = $startpage['type'];
+            }   
+        } else if ($return == 'string') {
+            $url_query = '';
+            $startpage = Pages::getMenu($settings['startpage']);
+            $startpage = $startpage[0];
+            if ($startpage['type'] == 'pages'){
+                $url_query .= $startpage['type'];
+                $url_query .= '/';
+                $url_query .= $startpage['id'];
+            } else {
+                $url_query .= $startpage['type'];
+            }
+        }
+        return $url_query;
+    }
+    
 }
 
 # Handle all interaction with this modules model class

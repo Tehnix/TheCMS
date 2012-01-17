@@ -8,7 +8,7 @@ if(!file_exists('settings.php')) {
     file_put_contents('settings.php', $settingFile);
 }
 require_once('settings.php');
-if (!$CORRECT_SETTINGS) {
+if (!CORRECT_SETTINGS) {
     print 'There seems to be a problem with the settings file!';
     exit();
 }
@@ -461,32 +461,62 @@ class Template extends TemplateBase
         if (AJAX) {
             $value = "
             $(document).ready(function () {
-                var ajaxTarget = '.ajax-content';
-                var ajaxMenu = '.ajax-menu';
+                var emptyhash = '!/" . Pages::get_startpage('string') . "';
+                var title = $('title');
+                var ajaxTarget = $('.ajax-content');
+                var ajaxMenu = $('.ajax-menu');
+                var ajaxMenuAnchor = $('.ajax-menu a');
                 var rootUrlLength = '" . URL_ROOT . "'.length;
+                var loadingImg = '<div class=\"ajax-loading\"><img src=\"" 
+                . URL_ROOT . "resources/img/load.gif\" alt=\"Loading...\"></div>';
+                var hash = false;
+                var href = '';
                 
-    			$(ajaxMenu + ' a').each(function () {
-    				var href = '#!/' + $(this).attr('href').substr(rootUrlLength);
-    				$(this).attr('href', href);
-    			});
-                $(ajaxMenu).on('click', 'a', function () {
-                    AJAX_load_content($(this).attr('href'));
-                });
-                var loadingImg = '<img class=\"ajax-loading\" src=\"" . URL_ROOT 
-                . "resources/img/load.gif\" alt=\"Loading...\">';
+        		function check_hash() {
+        			if (window.location.hash == '') {
+        				window.location.hash = emptyhash;
+                        hash = window.location.hash;
+        				AJAX_load_content('#' + emptyhash);
+                        ajaxMenuAnchor.removeClass('active-link');
+                        $('a[href*=\"' + hash + '\"]').attr('class', 'active-link');
+        			} else if (window.location.hash != hash) {
+        		        hash = window.location.hash;
+        		        AJAX_load_content(hash);
+                        ajaxMenuAnchor.removeClass('active-link');
+                        $('a[href*=\"' + hash + '\"]').attr('class', 'active-link');
+        		    }
+        		}
+                setInterval(function () {
+                    check_hash();
+                }, 500);
+                
                 function AJAX_load_content(href) {
-                    $(ajaxTarget).fadeOut(0);
-                    $(ajaxTarget).html(loadingImg);
+                    ajaxTarget.html(loadingImg);
                     $.ajax({
                         url: '" . URL_ROOT . "index.php',
                         type: 'POST',
                         data: {ajax: 'getContent', target: href},
-                        success: function(response) {
-                            $(ajaxTarget).html(response);
-                            $(ajaxTarget).fadeIn();
+                        dataType: 'json',
+                        success: function(json) {
+                            title.html(json.title);
+                            ajaxTarget.fadeOut(0);
+                            ajaxTarget.html(json.content);
+                            ajaxTarget.fadeIn();
                         }
                     });
                 }
+                
+    			ajaxMenuAnchor.each(function () {
+    				href = '#!/' + $(this).attr('href').substr(rootUrlLength);
+    				$(this).attr('href', href);
+    			});
+                ajaxMenu.on('click', 'a', function () {
+                    ajaxMenuAnchor.removeClass('active-link');
+                    $(this).attr('class', 'active-link');
+                    hash = $(this).attr('href');
+                    AJAX_load_content($(this).attr('href'));
+                });
+                check_hash();
             });
             ";
             $tagToReplace = '//{% AJAX %}';

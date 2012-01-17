@@ -12,15 +12,8 @@ if (AJAX and $_POST['ajax'] == 'getContent') {
     $url_query = explode('/', URL);
 }
 # Redirect to startpage if page is empty
-if (empty($url_query[0])){
-    $startpage = Pages::getMenu($settings['startpage']);
-    $startpage = $startpage[0];
-    if ($startpage['type'] != 'pages'){
-        $url_query[0] = $startpage['type'];
-        $url_query[1] = $startpage['id'];
-    } else {
-        $url_query[0] = $startpage['type'];
-    }
+if (empty($url_query[0]) and !AJAX){
+    $url_query = Pages::get_startpage('array');
 }
 foreach($getmodules as $module) {
     include(MODULE_ROOT . $module . DS . 'urls.php');
@@ -410,10 +403,18 @@ else {
     # The general page
     try {
         if ($_POST['ajax'] == 'getContent') {
-            print $tpl_content;
+            # TODO get a more precise title. So far it's only on 'pages'.
+            if (isset($tplContentTitle)) {
+                $siteTitle = $tplContentTitle . ' | ' . $settings['sitetitle'];
+            } else {
+                $siteTitle = $settings['sitetitle'];
+            }
+            $ajaxReturn = array('title'=>$siteTitle, 'content'=>$tpl_content);
+            print json_encode($ajaxReturn);
         } else {
+            $siteTitle = Pages::get_cur_page() . ' | ' . $settings['sitetitle'];
             $tpl_layout = new Template(Template::getFile('index.tpl'));
-            $tpl_layout->set('SITE_TITLE', Pages::get_cur_page() . ' | ' . $settings['sitetitle']);
+            $tpl_layout->set('SITE_TITLE', $siteTitle);
             $tpl_layout->set('TITLE', $settings['sitetitle']);
             $tpl_layout->set('CONTENT', $tpl_content);
             if ($settings['googleanalytics'] == 1 and $settings['analyticscode'] != '') {

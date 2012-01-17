@@ -17,7 +17,7 @@ if($Module_pages) {
         else {
             $tpl_content->set('DISCUSSION', '');
         }
-
+        $tplContentTitle = $getPage['name'];
         $tpl_content = $tpl_content->output();
     } 
     catch (Exception $e) {
