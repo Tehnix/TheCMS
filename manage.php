@@ -500,7 +500,7 @@ class Template extends TemplateBase
                 
                 function AJAX_load_content(href) {
                     if (ajaxHookBefore) {
-                        AJAX_load_content_hook();
+                        AJAX_load_content_hook_before();
                     }
                     ajaxTarget.html(loadingImg);
                     $.ajax({
