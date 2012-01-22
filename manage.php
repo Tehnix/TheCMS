@@ -471,6 +471,14 @@ class Template extends TemplateBase
                 . URL_ROOT . "resources/img/load.gif\" alt=\"Loading...\"></div>';
                 var hash = false;
                 var href = '';
+                var ajaxHookBefore = false;
+                if (typeof(AJAX_load_content_hook_before) == typeof(Function)) {
+                    ajaxHookBefore = true;
+                }
+                var ajaxHookAfter = false;
+                if (typeof(AJAX_load_content_hook_after) == typeof(Function)) {
+                    ajaxHookAfter = true;
+                }
                 
         		function check_hash() {
         			if (window.location.hash == '') {
@@ -491,6 +499,9 @@ class Template extends TemplateBase
                 }, 500);
                 
                 function AJAX_load_content(href) {
+                    if (ajaxHook) {
+                        AJAX_load_content_hook();
+                    }
                     ajaxTarget.html(loadingImg);
                     $.ajax({
                         url: '" . URL_ROOT . "index.php',
@@ -504,6 +515,9 @@ class Template extends TemplateBase
                             ajaxTarget.fadeIn();
                         }
                     });
+                    if (ajaxHookAfter) {
+                        AJAX_load_content_hook_after();
+                    }
                 }
                 
     			ajaxMenuAnchor.each(function () {

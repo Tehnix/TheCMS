@@ -65,7 +65,7 @@ define("DS", DIRECTORY_SEPARATOR);
 # Example using two subdirectories (e.g. ZealDev/TheCMS/index.php)
 #define("URL_ROOT", DS . $exploded_root[1] . DS . $exploded_root[2] . DS);
 # Alter the below URL_ROOT to you needs
-define("URL_ROOT", DS . $exploded_root[1] . DS . $exploded_root[2] . DS);
+define("URL_ROOT", DS);
 
 define("ADMIN_PATH", "admin");
 define("URL", $_GET['handle']);
