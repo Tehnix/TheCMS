@@ -499,7 +499,7 @@ class Template extends TemplateBase
                 }, 500);
                 
                 function AJAX_load_content(href) {
-                    if (ajaxHook) {
+                    if (ajaxHookBefore) {
                         AJAX_load_content_hook();
                     }
                     ajaxTarget.html(loadingImg);
