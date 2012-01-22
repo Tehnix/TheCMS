@@ -19,10 +19,15 @@ if($Module_blog) {
             if(!empty($post['category'])){
                 $footerInfo[] = $post['category'];
             }
+            if (AJAX) {
+                $link = '<a href="#!/blog/article/' . $post['id'] . '"><h2>' . $post['title'] . '</h2></a>';
+            } else {
+                $link = '<a href="' . URL_ROOT . 'blog/article/' . $post['id'] . '"><h2>' . $post['title'] . '</h2></a>';
+            }
             $blogHtml .= '
             <article class="blogPost">
                 <header>
-                    <a href="' . URL_ROOT . 'blog/article/' . $post['id'] . '"><h2>' . $post['title'] . '</h2></a>
+                    ' . $link . '
                     <p>Posted on <time datetime="' 
                     . date('c', strtotime($post['date_posted'])) . '">' 
                     . date('F d, Y', strtotime($post['date_posted'])) 
@@ -100,7 +105,8 @@ if($Module_blog) {
         catch (Exception $e) {
             $tpl_content = '
             <section id="blogPosts">' . $blogHtml . '
-            </section>'
+            </section>
+            <h2 class="blogCommentsTitle">Comments</h2>'
             . $blogComments;
         }
     }

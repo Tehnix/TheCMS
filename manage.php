@@ -478,12 +478,12 @@ class Template extends TemplateBase
                         hash = window.location.hash;
         				AJAX_load_content('#' + emptyhash);
                         ajaxMenuAnchor.removeClass('active-link');
-                        $('a[href*=\"' + hash + '\"]').attr('class', 'active-link');
+                        $('a[href$=\"' + hash + '\"]').attr('class', 'active-link');
         			} else if (window.location.hash != hash) {
         		        hash = window.location.hash;
         		        AJAX_load_content(hash);
                         ajaxMenuAnchor.removeClass('active-link');
-                        $('a[href*=\"' + hash + '\"]').attr('class', 'active-link');
+                        $('a[href$=\"' + hash + '\"]').attr('class', 'active-link');
         		    }
         		}
                 setInterval(function () {
@@ -900,17 +900,20 @@ class Paginator
                                 ? $pagination_ipp:$this->default_ipp;
         if ($url_query[0] == 'admin'){
             if (isset($url_query[0])){
-                $this->url_prefix = '' . URL_ROOT . $url_query[0] 
-                                    . '/' . $url_query[1] . '/';
+                $this->url_prefix = $url_query[0] . '/' 
+                                    . $url_query[1] . '/';
+            } else {
+                $this->url_prefix = $url_query[0] . '/';
             }
-            else {
-                $this->url_prefix = '' . URL_ROOT 
-                                    . $url_query[0] . '/';
-            }
+        } else {
+            $this->url_prefix = $url_query[0] . '/';
         }
-        else {
-            $this->url_prefix = '' . URL_ROOT . $url_query[0] . '/';
+        if (AJAX) {
+            $this->url_prefix = '#!/' . $this->url_prefix;
+        } else {
+            $this->url_prefix = URL_ROOT . $this->url_prefix;
         }
+        
     }
 
     function paginate($count_tbl, 
@@ -921,8 +924,7 @@ class Paginator
         if ($pagination_ipp == 'All'){
             $this->num_pages = ceil($this->items_total/$this->default_ipp);
             $this->items_per_page = $this->default_ipp;
-        }
-        else {
+        } else {
             if (!is_numeric($this->items_per_page) 
                or $this->items_per_page <= 0){
                 $this->items_per_page = $this->default_ipp;
@@ -984,13 +986,13 @@ class Paginator
             }
             $this->range = range($this->start_range,$this->end_range);
 
-            for ($i=1;$i<=$this->num_pages;$i++){
-                if ($this->range[0] > 2 and $i == $this->range[0]){
+            for ($i=1;$i<=$this->num_pages;$i++) {
+                if ($this->range[0] > 2 and $i == $this->range[0]) {
                     $this->return .= " ... ";
                 }
                 # loop through all pages. if first, last, or in range, display
-                if ($i==1 Or $i==$this->num_pages Or in_array($i,$this->range))
-                {
+                if ($i==1 or $i==$this->num_pages or 
+                    in_array($i,$this->range)) {
                     $this->return .= ($i == $this->current_page 
                                      and $pagination_page != 'All') 
                                      ? "<a title=\"Go to page " 
@@ -1009,7 +1011,7 @@ class Paginator
                                        . "</a> ";
                 }
                 if ($this->range[$this->mid_range-1] < $this->num_pages-1 
-                   and $i == $this->range[$this->mid_range-1]){
+                   and $i == $this->range[$this->mid_range-1]) {
                     $this->return .= " ... ";
                 }
             }
@@ -1031,9 +1033,8 @@ class Paginator
                                . "style=\"margin-left:10px\" href=\""
                                . $this->url_prefix 
                                . "page/All/ipp/All\">All</a> \n";
-        }
-        else {
-            for ($i=1;$i<=$this->num_pages;$i++){
+        } else {
+            for ($i=1;$i<=$this->num_pages;$i++) {
                 $this->return .= ($i == $this->current_page 
                                   and $pagination_page != 'All') 
                                  ? "<a class=\"current\" href=\"#\">"
@@ -1057,10 +1058,10 @@ class Paginator
                        : " LIMIT " . $this->low . "," . $this->items_per_page;
     }
 
-    function display_items_per_page(){
+    function display_items_per_page() {
         $items = '';
         $ipp_array = array(4, 10, 25, 50, 100, 'All');
-        foreach($ipp_array as $ipp_opt){
+        foreach($ipp_array as $ipp_opt) {
             $items .= ($ipp_opt == $this->items_per_page) 
                       ? "<option selected value=\"" 
                         . $ipp_opt . "\">" . $ipp_opt 
@@ -1075,7 +1076,7 @@ class Paginator
                . $items . "</select>\n";
     }
 
-    function display_jump_menu(){
+    function display_jump_menu() {
         for ($i = 1; $i <= $this->num_pages; $i++){
             $option .= ($i == $this->current_page) 
                        ? "<option value=\"" . $i . "\" selected>" 
@@ -1091,7 +1092,7 @@ class Paginator
                . $option . "</select>\n";
     }
 
-    function display_pages(){
+    function display_pages() {
         return $this->return;
     }
 }

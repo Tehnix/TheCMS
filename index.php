@@ -12,7 +12,7 @@ if (AJAX and $_POST['ajax'] == 'getContent') {
     $url_query = explode('/', URL);
 }
 # Redirect to startpage if page is empty
-if (empty($url_query[0]) and !AJAX){
+if (empty($url_query[0]) and !AJAX) {
     $url_query = Pages::get_startpage('array');
 }
 foreach($getmodules as $module) {
