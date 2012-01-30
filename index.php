@@ -19,7 +19,6 @@ foreach($getmodules as $module) {
     include(MODULE_ROOT . $module . DS . 'urls.php');
     include(MODULE_ROOT . $module . DS . 'view.php');
 }
-
 # Construct the layout from the template
 if ($Module_admin) {
     # Create the dashboard arrays

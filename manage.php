@@ -919,20 +919,18 @@ class Paginator
                                 ? $pagination_ipp:$this->default_ipp;
         if ($url_query[0] == 'admin'){
             if (isset($url_query[0])){
-                $this->url_prefix = $url_query[0] . '/' 
-                                    . $url_query[1] . '/';
+                $this->url_prefix = $url_query[1] . '/';
             } else {
                 $this->url_prefix = $url_query[0] . '/';
             }
         } else {
             $this->url_prefix = $url_query[0] . '/';
+            if (AJAX) {
+                $this->url_prefix = '#!/' . $this->url_prefix;
+            } else {
+                $this->url_prefix = URL_ROOT . $this->url_prefix;
+            }
         }
-        if (AJAX) {
-            $this->url_prefix = '#!/' . $this->url_prefix;
-        } else {
-            $this->url_prefix = URL_ROOT . $this->url_prefix;
-        }
-        
     }
 
     function paginate($count_tbl, 
