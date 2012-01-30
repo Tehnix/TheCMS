@@ -56,8 +56,26 @@ class Portfolio extends ModulesBase
         return $imgArray;
     }
     
-    public function insert() {
-        
+    public function insert($name=null, $description=null, $weight=0) {
+        if (empty($name)) {
+            return false;
+        } else {
+            if (!is_numeric($weight)) {
+                $weight = 0;
+            }
+            $this->database->insert('portfolio',
+                                    array('name'=>$name,
+                                          'description'=>$description,
+                                          'weight'=>$weight)
+                                    );
+            $this->database->insert('_recent_activity',
+                                    array('name'=>'portfolio',
+                                          'grouping'=>'portfolio'.date("Y-m-d"),
+                                          'action'=>'insert',
+                                          'additional'=>$name)
+                                    );
+            return true;
+        }
     }
     
     public function trash($id=null) {
@@ -241,12 +259,17 @@ class Portfolio extends ModulesBase
 }
 
 # Handle all interaction with this modules model class
-if ($FieldStorage['action'] == 'portfolio_getImages') {
+if ($FieldStorage['action'] == 'portfolio_newPortfolio') {
+    $Portfolio = new Portfolio;
+    $Portfolio->insert($FieldStorage['portfolio_name'],
+                       $FieldStorage['portfolio_description'],
+                       $FieldStorage['portfolio_weight']);
+    header("Location: " . $FieldStorage['referer']);
+} else if ($FieldStorage['action'] == 'portfolio_getImages') {
     $Portfolio = new Portfolio;
     $images = $Portfolio->get_images($FieldStorage['portfolio_id']);
     print json_encode($images);
 } else if ($_GET['action'] == 'portfolio_addImages') {
-    # Initialize Uploader object
     if (isset($_GET['portfolio_id'])) {
         $Portfolio = new Portfolio;
         $Portfolio->upload($_GET['portfolio_id'], $_REQUEST);
