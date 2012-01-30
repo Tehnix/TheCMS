@@ -686,12 +686,17 @@ class AdminGenerator
         $this->script .= $val;
     }
     
-    public function uploader($id){
+    public function uploader($id, $action=null, $add=''){
+        if (empty($action)) {
+            $action = 'upload_file' . $add;
+        } else {
+            $action = $action . $add;
+        }
         $upload = "
         $(\"#$id\").pluploadQueue({
                 // General settings
                 runtimes : 'gears,html5,html4',
-                url : 'index.php?action=upload_file',
+                url : 'index.php?action=$action',
                 max_file_size : '1000mb',
                 chunk_size : '30mb',
                 unique_names : true,

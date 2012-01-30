@@ -156,7 +156,6 @@ class Pages extends ModulesBase
         }
     }
     
-    
     public static function getTypes() {
         global $Database;
         $typeArray = array();
