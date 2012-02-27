@@ -78,6 +78,28 @@ class Portfolio extends ModulesBase
         }
     }
     
+    public function update($id=null, $name=null, $description=null, $weight=0) {
+        if (empty($name) or empty($id)) {
+            return false;
+        }
+        if (!is_numeric($weight)) {
+            $weight = 0;
+        }
+        $this->database->update('portfolio',
+                                array('name'=>$name,
+                                      'description'=>$description,
+                                      'weight'=>$weight),
+                                array('id'=>$id)
+                                );
+        $this->database->insert('_recent_activity',
+                                array('name'=>'portfolio',
+                                      'grouping'=>'portfolio'.date("Y-m-d"),
+                                      'action'=>'update',
+                                      'additional'=>$name)
+                                );
+        return true;
+    }
+    
     public function trash($id=null) {
         if (empty($id)) {
             return false;
@@ -262,6 +284,13 @@ class Portfolio extends ModulesBase
 if ($FieldStorage['action'] == 'portfolio_newPortfolio') {
     $Portfolio = new Portfolio;
     $Portfolio->insert($FieldStorage['portfolio_name'],
+                       $FieldStorage['portfolio_description'],
+                       $FieldStorage['portfolio_weight']);
+    header("Location: " . $FieldStorage['referer']);
+} else if ($FieldStorage['action'] == 'portfolio_updatePortfolio') {
+    $Portfolio = new Portfolio;
+    $Portfolio->update($FieldStorage['portfolio_id'],
+                       $FieldStorage['portfolio_name'],
                        $FieldStorage['portfolio_description'],
                        $FieldStorage['portfolio_weight']);
     header("Location: " . $FieldStorage['referer']);

@@ -27,6 +27,8 @@ if($$portfolio_admin_name){
             '<tr>' .
             '<td> ' . $checkBox . '</td>' .
             '<td ' . $onclick . '>' . $item['name'] . '</td>' .
+            '<td><a href="' . URL_ROOT . ADMIN_PATH 
+            . '/' . $module_portfolio_name . '/update/' . $item['id'] . '">Edit</a></td>' .
             '</tr>';
         }
         
@@ -43,13 +45,15 @@ if($$portfolio_admin_name){
             <thead>
                 <tr>
                     <th style="width:10px;"></th>
-                    <th style="width:100%;">Title</th>
+                    <th style="width:85%;">Title</th>
+                    <th style="width:20px;"></th>
                 </tr>
             </thead>
             <tfoot>
                 <tr>
                     <td></td>
                     <td>Title</td>
+                    <td></td>
                 </tr>
             </tfoot>
             <tbody>' 
@@ -140,7 +144,99 @@ if($$portfolio_admin_name){
 
         $tpl_content = $tpl_content->output();
     } else if($portfolio_admin_update){
+        $error = true;
+        if(isset($url_query[3])){
+            $error = false;
+            $portfolio = $Portfolio->get($url_query[3]);
+            if(empty($portfolio['id'])){
+                $error = true;
+            }
+            $id = $admin->input(array('name'=>'portfolio_id',
+                                      'type'=>'hidden',
+                                      'value'=>$portfolio['id']));
+            
+            $textarea = $admin->textarea(array('name'=>'portfolio_description',
+                                               'class'=>'advancedEditor',
+                                               'rows'=>'20',
+                                               'cols'=>'60',
+                                               'value'=>$portfolio['description']));
         
+            $name = $admin->input(array('name'=>'portfolio_name',
+                                         'id'=>'portfolio_name',
+                                         'class'=>'input',
+                                         'style'=>'width:95%;',
+                                         'type'=>'text',
+                                         'value'=>$portfolio['name'],
+                                         'placeholder'=>'Enter name here...'));
+            $admin->validateField('required', array('id'=>'portfolio_name',
+                                                    'error'=>'Please enter a name !'));
+            $weight = $admin->input(array('name'=>'portfolio_weight',
+                                          'id'=>'portfolio_weight',
+                                          'class'=>'input',
+                                          'style'=>'width:95%;',
+                                          'type'=>'text',
+                                          'value'=>$portfolio['weight']));
+        
+            $submit = $admin->input(array('id'=>'portfolio_submit',
+                                          'class'=>'button darkblue',
+                                          'type'=>'submit',
+                                          'value'=>'Submit'));
+        
+            $form = $admin->form(array('action'=>'portfolio_updatePortfolio',
+                                       'referer'=>ADMIN_PATH . '/' . $module_portfolio_name,
+                                       'validate'=>'#portfolio_name'));
+                             
+            $style = '<style></style>';
+        
+            $top_right = 'New';
+            $top_left = '<a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_portfolio_name . '">View All</a>';
+        
+            $left = $form . $id . $textarea;
+        
+            $right = '
+            <table style="width:100%;">
+                <thead>
+                    <tr>
+                        <th style="width:40%;"></th>
+                        <th style="width:60%;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Name :</td>
+                        <td>' . $name . '</td>
+                    </tr>
+                    <tr>
+                        <td>Weight :</td>
+                        <td>' . $weight . '</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="text-align:right;">'. $submit .'</td>
+                    </tr>
+                </tbody>
+            </table>
+            </form>';
+        }
+        if($error){
+            $script = '';
+            $style = '';
+            $top_right = '';
+            $top_left = '<a href="' . URL_ROOT . ADMIN_PATH . '/' . $module_portfolio_name . '">View All</a>';
+            $left = '<div class="errormsg">Sorry, there wasn\'t found any data !</div>';
+            $right = '';
+        }
+        
+        
+        $tpl_content = new Template(Template::getAdminFile('two_col.tpl'));
+        $tpl_content->set('SCRIPT', $admin->script);
+        $tpl_content->set('STYLE', $style);
+        $tpl_content->set('TOP_RIGHT', $top_right);
+        $tpl_content->set('TOP_LEFT', $top_left);
+        $tpl_content->set('LEFT' , $left);
+        $tpl_content->set('RIGHT' , $right);
+
+        $tpl_content = $tpl_content->output();
     } else if($portfolio_admin_images){
         $error = true;
         if(isset($url_query[3])){
