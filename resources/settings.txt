@@ -39,7 +39,9 @@ define("TBL_BANNED_USERS",  "banned_users");
 /**
  * Server specific Constants
  */
-$ar = split("[/ ]", $_SERVER['SERVER_SOFTWARE']);
+$Apache_Version = '';
+$PHP_Version = '';
+$ar = preg_split("[/ ]", $_SERVER['SERVER_SOFTWARE']);
 for($i=0; $i<(count($ar)); $i++){
     switch(strtoupper($ar[$i])){
         case 'APACHE':
