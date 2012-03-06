@@ -224,6 +224,7 @@ class Pages extends ModulesBase
         global $Database;
         global $settings;
         
+        $curPage = '';
         if (!empty($id)){
             $menu = $Database->fetchAll('pages', array('id'=>$id));
         } else {
