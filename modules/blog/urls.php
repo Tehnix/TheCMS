@@ -1,7 +1,8 @@
 <?php
-$module_blog_name = end(explode(DS, dirname(__file__)));
+$dir = explode(DS, dirname(__file__));
+$module_blog_name = end($dir);
 # Normal URLs
-if($url_query[0] == $module_blog_name){
+if(isset($url_query[0]) and $url_query[0] == $module_blog_name){
     $Module_blog = true;
     $blog_blog = false;
     $blog_page = false;
@@ -36,7 +37,7 @@ if($url_query[0] == $module_blog_name){
 }
 # Admin URLs
 $blog_admin_name = 'Module_'.$module_blog_name.'_admin';
-if($$blog_admin_name){
+if(isset($$blog_admin_name) and $$blog_admin_name) {
     $blog_admin_all = false;
     $blog_admin_new = false;
     $blog_admin_update = false;

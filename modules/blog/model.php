@@ -352,48 +352,53 @@ class Blog extends ModulesBase
         return $array;
     }
 }
-if($FieldStorage['action'] == 'blog_addBlogPost'){
-    $Blog = new Blog;
-    if(isset($Session->id)){
-        $author_id = $Session->id;
-    }
-    else{
-        $author_id = 0;
-    }
-    $Blog->insert(
-                  $FieldStorage['blog_title'],
-                  $FieldStorage['blog_post'],
-                  $author_id,
-                  $FieldStorage['blog_category'],
-                  $FieldStorage['blog_tags'],
-                  $FieldStorage['blog_discussion']
-                 );
-    header("Location: " . $FieldStorage['referer']);
-}
-if($FieldStorage['action'] == 'blog_updateBlogPost'){
-    $Blog = new Blog;
-    if(isset($Session->id)){
-        $author_id = $Session->id;
-    }
-    else{
-        $author_id = 0;
-    }
-    $Blog->update(
-                  $FieldStorage['blog_id'],
-                  $FieldStorage['blog_title'],
-                  $FieldStorage['blog_post'],
-                  $author_id,
-                  $FieldStorage['blog_category'],
-                  $FieldStorage['blog_tags'],
-                  $FieldStorage['blog_discussion']
-                 );
-    header("Location: " . $FieldStorage['referer']);
-} else if ($FieldStorage['action'] == 'blog_multi') {
-    if ($FieldStorage['multiAction'] == 'delete') {
-        $items = explode(',', $FieldStorage['data']);
+
+
+if (isset($FieldStorage['action'])) {
+    if($FieldStorage['action'] == 'blog_addBlogPost'){
         $Blog = new Blog;
-        foreach ($items as $item) {
-            $Blog->trash($item);
+        if(isset($Session->id)){
+            $author_id = $Session->id;
+        }
+        else{
+            $author_id = 0;
+        }
+        $Blog->insert(
+                      $FieldStorage['blog_title'],
+                      $FieldStorage['blog_post'],
+                      $author_id,
+                      $FieldStorage['blog_category'],
+                      $FieldStorage['blog_tags'],
+                      $FieldStorage['blog_discussion']
+                     );
+        header("Location: " . $FieldStorage['referer']);
+    }
+    if($FieldStorage['action'] == 'blog_updateBlogPost'){
+        $Blog = new Blog;
+        if(isset($Session->id)){
+            $author_id = $Session->id;
+        }
+        else{
+            $author_id = 0;
+        }
+        $Blog->update(
+                      $FieldStorage['blog_id'],
+                      $FieldStorage['blog_title'],
+                      $FieldStorage['blog_post'],
+                      $author_id,
+                      $FieldStorage['blog_category'],
+                      $FieldStorage['blog_tags'],
+                      $FieldStorage['blog_discussion']
+                     );
+        header("Location: " . $FieldStorage['referer']);
+    }
+    if ($FieldStorage['action'] == 'blog_multi') {
+        if ($FieldStorage['multiAction'] == 'delete') {
+            $items = explode(',', $FieldStorage['data']);
+            $Blog = new Blog;
+            foreach ($items as $item) {
+                $Blog->trash($item);
+            }
         }
     }
 }

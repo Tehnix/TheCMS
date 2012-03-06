@@ -1,5 +1,12 @@
 <?php
-if($Module_blog) {
+if(isset($Module_blog) and $Module_blog) {
+    $page_needle = (!isset($page_needle)) ? '' : $page_needle;
+    $page_ipp = (!isset($page_ipp)) ? '' : $page_ipp;
+    $blog_needle = (!isset($blog_needle)) ? '' : $blog_needle;
+    $category_needle = (!isset($category_needle)) ? '' : $category_needle;
+    $tag_needle = (!isset($tag_needle)) ? '' : $tag_needle;
+    $archive_needle = (!isset($archive_needle)) ? '' : $archive_needle;
+    
     $pagination = new Paginator($url_query, $page_needle, $page_ipp);
     $pagination->mid_range = 2;
     $pagination->default_ipp = 4;
@@ -8,8 +15,9 @@ if($Module_blog) {
     $blog = new Blog;
     $getPosts = $blog->get($pagination->limit, $blog_needle, $category_needle, $tag_needle, $archive_needle);
     
-    $template_dir = TEMPLATES_ROOT . end(explode(DS, dirname(__file__))) . DS;
-    
+    $dir = explode(DS, dirname(__file__));
+    $template_dir = TEMPLATES_ROOT . end($dir) . DS;
+    $blogHtml = '';
     if($blog_blog or $blog_category or $blog_tag or $blog_archive) {
         foreach($getPosts as $post){
             $footerInfo = array();

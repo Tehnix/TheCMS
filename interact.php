@@ -43,12 +43,14 @@ foreach($getmodules as $module) {
 }
 
 # Creation of the minified and gzippid compressed css
-if ($_GET['css'] == 'css') {
+if (isset($_GET['css']) and $_GET['css'] == 'css') {
     /* Add your CSS files to this array */
-    if (isset($_GET['type']) and $_GET['type'] != 'admin') {
-    	$type = '.' . $_GET['type'];
-    } elseif ($_GET['type'] == 'admin') {
-        $type = $_GET['type'];
+    if (isset($_GET['type'])) {
+        if ($_GET['type'] != 'admin') {
+        	$type = '.' . $_GET['type'];
+        } elseif ($_GET['type'] == 'admin') {
+            $type = $_GET['type'];
+        }
     } else {
         $type = '';
     }
@@ -125,44 +127,46 @@ if ($_GET['css'] == 'css') {
     echo($buffer);
     exit();
 }
-# Interaction with the Database object
-if ($FieldStorage['action'] == 'backup_db') {
-    if (isset($FieldStorage['output'])){
-        $output = $FieldStorage['output'];
-    } else {
-        $output = '';
+if (isset($FieldStorage['action'])) {
+    # Interaction with the Database object
+    if ($FieldStorage['action'] == 'backup_db') {
+        if (isset($FieldStorage['output'])){
+            $output = $FieldStorage['output'];
+        } else {
+            $output = '';
+        }
+        $backup_db = $Database->backupDatabase('*');
+        if ($backup_db and $output == 'print') {
+            print 'The database has been backed up successfully !';
+        } else {
+            print 'Something went wrong while trying to backup the database, '
+                  . 'please try again <input class="old_backup_btn" '
+                  . 'type="button" value="Backup database !">';
+        }
     }
-    $backup_db = $Database->backupDatabase('*');
-    if ($backup_db and $output == 'print') {
-        print 'The database has been backed up successfully !';
-    } else {
-        print 'Something went wrong while trying to backup the database, '
-              . 'please try again <input class="old_backup_btn" '
-              . 'type="button" value="Backup database !">';
+    # Interaction with the AdminGenerator object
+    if ($FieldStorage['action'] == 'settings_settings') {
+        $Database->update('settings',
+                          array('sitetitle'=>$FieldStorage['settings_sitetitle'],
+                          'url'=>$FieldStorage['settings_url'],
+                          'email'=>$FieldStorage['settings_email'],
+                          'startpage'=>$FieldStorage['settings_startpage'], 
+                          'membership'=>$FieldStorage['settings_membership'],
+                          'theme'=>$FieldStorage['settings_theme'],
+                          'themeAdmin'=>$FieldStorage['settings_themeAdmin'],
+                          'googleanalytics'=>$FieldStorage['settings_googleanalytics'],
+                          'analyticscode'=>$FieldStorage['settings_analyticscode']),
+                          array('id'=>'1'));
+        header("Location: " . $FieldStorage['referer'] . "");
     }
-}
-# Interaction with the AdminGenerator object
-if ($FieldStorage['action'] == 'settings_settings') {
-    $Database->update('settings',
-                      array('sitetitle'=>$FieldStorage['settings_sitetitle'],
-                      'url'=>$FieldStorage['settings_url'],
-                      'email'=>$FieldStorage['settings_email'],
-                      'startpage'=>$FieldStorage['settings_startpage'], 
-                      'membership'=>$FieldStorage['settings_membership'],
-                      'theme'=>$FieldStorage['settings_theme'],
-                      'themeAdmin'=>$FieldStorage['settings_themeAdmin'],
-                      'googleanalytics'=>$FieldStorage['settings_googleanalytics'],
-                      'analyticscode'=>$FieldStorage['settings_analyticscode']),
-                      array('id'=>'1'));
-    header("Location: " . $FieldStorage['referer'] . "");
 }
 # Interaction with the Uploader object
-if ($_GET['action'] == 'upload_file') {
+if (isset($_GET['action']) and $_GET['action'] == 'upload_file') {
     # Initialize Uploader object
     $Uploader = new Uploader;
     $Uploader->upload($_REQUEST);
 }
 # Interaction with the Process object
-if ($_POST['action'] == 'process') {
+if (isset($_POST['action']) and $_POST['action'] == 'process') {
     $Process = new Process;
 }

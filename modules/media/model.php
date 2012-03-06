@@ -92,12 +92,14 @@ class Media extends ModulesBase
     }
 }
 
-if ($FieldStorage['action'] == 'media_multi') {
-    if ($FieldStorage['multiAction'] == 'delete') {
-        $items = explode(',', $FieldStorage['data']);
-        $Media = new Media;
-        foreach ($items as $item) {
-            $Media->trash($item);
+if (isset($FieldStorage['action'])) {
+    if ($FieldStorage['action'] == 'media_multi') {
+        if ($FieldStorage['multiAction'] == 'delete') {
+            $items = explode(',', $FieldStorage['data']);
+            $Media = new Media;
+            foreach ($items as $item) {
+                $Media->trash($item);
+            }
         }
     }
 }

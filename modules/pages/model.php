@@ -169,6 +169,8 @@ class Pages extends ModulesBase
     }
     
     public static function getMenu($id=null) {
+        global $settings;
+        
         $Pages = new Pages();
         if (!empty($id)){
             $menu = array($Pages->get($id));
@@ -274,34 +276,36 @@ class Pages extends ModulesBase
     
 }
 
-# Handle all interaction with this modules model class
-if ($FieldStorage['action'] == 'pages_newPage') {
-    $Pages = new Pages;
-    $Pages->insert(
-                   $FieldStorage['pages_title'],
-                   $FieldStorage['pages_content'],
-                   $FieldStorage['pages_discussion'],
-                   $FieldStorage['pages_type'],
-                   $FieldStorage['pages_weight']
-                  );
-    header("Location: " . $FieldStorage['referer']);
-} else if ($FieldStorage['action'] == 'pages_updatePage') {
-    $Pages = new Pages;
-    $Pages->update(
-                   $FieldStorage['pages_id'],
-                   $FieldStorage['pages_title'],
-                   $FieldStorage['pages_content'],
-                   $FieldStorage['pages_discussion'],
-                   $FieldStorage['pages_type'],
-                   $FieldStorage['pages_weight']
-                  );
-    header("Location: " . $FieldStorage['referer']);
-} else if ($FieldStorage['action'] == 'pages_multi') {
-    if ($FieldStorage['multiAction'] == 'delete') {
-        $items = explode(',', $FieldStorage['data']);
+if (isset($FieldStorage['action'])) {
+    # Handle all interaction with this modules model class
+    if ($FieldStorage['action'] == 'pages_newPage') {
         $Pages = new Pages;
-        foreach ($items as $item) {
-            $Pages->trash($item);
+        $Pages->insert(
+                       $FieldStorage['pages_title'],
+                       $FieldStorage['pages_content'],
+                       $FieldStorage['pages_discussion'],
+                       $FieldStorage['pages_type'],
+                       $FieldStorage['pages_weight']
+                      );
+        header("Location: " . $FieldStorage['referer']);
+    } else if ($FieldStorage['action'] == 'pages_updatePage') {
+        $Pages = new Pages;
+        $Pages->update(
+                       $FieldStorage['pages_id'],
+                       $FieldStorage['pages_title'],
+                       $FieldStorage['pages_content'],
+                       $FieldStorage['pages_discussion'],
+                       $FieldStorage['pages_type'],
+                       $FieldStorage['pages_weight']
+                      );
+        header("Location: " . $FieldStorage['referer']);
+    } else if ($FieldStorage['action'] == 'pages_multi') {
+        if ($FieldStorage['multiAction'] == 'delete') {
+            $items = explode(',', $FieldStorage['data']);
+            $Pages = new Pages;
+            foreach ($items as $item) {
+                $Pages->trash($item);
+            }
         }
     }
 }

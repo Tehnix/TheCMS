@@ -1,8 +1,9 @@
 <?php
-$module_portfolio_name = end(explode(DS, dirname(__file__)));
+$dir = explode(DS, dirname(__file__));
+$module_portfolio_name = end($dir);
 # Admin URLs
 $portfolio_admin_name = 'Module_' . $module_portfolio_name . '_admin';
-if ($$portfolio_admin_name) {
+if (isset($$portfolio_admin_name) and $$portfolio_admin_name) {
     $portfolio_admin_all = false;
     $portfolio_admin_new = false;
     $portfolio_admin_update = false;

@@ -1,9 +1,10 @@
 <?php
-if($Module_pages) {
+if(isset($Module_pages) and $Module_pages) {
     $pages = new Pages;
     $getPage = $pages->get($pages_number);
     
-    $template_dir = TEMPLATES_ROOT . end(explode(DS, dirname(__file__))) . DS;
+    $dir = explode(DS, dirname(__file__));
+    $template_dir = TEMPLATES_ROOT . end($dir) . DS;
     
     try {
         $tpl_content = new Template(Template::getFile('pages/pages.tpl'));

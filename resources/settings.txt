@@ -69,6 +69,10 @@ define("DS", DIRECTORY_SEPARATOR);
 # Alter the below URL_ROOT to you needs
 define("URL_ROOT", DS);
 
+if (!isset($_GET['handle'])) {
+    $_GET['handle'] = "";
+}
+
 define("ADMIN_PATH", "admin");
 define("URL", $_GET['handle']);
 define("ROOT", dirname(__file__) . DS);

@@ -4,7 +4,7 @@ require_once('manage.php');
 require_once('interact.php');
 require('urls.php');
 # URL variable
-if (AJAX and $_POST['ajax'] == 'getContent') {
+if (AJAX and isset($_POST['ajax']) and $_POST['ajax'] == 'getContent') {
     # Remove 3, because of the #!/ in the url
     $target = substr($_POST['target'], 3);
     $url_query = explode('/', $target);
@@ -16,11 +16,15 @@ if (empty($url_query[0]) and !AJAX) {
     $url_query = Pages::get_startpage('array');
 }
 foreach($getmodules as $module) {
-    include(MODULE_ROOT . $module . DS . 'urls.php');
-    include(MODULE_ROOT . $module . DS . 'view.php');
+    if (is_file(MODULE_ROOT . $module . DS . 'urls.php')) {
+        include(MODULE_ROOT . $module . DS . 'urls.php');
+    }
+    if (is_file(MODULE_ROOT . $module . DS . 'view.php')) {
+        include(MODULE_ROOT . $module . DS . 'view.php');
+    }
 }
 # Construct the layout from the template
-if ($Module_admin) {
+if (isset($Module_admin) and $Module_admin) {
     # Create the dashboard arrays
     $admin_count_array_left = array();
     $admin_count_array_right = array();
@@ -275,7 +279,7 @@ if ($Module_admin) {
     $tpl_layout->set('CONTENT', $tpl_content);
     print $tpl_layout->output();
 }
-else if ($Module_login){
+else if (isset($Module_login) and $Module_login){
     /**
      * User not logged in, display the login form.
      * If user has already tried to login, but errors were
@@ -301,7 +305,7 @@ else if ($Module_login){
         print 'Error loading template !...';
     }
 }
-else if ($Module_register){
+else if (isset($Module_register) and $Module_register){
     /**
      * The user is already logged in, not allowed to register.
      */
@@ -401,7 +405,7 @@ else if ($Module_register){
 else {
     # The general page
     try {
-        if ($_POST['ajax'] == 'getContent') {
+        if (AJAX and isset($_POST['ajax']) and $_POST['ajax'] == 'getContent') {
             # TODO get a more precise title. So far it's only on 'pages'.
             if (isset($tplContentTitle)) {
                 $siteTitle = $tplContentTitle . ' | ' . $settings['sitetitle'];
@@ -415,7 +419,11 @@ else {
             $tpl_layout = new Template(Template::getFile('index.tpl'));
             $tpl_layout->set('SITE_TITLE', $siteTitle);
             $tpl_layout->set('TITLE', $settings['sitetitle']);
-            $tpl_layout->set('CONTENT', $tpl_content);
+            if (isset($tpl_content)) {
+                $tpl_layout->set('CONTENT', $tpl_content);
+            } else {
+                $tpl_layout->set('CONTENT', '');
+            }
             if ($settings['googleanalytics'] == 1 and $settings['analyticscode'] != '') {
                 $tpl_layout->set(
                                  'GOOGLE_ANALYTICS',

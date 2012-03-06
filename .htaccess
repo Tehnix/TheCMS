@@ -57,6 +57,15 @@ AddType video/webm .webm
     BrowserMatch \bMSIE !no-gzip !gzip-only-text/html 
 </IfModule>
 
+
+
+<IfModule mod_deflate.c>
+    SetOutputFilter DEFLATE
+    # Don’t compress
+    SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary
+    SetEnvIfNoCase Request_URI \.(?:exe|t?gz|zip|bz2|sit|rar)$ no-gzip dont-vary
+</IfModule>
+
 <IfModule mod_headers.c>
     <FilesMatch "\.(js|css|xml|gz)$">
         Header append Vary Accept-Encoding

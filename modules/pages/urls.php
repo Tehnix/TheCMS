@@ -1,5 +1,6 @@
 <?php
-$module_pages_name = end(explode(DS, dirname(__file__)));
+$dir = explode(DS, dirname(__file__));
+$module_pages_name = end($dir);
 # Normal URLs
 if($url_query[0] == $module_pages_name) {
     $Module_pages = true;
@@ -13,7 +14,7 @@ if($url_query[0] == $module_pages_name) {
 }
 # Admin URLs
 $pages_admin_name = 'Module_'.$module_pages_name.'_admin';
-if($$pages_admin_name){
+if(isset($$pages_admin_name) and $$pages_admin_name){
     $pages_admin_all = false;
     $pages_admin_new = false;
     $pages_admin_update = false;

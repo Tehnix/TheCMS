@@ -38,7 +38,7 @@ class Database
         $this->DB_PASS = $DB_PASS;
     }
     
-    public function execute($type, $sql, $args) {
+    public function execute($type, $sql, $args=array()) {
         try {
             # MySQL with PDO_MYSQL
             if ($this->DB_TYPE == 'MySQL') {
@@ -401,6 +401,8 @@ class Template extends TemplateBase
      * @param string $file the filename of the template to load
      */
     public function __construct($file) {
+        global $settings;
+        
         $this->file = $file;
         
         # Set some of the default values

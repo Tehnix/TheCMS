@@ -280,43 +280,45 @@ class Portfolio extends ModulesBase
     }
 }
 
-# Handle all interaction with this modules model class
-if ($FieldStorage['action'] == 'portfolio_newPortfolio') {
-    $Portfolio = new Portfolio;
-    $Portfolio->insert($FieldStorage['portfolio_name'],
-                       $FieldStorage['portfolio_description'],
-                       $FieldStorage['portfolio_weight']);
-    header("Location: " . $FieldStorage['referer']);
-} else if ($FieldStorage['action'] == 'portfolio_updatePortfolio') {
-    $Portfolio = new Portfolio;
-    $Portfolio->update($FieldStorage['portfolio_id'],
-                       $FieldStorage['portfolio_name'],
-                       $FieldStorage['portfolio_description'],
-                       $FieldStorage['portfolio_weight']);
-    header("Location: " . $FieldStorage['referer']);
-} else if ($FieldStorage['action'] == 'portfolio_getImages') {
-    $Portfolio = new Portfolio;
-    $images = $Portfolio->get_images($FieldStorage['portfolio_id']);
-    print json_encode($images);
-} else if ($_GET['action'] == 'portfolio_addImages') {
-    if (isset($_GET['portfolio_id'])) {
+if (isset($FieldStorage['action'])) {
+    # Handle all interaction with this modules model class
+    if ($FieldStorage['action'] == 'portfolio_newPortfolio') {
         $Portfolio = new Portfolio;
-        $Portfolio->upload($_GET['portfolio_id'], $_REQUEST);
-    }
-} else if ($FieldStorage['action'] == 'portfolio_multi') {
-    if ($FieldStorage['multiAction'] == 'delete') {
-        $items = explode(',', $FieldStorage['data']);
+        $Portfolio->insert($FieldStorage['portfolio_name'],
+                           $FieldStorage['portfolio_description'],
+                           $FieldStorage['portfolio_weight']);
+        header("Location: " . $FieldStorage['referer']);
+    } else if ($FieldStorage['action'] == 'portfolio_updatePortfolio') {
         $Portfolio = new Portfolio;
-        foreach ($items as $item) {
-            $Portfolio->trash($item);
+        $Portfolio->update($FieldStorage['portfolio_id'],
+                           $FieldStorage['portfolio_name'],
+                           $FieldStorage['portfolio_description'],
+                           $FieldStorage['portfolio_weight']);
+        header("Location: " . $FieldStorage['referer']);
+    } else if ($FieldStorage['action'] == 'portfolio_getImages') {
+        $Portfolio = new Portfolio;
+        $images = $Portfolio->get_images($FieldStorage['portfolio_id']);
+        print json_encode($images);
+    } else if ($_GET['action'] == 'portfolio_addImages') {
+        if (isset($_GET['portfolio_id'])) {
+            $Portfolio = new Portfolio;
+            $Portfolio->upload($_GET['portfolio_id'], $_REQUEST);
         }
-    }
-} else if ($FieldStorage['action'] == 'portfolio_pictures_multi') {
-    if ($FieldStorage['multiAction'] == 'delete') {
-        $items = explode(',', $FieldStorage['data']);
-        $Portfolio = new Portfolio;
-        foreach ($items as $item) {
-            $Portfolio->trash_pictures($item);
+    } else if ($FieldStorage['action'] == 'portfolio_multi') {
+        if ($FieldStorage['multiAction'] == 'delete') {
+            $items = explode(',', $FieldStorage['data']);
+            $Portfolio = new Portfolio;
+            foreach ($items as $item) {
+                $Portfolio->trash($item);
+            }
+        }
+    } else if ($FieldStorage['action'] == 'portfolio_pictures_multi') {
+        if ($FieldStorage['multiAction'] == 'delete') {
+            $items = explode(',', $FieldStorage['data']);
+            $Portfolio = new Portfolio;
+            foreach ($items as $item) {
+                $Portfolio->trash_pictures($item);
+            }
         }
     }
 }
