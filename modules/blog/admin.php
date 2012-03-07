@@ -4,7 +4,7 @@ $admin_count_array_right['Tags'] = $Database->count('tags', array('trash'=>'0'))
 $admin_count_array_right['Categories'] = $Database->count('categories', array('trash'=>'0'));
 $admin_count_array_right['Comments'] = $Database->count('comments', array('trash'=>'0'));
 $admin_activity['blog'] = array('insert'=>'Added a new blog post with title {% ADDIT %}', 'update'=>'Updated blog post {% ADDIT %}', 'delete'=>'Deleted blog post {% ADDIT %}');
-if($$blog_admin_name){
+if(isset($$blog_admin_name) and $$blog_admin_name){
     $Blog = new Blog;
     $admin = new AdminGenerator;
     

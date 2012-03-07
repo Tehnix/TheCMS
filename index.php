@@ -30,6 +30,7 @@ if (isset($Module_admin) and $Module_admin) {
     $admin_count_array_right = array();
     $admin_activity = array();
     # Construct the admin menu
+    $admin_menu = '';
     $admin_menu_array = array('dashboard'=>'Dashboard');
     foreach($getmodules as $module) {
         if (is_file(MODULE_ROOT . $module . DS . 'admin.php')){
@@ -51,6 +52,8 @@ if (isset($Module_admin) and $Module_admin) {
     }
     if ($admin_title == 'Dashboard'){
         # And then we construct the dashboard items
+        $admin_dashboard_left = '';
+        $admin_dashboard_right = '';
         foreach($admin_count_array_left as $key => $value){
             $admin_dashboard_left .= '<tr><td><b>' . $key . '</b></td><td>' . $value . '</td></tr>';
         }
@@ -58,6 +61,7 @@ if (isset($Module_admin) and $Module_admin) {
             $admin_dashboard_right .= '<tr><td><b>' . $key . '</b></td><td>' . $value . '</td></tr>';
         }
         $admin_activity_log = $Database->fetchall('_recent_activity', array(), 'ORDER BY date DESC LIMIT 10');
+        $admin_activity_text = '';
         foreach($admin_activity_log as $log){
             $tagToReplace = '{% ADDIT %}';
             $admin_activity_text .= '

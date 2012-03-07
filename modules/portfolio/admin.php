@@ -4,7 +4,7 @@ $admin_count_array_right['Portfolio Pictures'] = $Database->count('portfolio_pic
 $admin_activity['portfolio'] = array('insert'=>'Added a new portfolio called {% ADDIT %}', 'update'=>'Updated portfolio {% ADDIT %}', 'delete'=>'Deleted the portfolio {% ADDIT %}');
 $admin_activity['portfolio_pictures'] = array('insert'=>'Added a new portfolio picture called {% ADDIT %}', 'update'=>'Updated portfolio picture {% ADDIT %}', 'delete'=>'Deleted the portfolio picture {% ADDIT %}', 'upload'=>'Uploaded portfolio picture {% ADDIT %}');
 
-if($$portfolio_admin_name){
+if(isset($$portfolio_admin_name) and $$portfolio_admin_name){
     $Portfolio = new portfolio;
     $admin = new AdminGenerator;
     

@@ -78,7 +78,7 @@ class Database
             if ($type == 'exec') {
                 $dbh->rollBack();
             }
-            file_put_contents('includes/errors/PDOErrors.txt',
+            file_put_contents('resources/errors/PDOErrors.txt',
                               $e->getMessage()."\n", FILE_APPEND);
             
             return "Sorry, an internal database error has occurred !";
@@ -1665,7 +1665,11 @@ class Session
         $this->first_name = $this->userinfo['first_name'];
         $this->last_name = $this->userinfo['last_name'];
         $this->id = $this->userinfo['id'];
-        $this->profilepic = $this->userinfo['profilepic'];
+        if (isset($this->userinfo['profilepic'])) {
+            $this->profilepic = $this->userinfo['profilepic'];
+        } else {
+            $this->profilepic = '';
+        }
         $this->userid     = $this->userinfo['userid'];
         $this->userlevel = $this->userinfo['userlevel'];
         return true;

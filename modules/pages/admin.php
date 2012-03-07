@@ -1,7 +1,7 @@
 <?php
 $admin_count_array_left['Pages'] = $Database->count('pages', array('trash'=>'0'));
 $admin_activity['pages'] = array('insert'=>'Added a new page called {% ADDIT %}', 'update'=>'Updated page {% ADDIT %}', 'delete'=>'Deleted the page {% ADDIT %}');
-if($$pages_admin_name){
+if(isset($$pages_admin_name) and $$pages_admin_name){
     $Pages = new Pages;
     $admin = new AdminGenerator;
     

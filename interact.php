@@ -39,9 +39,11 @@ if ($_POST){
 # Import the module: Models, URL handlers and Views
 $getmodules = $Modules->getModules();
 foreach($getmodules as $module) {
-    include(MODULE_ROOT . $module . DS . 'model.php');
+    if (is_file(MODULE_ROOT . $module . DS . 'model.php')) {
+        include(MODULE_ROOT . $module . DS . 'model.php');
+    }
 }
-
+$cssFiles = array();
 # Creation of the minified and gzippid compressed css
 if (isset($_GET['css']) and $_GET['css'] == 'css') {
     /* Add your CSS files to this array */

@@ -1,7 +1,7 @@
 <?php
 $admin_count_array_left['Media'] = $Database->count('_uploads_log', array('trash'=>'0'));
 $admin_activity['uploads'] = array('upload'=>'Added a new file called {% ADDIT %}', 'delete'=>'Deleted a file called {% ADDIT %}');
-if($$media_admin_name){
+if(isset($$media_admin_name) and $$media_admin_name){
     $Media = new Media;
     $admin = new AdminGenerator;
     

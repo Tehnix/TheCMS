@@ -1,0 +1,6 @@
+SQLSTATE[42S02]: Base table or view not found: 1146 Table 'chrules_thecms.portfolio' doesn't exist
+SQLSTATE[42S02]: Base table or view not found: 1146 Table 'chrules_thecms.portfolio_pictures' doesn't exist
+SQLSTATE[42S02]: Base table or view not found: 1146 Table 'chrules_thecms.portfolio' doesn't exist
+SQLSTATE[42S02]: Base table or view not found: 1146 Table 'chrules_thecms.portfolio_pictures' doesn't exist
+SQLSTATE[42S02]: Base table or view not found: 1146 Table 'chrules_thecms.portfolio' doesn't exist
+SQLSTATE[42S02]: Base table or view not found: 1146 Table 'chrules_thecms.portfolio_pictures' doesn't exist

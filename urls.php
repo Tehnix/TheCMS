@@ -11,7 +11,7 @@ if($url_query[0] == ADMIN_PATH){
 
         foreach($getmodules as $module) {
             if(is_file(MODULE_ROOT . $module . DS . 'admin.php')) {
-                if($url_query[1] == $module) {
+                if(isset($url_query[1]) and $url_query[1] == $module) {
                     $module = 'Module_' . $module . '_admin';
                     $$module = true;
                 }
