@@ -12,7 +12,7 @@ if(isset($$blog_admin_name) and $$blog_admin_name){
         $pagination = new Paginator($url_query, $pagination_page, $pagination_ipp);
         $pagination->mid_range = 4;
         $pagination->default_ipp = 8;
-        $pagination->paginate("blog_posts", $pagination_page, $pagination_ipp);
+        $pagination->paginate("blog_posts", $pagination_page, $pagination_ipp, array('trash' => 0));
         
         $blog = '';
         foreach($Blog->get($pagination->limit) as $item){

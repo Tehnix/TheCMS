@@ -921,9 +921,14 @@ class Paginator
                                 ? $pagination_ipp:$this->default_ipp;
         if ($url_query[0] == 'admin'){
             if (isset($url_query[0])){
-                $this->url_prefix = $url_query[1] . '/';
+                $this->url_prefix = URL_ROOT . $url_query[0] . '/' . $url_query[1] . '/';
             } else {
-                $this->url_prefix = $url_query[0] . '/';
+                $this->url_prefix = URL_ROOT . $url_query[0] . '/';
+            }
+            for ($i=2; $i <= 3; $i++) {
+                if (isset($url_query[$i])) {
+                    $this->url_prefix = $this->url_prefix . $url_query[$i] . '/';
+                }
             }
         } else {
             $this->url_prefix = $url_query[0] . '/';
@@ -937,8 +942,10 @@ class Paginator
 
     function paginate($count_tbl, 
                       $pagination_page = null, 
-                      $pagination_ipp = null){
-        $this->items_total = $this->db->count($count_tbl);
+                      $pagination_ipp = null,
+                      $additional = null){
+        # NOTE add additional parameters
+        $this->items_total = $this->db->count($count_tbl, $additional);
         
         if ($pagination_ipp == 'All'){
             $this->num_pages = ceil($this->items_total/$this->default_ipp);

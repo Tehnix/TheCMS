@@ -9,7 +9,7 @@ if(isset($$media_admin_name) and $$media_admin_name){
         $pagination = new Paginator($url_query, $pagination_page, $pagination_ipp);
         $pagination->mid_range = 4;
         $pagination->default_ipp = 8;
-        $pagination->paginate("_uploads_log", $pagination_page, $pagination_ipp);
+        $pagination->paginate("_uploads_log", $pagination_page, $pagination_ipp, array('trash' => 0));
         
         $media = '';
         foreach($Media->get('', $pagination->limit) as $item){

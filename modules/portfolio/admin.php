@@ -12,7 +12,7 @@ if(isset($$portfolio_admin_name) and $$portfolio_admin_name){
         $pagination = new Paginator($url_query, $pagination_page, $pagination_ipp);
         $pagination->mid_range = 4;
         $pagination->default_ipp = 8;
-        $pagination->paginate("portfolio", $pagination_page, $pagination_ipp);
+        $pagination->paginate("portfolio", $pagination_page, $pagination_ipp, array('trash' => 0));
         
         $portfolio = '';
         foreach($Portfolio->get('', 'ORDER BY weight ASC '.$pagination->limit) as $item){
@@ -244,10 +244,10 @@ if(isset($$portfolio_admin_name) and $$portfolio_admin_name){
             $pagination = new Paginator($url_query, $pagination_page, $pagination_ipp);
             $pagination->mid_range = 4;
             $pagination->default_ipp = 8;
-            $pagination->paginate("portfolio_pictures", $pagination_page, $pagination_ipp);
+            $pagination->paginate("portfolio_pictures", $pagination_page, $pagination_ipp, array('trash' => 0, 'portfolio_id' => $url_query[3]));
         
             $portfolio = '';
-            foreach($Portfolio->get_images($url_query[3], 'ORDER BY weight ASC '.$pagination->limit) as $item){
+            foreach($Portfolio->get_images($url_query[3], 'ORDER BY weight ASC ' . $pagination->limit) as $item){
                 $checkBox = $admin->input(array('name'=>'multiSelect',
                                                 'id'=>'multiSelect',
                                                 'style'=>'margin:0 10px 0 -5px;',

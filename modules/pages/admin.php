@@ -9,7 +9,7 @@ if(isset($$pages_admin_name) and $$pages_admin_name){
         $pagination = new Paginator($url_query, $pagination_page, $pagination_ipp);
         $pagination->mid_range = 4;
         $pagination->default_ipp = 8;
-        $pagination->paginate("pages", $pagination_page, $pagination_ipp);
+        $pagination->paginate("pages", $pagination_page, $pagination_ipp, array('trash' => 0));
         
         $pages = '';
         foreach($Pages->get('', 'ORDER BY id DESC '.$pagination->limit) as $item){
