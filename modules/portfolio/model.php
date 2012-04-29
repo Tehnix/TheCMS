@@ -299,11 +299,6 @@ if (isset($FieldStorage['action'])) {
         $Portfolio = new Portfolio;
         $images = $Portfolio->get_images($FieldStorage['portfolio_id']);
         print json_encode($images);
-    } else if ($_GET['action'] == 'portfolio_addImages') {
-        if (isset($_GET['portfolio_id'])) {
-            $Portfolio = new Portfolio;
-            $Portfolio->upload($_GET['portfolio_id'], $_REQUEST);
-        }
     } else if ($FieldStorage['action'] == 'portfolio_multi') {
         if ($FieldStorage['multiAction'] == 'delete') {
             $items = explode(',', $FieldStorage['data']);
@@ -320,5 +315,11 @@ if (isset($FieldStorage['action'])) {
                 $Portfolio->trash_pictures($item);
             }
         }
+    }
+}
+if ($_GET['action'] == 'portfolio_addImages') {
+    if (isset($_GET['portfolio_id'])) {
+        $Portfolio = new Portfolio;
+        $Portfolio->upload($_GET['portfolio_id'], $_REQUEST);
     }
 }
