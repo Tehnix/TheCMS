@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <title>TheCMS by ZealDev</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>TheCMS</h1>
+        <h2>A PHP based CMS</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/ZealDev/TheCMS/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/ZealDev/TheCMS/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/ZealDev/TheCMS" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h2>Information / README / Documentation / Installation</h2>
+
+<h4>0x01        Intro</h4>
+
+<p>TheCMS is a PHP based CMS. Mainly as a learn-by-doing project, but is quite   potent for actual use. By looking at projects like Drupal and Django, simply taking some of the features we like and trying to avoid those we don't we have
+created a somewhat full CMS solution that is also easily expandable.</p>
+
+<h4>0x02        License</h4>
+
+<p>Is found in the license file. But also here:</p>
+
+<pre>
+    Copyright (C) 2012 
+
+    This program is free software; you can redistribute it and/or modify it 
+    under the terms of the GNU General Public License as published by the Free 
+    Software Foundation; either version 2 of the License, or (at your option) 
+    any later version.
+
+    This program is distributed in the hope that it will be useful, but WITHOUT 
+    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+    FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for 
+    more details.
+
+    You should have received a copy of the GNU General Public License along with 
+    this program; if not, write to the Free Software Foundation, Inc., 59 Temple 
+    Place, Suite 330, Boston, MA 02111-1307 USA.
+</pre>
+
+<h4>0x03        Installation</h4>
+
+<ol>
+<li>
+<p>First clone the repos</p>
+
+<p><code>$ git clone <a href="mailto:git@github.com">git@github.com</a>:ZealDev/TheCMS.git</code></p>
+</li>
+<li><p>Visit the index.php page once, and a settings.php file should be created.
+You will need to fill this out with your settings.</p></li>
+<li><p>Your good to go!</p></li>
+</ol><hr><h2>Files and folders</h2>
+
+<h4>1x01        manage.php</h4>
+
+<p>In this document resides the main driveforece of TheCMS. The database class,<br>
+module class, templates class and the various class's that handles the login<br>
+system.</p>
+
+<h4>1x02        settings.php</h4>
+
+<p>Here is all the constants that needs defining throughout TheCMS. From database
+connection to URLs and default mailer behavior.</p>
+
+<h4>1x03        urls.php</h4>
+
+<p>Here is the default url handling (derived from .htaccess's urlrewrite, that<br>
+puts everything behind a ?handle= query). The path to admin panel, and main<br>
+application is defined here.</p>
+
+<h4>1x04        INSTALL.sql</h4>
+
+<p>Our sql information for the basic setup of TheCMS</p>
+
+<h4>1x05        modules/</h4>
+
+<p>All modules go in here, organized in folders. The structure goes:</p>
+
+<pre>
+    modules/mymodule/model.php # Holds the core of the module
+
+    modules/mymodule/urls.php # Handles all the urls and passes to view.php
+
+    modules/mymodule/view.php # What to display to the user
+
+    modules/mymodule/admin.php # What to display in admin
+
+    modules/mymodule/INSTALL.sql # All SQL information
+
+    modules/mymodule/DELETE.sql # Deletion information for SQL
+
+    modules/mymodule/style.css # CSS to be included with the module
+</pre>
+
+<p>None of these files are required, but their names must match their use, else<br>
+it will result in wrong order of includes and can essentially cause some nice 
+500's ;)...</p>
+
+<h4>1x06        templates/</h4>
+
+<p>In here we create our 'themes'. These can override existing page in the 
+default folder.</p>
+
+<h4>1x07        resources/</h4>
+
+<p>All of our resource files. This includes images, css, javascript but also<br>
+error documents and uploads.</p>
+
+<h4>1x08        cgi-bin/</h4>
+
+<p>Our backup scripts written in python</p>
+
+<h4>1x09        _backup/</h4>
+
+<p>Location for all our backups. Server backups are located in the main folder<br>
+saved as .zip files ,and database backups are located in: _backup/database/<br>
+with .sql extension.</p>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
