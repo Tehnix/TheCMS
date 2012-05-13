@@ -25,6 +25,26 @@ class Portfolio extends ModulesBase
         return $portfolioArray;
     }
     
+    public function get_image($id=null, $additional=null) {
+        if (!empty($id)) {
+            $portfolioArray = $this->database->fetchOne('portfolio_pictures', array('id'=>$id));
+            if (get_magic_quotes_gpc()) {
+                $portfolioArray['name'] = stripslashes($portfolioArray['name']);
+                $portfolioArray['description'] = stripslashes($portfolioArray['description']);
+            }
+        } else {
+            $portfolioArray = array();
+            $portfolioArray = $this->database->fetchAll('portfolio', array('trash'=>'0'), $additional);
+            if (get_magic_quotes_gpc()) {
+                for ($i=0; $i<sizeof($portfolioArray ); $i++) {
+                    $portfolioArray[$i]['name'] = stripslashes($portfolioArray[$i]['name']);
+                    $portfolioArray[$i]['description'] = stripslashes($portfolioArray[$i]['description']);
+                }
+            }
+        }
+        return $portfolioArray;
+    }
+    
     public function get_images($id=null, $additional=null) {
         $imgArray = array();
         if (!empty($id)) {
@@ -93,6 +113,28 @@ class Portfolio extends ModulesBase
                                 );
         $this->database->insert('_recent_activity',
                                 array('name'=>'portfolio',
+                                      'grouping'=>'portfolio'.date("Y-m-d"),
+                                      'action'=>'update',
+                                      'additional'=>$name)
+                                );
+        return true;
+    }
+    
+    public function update_image($id=null, $name=null, $description=null, $weight=0) {
+        if (empty($name) or empty($id)) {
+            return false;
+        }
+        if (!is_numeric($weight)) {
+            $weight = 0;
+        }
+        $this->database->update('portfolio_pictures',
+                                array('name'=>$name,
+                                      'description'=>$description,
+                                      'weight'=>$weight),
+                                array('id'=>$id)
+                                );
+        $this->database->insert('_recent_activity',
+                                array('name'=>'portfolio_pictures',
                                       'grouping'=>'portfolio'.date("Y-m-d"),
                                       'action'=>'update',
                                       'additional'=>$name)
@@ -291,6 +333,13 @@ if (isset($FieldStorage['action'])) {
     } else if ($FieldStorage['action'] == 'portfolio_updatePortfolio') {
         $Portfolio = new Portfolio;
         $Portfolio->update($FieldStorage['portfolio_id'],
+                           $FieldStorage['portfolio_name'],
+                           $FieldStorage['portfolio_description'],
+                           $FieldStorage['portfolio_weight']);
+        header("Location: " . $FieldStorage['referer']);
+    } else if ($FieldStorage['action'] == 'portfolio_updatePortfolioImage') {
+        $Portfolio = new Portfolio;
+        $Portfolio->update_image($FieldStorage['portfolio_id'],
                            $FieldStorage['portfolio_name'],
                            $FieldStorage['portfolio_description'],
                            $FieldStorage['portfolio_weight']);
