@@ -464,7 +464,6 @@ class Template extends TemplateBase
             $value = "
             $(document).ready(function () {
                 var emptyhash = '!/" . Pages::get_startpage('string') . "';
-                var title = $('title');
                 var ajaxTarget = $('.ajax-content');
                 var ajaxMenu = $('.ajax-menu');
                 var ajaxMenuAnchor = $('.ajax-menu a');
@@ -474,11 +473,11 @@ class Template extends TemplateBase
                 var hash = false;
                 var href = '';
                 var ajaxHookBefore = false;
-                if (typeof(AJAX_load_content_hook_before) == typeof(Function)) {
+                if (typeof(AJAX_load_content_hook_before) == 'function') {
                     ajaxHookBefore = true;
                 }
                 var ajaxHookAfter = false;
-                if (typeof(AJAX_load_content_hook_after) == typeof(Function)) {
+                if (typeof(AJAX_load_content_hook_after) == 'function') {
                     ajaxHookAfter = true;
                 }
                 
@@ -502,7 +501,7 @@ class Template extends TemplateBase
                 
                 function AJAX_load_content(href) {
                     if (ajaxHookBefore) {
-                        AJAX_load_content_hook_before();
+                        AJAX_load_content_hook_before.call();
                     }
                     ajaxTarget.html(loadingImg);
                     $.ajax({
@@ -511,14 +510,14 @@ class Template extends TemplateBase
                         data: {ajax: 'getContent', target: href},
                         dataType: 'json',
                         success: function(json) {
-                            title.html(json.title);
+                            document.title = json.title;
                             ajaxTarget.fadeOut(0);
                             ajaxTarget.html(json.content);
                             ajaxTarget.fadeIn();
                         }
                     });
                     if (ajaxHookAfter) {
-                        AJAX_load_content_hook_after();
+                        AJAX_load_content_hook_after.call();
                     }
                 }
                 

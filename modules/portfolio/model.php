@@ -306,7 +306,12 @@ class Portfolio extends ModulesBase
                               'log_filename'=>$fileName,
                               'log_size'=>$_FILES['file']['size'],
                               'log_ip'=>$_SERVER['REMOTE_ADDR']));
-            $sql = "INSERT INTO portfolio_pictures (portfolio_id, image, name) VALUES(:portfolio_id, (SELECT log_id FROM _uploads_log WHERE log_filename = :log_filename), (SELECT log_originalname FROM _uploads_log WHERE log_filename = :log_filename))";
+            $sql = "INSERT INTO portfolio_pictures (portfolio_id, image, name) 
+                    VALUES(
+                        :portfolio_id, 
+                        (SELECT log_id FROM _uploads_log WHERE log_filename = :log_filename), 
+                        (SELECT log_originalname FROM _uploads_log WHERE log_filename = :log_filename)
+                    )";
             $args = array('portfolio_id'=>$portfolio_id, 'log_filename'=>$fileName);
             $Database->execute('exec', $sql, $args);
             $Database->insert('_recent_activity',
