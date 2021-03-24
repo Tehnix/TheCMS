@@ -1,9 +1,9 @@
-##Information / README / Documentation / Installation
-####0x01        Intro
+## Information / README / Documentation / Installation
+#### 0x01        Intro
 TheCMS is a PHP based CMS. Mainly as a learn-by-doing project, but is quite   potent for actual use. By looking at projects like Drupal and Django, simply taking some of the features we like and trying to avoid those we don't we have
 created a somewhat full CMS solution that is also easily expandable.
 
-####0x02        License
+#### 0x02        License
 Is found in the license file. But also here:
 <pre>
     Copyright (C) 2012 
@@ -24,37 +24,37 @@ Is found in the license file. But also here:
 </pre>
 
 
-####0x03        Installation
+#### 0x03        Installation
 1. First clone the repos
 
-    <code>$ git clone git@github.com:ZealDev/TheCMS.git</code>
+    <code>$ git clone git@github.com:Tehnix/TheCMS.git</code>
 
 2. Visit the index.php page once, and a settings.php file should be created.
     You will need to fill this out with your settings.
-3. Your good to go!
+3. You're good to go!
 
 - - -
 
-##Files and folders
+## Files and folders
 
-####1x01        manage.php
+#### 1x01        manage.php
 In this document resides the main driveforece of TheCMS. The database class,  
 module class, templates class and the various class's that handles the login  
 system.
 
-####1x02        settings.php
+#### 1x02        settings.php
 Here is all the constants that needs defining throughout TheCMS. From database
 connection to URLs and default mailer behavior.
 
-####1x03        urls.php
+#### 1x03        urls.php
 Here is the default url handling (derived from .htaccess's urlrewrite, that   
 puts everything behind a ?handle= query). The path to admin panel, and main   
 application is defined here.
 
-####1x04        INSTALL.sql
+#### 1x04        INSTALL.sql
 Our sql information for the basic setup of TheCMS
 
-####1x05        modules/
+#### 1x05        modules/
 All modules go in here, organized in folders. The structure goes:
 
 <pre>
@@ -78,18 +78,18 @@ None of these files are required, but their names must match their use, else
 it will result in wrong order of includes and can essentially cause some nice 
 500's ;)...
 
-####1x06        templates/
+#### 1x06        templates/
 In here we create our 'themes'. These can override existing page in the 
 default folder.
 
-####1x07        resources/
+#### 1x07        resources/
 All of our resource files. This includes images, css, javascript but also     
 error documents and uploads.
 
-####1x08        cgi-bin/
+#### 1x08        cgi-bin/
 Our backup scripts written in python
 
-####1x09        _backup/
+#### 1x09        _backup/
 Location for all our backups. Server backups are located in the main folder  
 saved as .zip files ,and database backups are located in: _backup/database/   
 with .sql extension.
